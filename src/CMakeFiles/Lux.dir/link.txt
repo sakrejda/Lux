@@ -1,2 +1,0 @@
-/usr/bin/ar cr libLux.a  CMakeFiles/Lux.dir/survival.cpp.o
-/usr/bin/ranlib libLux.a
