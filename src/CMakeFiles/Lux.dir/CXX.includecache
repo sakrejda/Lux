@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/krzysiek/projekty/code/cpp/luxemburg/src/survival.cpp
+survival.hpp
+/home/krzysiek/projekty/code/cpp/luxemburg/src/survival.hpp
+
+/home/krzysiek/projekty/code/cpp/luxemburg/src/survival.hpp
+armadillo
+-
+vector
+-
+
