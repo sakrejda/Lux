@@ -17,7 +17,7 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
             caught[i,times_of_recaptures[i][j]] = 1;
-						std::cout << i << " " << j << std::endl;
+						std::cout << i << " " << times_of_recaptures[j] << std::endl;
         }
     }
 		std::cout << caught << std::endl;
@@ -40,12 +40,16 @@ void Recapture_Data_FLAT::init() {
         for ( int j=0; j < caught.n_cols; ++j ) {
 						std::cout << j << ", " << std::flush;
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
+						std::cout << "B1";
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
+						std::cout << "B2";
 						caught_double(i,j) == (double)caught(i,j);
+						std::cout << "B3";
 						if ( caught(i,j) == 0 ) uncaught(i,j) = 1;
+						std::cout << "B4";
 						uncaught_double(i,j) == (double)caught(i,j);
         }
-				std::cout << " :WOOT!" << std::flush;
+				std::cout << "WOOT!" << std::flush;
 				known_death[i] = false;
     }
     tb = fo;
