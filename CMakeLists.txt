@@ -5,6 +5,7 @@
 # to the root binary directory of the project as ${HELLO_BINARY_DIR}.
 cmake_minimum_required (VERSION 2.8)
 project (LUX)
+SET(CMAKE_BUILD_TYPE debug)
 
 # Recurse into the "Hello" and "Demo" subdirectories. This does not
 # actually
