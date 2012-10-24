@@ -32,7 +32,7 @@ void Recapture_Data_FLAT::init() {
     bool find_fo = true;
 		std::cout << "1, n_rows in caught:" << caught.n_rows;
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
-				std::cout << std::endl << "+" << i << ":";
+				std::cout << std::endl << "+" << i << ":" << std::flush;
         for ( int j=0; j < caught.n_cols; ++j ) {
 						std::cout << j << ", ";
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
