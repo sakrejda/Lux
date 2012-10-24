@@ -1,5 +1,5 @@
 #include "survival.hpp"
-
+#include <iostream>
 // Member functions for Data_FLAT only:
 //
 Recapture_Data_FLAT::Recapture_Data_FLAT() : number_of_individuals(0) {}
@@ -30,8 +30,11 @@ arma::Col<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
 
 void Recapture_Data_FLAT::init() {
     bool find_fo = true;
+		std::cout << "1";
     for ( int i=0; i < caught.n_rows; ++i ) {
+				std::cout << std::endl << "+" << i << ":";
         for ( int j=0; j < caught.n_cols; ++j ) {
+						std::cout << j << ", "
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
 						caught_double(i,j) == (double)caught(i,j);
