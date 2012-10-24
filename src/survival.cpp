@@ -34,13 +34,14 @@ void Recapture_Data_FLAT::init() {
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
 				std::cout << std::endl << "+" << i << ":" << std::flush;
         for ( int j=0; j < caught.n_cols; ++j ) {
-						std::cout << j << ", ";
+						std::cout << j << ", " << std::flush;
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
 						caught_double(i,j) == (double)caught(i,j);
 						if ( caught(i,j) == 0 ) uncaught(i,j) = 1;
 						uncaught_double(i,j) == (double)caught(i,j);
         }
+				std::cout << " :WOOT!" << std::flush;
 				known_death[i] = false;
     }
     tb = fo;
