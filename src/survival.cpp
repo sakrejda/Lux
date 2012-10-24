@@ -17,7 +17,7 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
             caught[i,times_of_recaptures[i][j]] = 1;
-						std::cout << i << " " << times_of_recaptures[j] << std::endl;
+						std::cout << i << " " << times_of_recaptures[i][j] << std::endl;
         }
     }
 		std::cout << caught << std::endl;
