@@ -30,7 +30,7 @@ arma::Col<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
 
 void Recapture_Data_FLAT::init() {
     bool find_fo = true;
-		std::cout << "1";
+		std::cout << "1, n_rows in caught:" << caught.n_rows;
     for ( int i=0; i < caught.n_rows; ++i ) {
 				std::cout << std::endl << "+" << i << ":";
         for ( int j=0; j < caught.n_cols; ++j ) {
