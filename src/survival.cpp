@@ -17,6 +17,7 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
             caught[i,times_of_recaptures[i][j]] = 1;
         }
     }
+		std::cout << caught << std::endl;
     init();
 }
 
