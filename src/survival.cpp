@@ -16,7 +16,7 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
         tb(times_of_recaptures.size()) {
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
-            caught[i,times_of_recaptures[i][j]] = 1;
+            caught(i,times_of_recaptures[i][j]-1) = 1;  // -1 shifts to C counting.
 						std::cout << i << " " << times_of_recaptures[i][j] << std::endl;
         }
     }
@@ -38,7 +38,7 @@ void Recapture_Data_FLAT::init() {
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
 				std::cout << std::endl << "+" << i << ":" << std::flush;
         for ( int j=0; j < caught.n_cols; ++j ) {
-						std::cout << j << ", " << std::flush;
+						std::cout << " " << j << ", " << std::flush;
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
 						std::cout << "B1";
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
