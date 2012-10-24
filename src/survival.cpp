@@ -33,13 +33,14 @@ int Recapture_Data_FLAT::get_tb(int i) const { return tb(i); }
 arma::Col<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
 
 void Recapture_Data_FLAT::init() {
-    bool find_fo = true;
 		std::cout << "1, n_rows in caught:" << caught.n_rows;
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
+    		bool find_fo = true;
 				std::cout << std::endl << "+" << i << ":" << std::flush;
-        for ( int j=0; j < caught.n_cols; ++j ) {
+        for ( arma::uword j=0; j < caught.n_cols; ++j ) {
 						std::cout << " " << j << ", " << std::flush;
-            if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
+						std::cout << "[" << caught(i,j) << "]" << std::flush;
+            if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false;}
 						std::cout << "B1";
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
 						std::cout << "B2";
