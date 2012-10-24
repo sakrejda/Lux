@@ -12,6 +12,7 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
 		number_of_occasions(*max_element(times_of_surveys.begin(),times_of_surveys.end())),
         fo(times_of_recaptures.size()), lo(times_of_recaptures.size()),
         caught(times_of_recaptures.size(),times_of_surveys.size()),
+        uncaught(times_of_recaptures.size(),times_of_surveys.size()),
 				known_death(times_of_recaptures.size()),
         tb(times_of_recaptures.size()) {
     for ( int i=0; i < number_of_individuals; ++i ) {
