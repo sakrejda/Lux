@@ -7,7 +7,9 @@ Recapture_Data_FLAT::Recapture_Data_FLAT() : number_of_individuals(0) {}
 Recapture_Data_FLAT::Recapture_Data_FLAT(
     std::vector<int> times_of_surveys,
     std::vector<std::vector<int> > times_of_recaptures
-) : ts(times_of_surveys), number_of_individuals(times_of_recaptures.size()),
+) : ts(times_of_surveys), 
+		number_of_individuals(times_of_recaptures.size()),
+		number_of_occasions(*max_element(times_of_surveys.begin(),times_of_surveys.end())),
         fo(times_of_recaptures.size()), lo(times_of_recaptures.size()),
         caught(times_of_recaptures.size(),times_of_surveys.size()),
 				known_death(times_of_recaptures.size()),
@@ -15,6 +17,7 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
             caught[i,times_of_recaptures[i][j]] = 1;
+						std::cout << i << " " << j << std::endl;
         }
     }
 		std::cout << caught << std::endl;

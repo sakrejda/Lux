@@ -28,6 +28,7 @@ protected:
 	arma::SpMat<int> uncaught;
 	arma::SpMat<double> uncaught_double;
 	int number_of_individuals;
+	int number_of_occasions;
 	std::vector<bool> known_death;
 
 private:
