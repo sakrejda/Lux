@@ -18,15 +18,14 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
             caught(i,times_of_recaptures[i][j]-1) = 1;  // -1 shifts to C counting.
-						std::cout << i << " " << times_of_recaptures[i][j] << std::endl;
         }
     }
-		std::cout << caught << std::endl;
     init();
 }
 
 
 int Recapture_Data_FLAT::get_N() const { return number_of_individuals; }
+int Recapture_Data_FLAT::get_K() const { return number_of_occasions; }
 arma::SpMat<int> Recapture_Data_FLAT::get_recaptures(int i) const { 
 	return caught.row(i); 
 }
@@ -34,25 +33,15 @@ int Recapture_Data_FLAT::get_tb(int i) const { return tb(i); }
 arma::Col<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
 
 void Recapture_Data_FLAT::init() {
-		std::cout << "1, n_rows in caught:" << caught.n_rows;
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
     		bool find_fo = true;
-				std::cout << std::endl << "+" << i << ":" << std::flush;
         for ( arma::uword j=0; j < caught.n_cols; ++j ) {
-						std::cout << " " << j << ", " << std::flush;
-						std::cout << "[" << caught(i,j) << "]" << std::flush;
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false;}
-						std::cout << "B1" << std::flush;
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
-						std::cout << "B2" << std::flush;
 						caught_double(i,j) == (double)caught(i,j);
-						std::cout << "B3" << std::flush;
 						if ( caught(i,j) == 0 ) uncaught(i,j) = 1;
-						std::cout << "B4" << std::flush;
 						uncaught_double(i,j) == (double)caught(i,j);
-						std::cout << "B5" << std::flush;
         }
-				std::cout << "WOOT!" << std::flush;
 				known_death[i] = false;
     }
     tb = fo;
