@@ -34,7 +34,7 @@ void Recapture_Data_FLAT::init() {
     for ( int i=0; i < caught.n_rows; ++i ) {
 				std::cout << std::endl << "+" << i << ":";
         for ( int j=0; j < caught.n_cols; ++j ) {
-						std::cout << j << ", "
+						std::cout << j << ", ";
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false; }
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
 						caught_double(i,j) == (double)caught(i,j);
