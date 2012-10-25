@@ -13,7 +13,8 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
     fo(times_of_recaptures.size()), lo(times_of_recaptures.size()),
     caught(times_of_recaptures.size(),
 					 *max_element(times_of_surveys.begin(),times_of_surveys.end())),
-    uncaught(times_of_recaptures.size(),times_of_surveys.size()),
+    uncaught(times_of_recaptures.size(),
+					 *max_element(times_of_surveys.begin(),times_of_surveys.end())),
 		known_death(times_of_recaptures.size()),
     tb(times_of_recaptures.size()) 
 {
