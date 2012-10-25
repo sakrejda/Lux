@@ -16,7 +16,7 @@ public:
 	int get_N() const;
 	int get_K() const;
 	arma::Row<int> get_recaptures(int i) const;
-	arma::Col<int> get_surveys() const;
+	arma::Row<int> get_surveys() const;
 	int get_birth(int i) const;
 
 protected:

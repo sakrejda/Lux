@@ -37,7 +37,7 @@ arma::Row<int> Recapture_Data_FLAT::get_recaptures(int i) const {
 	return recaptures;
 }
 
-arma::Col<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
+arma::Row<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
 
 int Recapture_Data_FLAT::get_birth(int i) const { return tb(i); }
 
