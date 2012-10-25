@@ -88,7 +88,7 @@ void Recapture_State_FLAT::known_deaths( arma::Col<arma::uword> indexes ) {
 	}
 }
 
-arma::Col<int> Recapture_Data_FLAT::get_deaths()    const { return td; }
+arma::Col<int> Recapture_State_FLAT::get_deaths()    const { return td; }
 
 
 void Recapture_State_FLAT::init() {
