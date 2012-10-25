@@ -37,9 +37,12 @@ arma::Row<int> Recapture_Data_FLAT::get_recaptures(int i) const {
 	return recaptures;
 }
 
-arma::Row<int> Recapture_Data_FLAT::get_surveys() const { return ts; }
+arma::Row<int> Recapture_Data_FLAT::get_surveys()   const { return ts; }
 
-int Recapture_Data_FLAT::get_birth(int i) const { return tb(i); }
+arma::Col<int> Recapture_Data_FLAT::get_births()    const { return tb; }
+arma::Col<int> Recapture_Data_FLAT::get_first_obs() const { return fo; }
+arma::Col<int> Recapture_Data_FLAT::get_last_obs()  const { return lo; }
+
 
 void Recapture_Data_FLAT::init() {
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
