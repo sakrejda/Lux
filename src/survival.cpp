@@ -18,10 +18,10 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
 		known_death(times_of_recaptures.size()),
     tb(times_of_recaptures.size()) 
 {
-		for ( unsigned int i=0; i < ts.size(); ++i ) ts[i] -= 1; // -1 shifts to C counting.
+		for ( unsigned int i=0; i < ts.size(); ++i ) ts[i] -= 1; // -1 shifts to C indexing.
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
-            caught(i,times_of_recaptures[i][j]-1) = 1;  // -1 shifts to C counting.
+            caught(i,times_of_recaptures[i][j]-1) = 1;  // -1 shifts to C indexing.
         }
     }
     init();
@@ -31,8 +31,8 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
 int Recapture_Data_FLAT::get_N() const { return number_of_individuals; }
 int Recapture_Data_FLAT::get_K() const { return number_of_occasions; }
 
-arma::Col<int> Recapture_Data_FLAT::get_recaptures(int i) const { 
-	arma::Col<int> recaptures(caught.n_cols);
+arma::Row<int> Recapture_Data_FLAT::get_recaptures(int i) const { 
+	arma::Row<int> recaptures(caught.n_cols);
 	for ( arma::uword j=0; j < caught.n_cols; ++j ) {
 		recaptures(j) = caught(i,j);
 	}
