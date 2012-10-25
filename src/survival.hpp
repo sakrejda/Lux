@@ -15,7 +15,7 @@ public:
 
 	int get_N() const;
 	int get_K() const;
-	arma::SpMat<int> get_recaptures(int i) const;
+	arma::Col<int> get_recaptures(int i) const;
 	int get_tb(int i) const;
 	arma::Col<int> get_surveys() const;
 
