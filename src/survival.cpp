@@ -9,12 +9,12 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
     std::vector<std::vector<int> > times_of_recaptures
 ) : ts(times_of_surveys), 
 		number_of_individuals(times_of_recaptures.size()),
-		number_of_occasions(*max_element(times_of_surveys.begin(),times_of_surveys.end())),
+		number_of_occasions(*max_element(times_of_surveys.begin(),times_of_surveys.end())+1),
     fo(times_of_recaptures.size()), lo(times_of_recaptures.size()),
     caught(times_of_recaptures.size(),
-					 *max_element(times_of_surveys.begin(),times_of_surveys.end())),
+					 *max_element(times_of_surveys.begin(),times_of_surveys.end())+1),
     uncaught(times_of_recaptures.size(),
-					 *max_element(times_of_surveys.begin(),times_of_surveys.end())),
+					 *max_element(times_of_surveys.begin(),times_of_surveys.end())+1),
 		known_death(times_of_recaptures.size()),
     tb(times_of_recaptures.size()) 
 {
