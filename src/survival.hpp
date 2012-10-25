@@ -57,6 +57,8 @@ public:
 
 	void known_deaths( arma::Col<arma::uword> indexes );
 
+	arma::Col<int> get_deaths()    const;
+
 protected:
 	arma::Col<int> td;
 	arma::SpMat<double> available;
