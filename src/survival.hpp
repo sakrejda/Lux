@@ -47,7 +47,9 @@ public:
 	Recapture_State_FLAT();
 	Recapture_State_FLAT(
 			std::vector<int> times_of_surveys,
-			std::vector<std::vector<int> > times_of_recaptures
+			std::vector<std::vector<int> > times_of_recaptures,
+			std::vector<int> times_of_deaths,
+			std::vector<bool> known_deaths
 	);
 
 	void set_td(

@@ -66,9 +66,11 @@ Recapture_State_FLAT::Recapture_State_FLAT() :
 
 Recapture_State_FLAT::Recapture_State_FLAT(
     std::vector<int> times_of_surveys,
-    std::vector<std::vector<int> > times_of_recaptures
+    std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
 ) : Recapture_Data_FLAT(times_of_surveys, times_of_recaptures),
-        td(times_of_recaptures.size()),
+        td(times_of_deaths),
         available(times_of_recaptures.size(),times_of_surveys.size()) {
     init();
 }
