@@ -94,7 +94,6 @@ arma::Col<int> Recapture_State_FLAT::get_deaths()    const { return td; }
 
 
 void Recapture_State_FLAT::init() {
-    td = lo;
     for (int i=0; i < caught.n_rows; ++i) {
         for (int j=0; j < caught.n_cols; ++j) {
             if ( j > tb[i] && j < td[i] ) {
