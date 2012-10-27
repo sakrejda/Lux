@@ -75,8 +75,10 @@ class Recapture_Likelihood_FLAT : public Recapture_State_FLAT {
 public:
 	Recapture_Likelihood_FLAT();
 	Recapture_Likelihood_FLAT(
-			std::vector<int> times_of_surveys,
-			std::vector<std::vector<int> > times_of_recaptures
+		std::vector<int> times_of_surveys,
+		std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
 	);
 
 	void resize_PHI( unsigned int scale);
