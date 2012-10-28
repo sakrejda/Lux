@@ -264,6 +264,8 @@ void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes )
 
 void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 	resize_PHI(SES);
+	PHI.zeros();
+	P.zeros();
 }
 
 
