@@ -83,6 +83,10 @@ public:
 
 	void resize_PHI( unsigned int scale);
 	
+	double get_ll();
+	arma::Col<double> get_ll_phi_components();
+	arma::Col<double> get_ll_p_components();
+	double get_part_ll( arma::Col<arma::uword> indexes );
 
 protected:
 	arma::Mat<double> PHI;
@@ -96,12 +100,10 @@ protected:
 	void update_ll_phi_components();
 	void update_ll_p_components();
 	void update_ll();
-	double get_ll();
 
 	void update_ll_phi_components( arma::Col<arma::uword> indexes );
 	void update_ll_p_components( arma::Col<arma::uword> indexes );
 	void update_part_ll( arma::Col<arma::uword> indexes );
-	double get_part_ll( arma::Col<arma::uword> indexes );
 
 
 private:

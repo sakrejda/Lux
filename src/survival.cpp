@@ -146,6 +146,44 @@ void Recapture_Likelihood_FLAT::resize_PHI( unsigned int scale) {
     ll_phi_components.set_size(phi_rows);
 }
 
+double Recapture_Likelihood_FLAT::get_ll() { 
+	if(fresh_ll) {
+		return log_likelihood; 
+	} else {
+		update_ll();
+		return log_likelihood;
+	}
+}
+
+
+arma::Col<double> get_ll_phi_components() {
+	if (fresh_ll) {
+		return ll_phi_components;
+	} else {
+		update_ll_phi_components();
+		return ll_phi_components;
+	}
+}
+
+arma::Col<double> get_ll_p_components() {
+	if (fresh_ll) {
+		return ll_p_components;
+	} else {
+		update_ll_p_components();
+		return ll_p_components;
+	}
+}
+
+double Recapture_Likelihood_FLAT::get_part_ll(
+	arma::Col<arma::uword> indexes		
+) {
+	update_ll_p_components(indexes);
+	update_ll_phi_components(indexes);
+	update_part_ll(indexes);
+	return part_log_likelihood;
+
+}
+
 // Likelihood calculations and getters, the meat.
 void Recapture_Likelihood_FLAT::update_ll_phi_components() {
     for ( arma::uword i=0; i < number_of_individuals; ++i ) {
@@ -176,14 +214,6 @@ void Recapture_Likelihood_FLAT::update_ll() {
 	log_likelihood = arma::accu(ll_phi_components) + arma::accu(ll_p_components);
 }
 
-double Recapture_Likelihood_FLAT::get_ll() { 
-	if(fresh_ll) {
-		return log_likelihood; 
-	} else {
-		update_ll();
-		return log_likelihood;
-	}
-}
 
 // Indexed likelihood getters, the partialy meat.
 void Recapture_Likelihood_FLAT::update_ll_phi_components(
@@ -224,17 +254,9 @@ void Recapture_Likelihood_FLAT::update_ll_p_components(
 
 
 void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes ) {
+	//            WRITE ME!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-double Recapture_Likelihood_FLAT::get_part_ll(
-	arma::Col<arma::uword> indexes		
-) {
-	update_ll_p_components(indexes);
-	update_ll_phi_components(indexes);
-	update_part_ll(indexes);
-	return part_log_likelihood;
-
-}
 
 void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 	resize_PHI(SES);
