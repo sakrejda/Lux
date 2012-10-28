@@ -108,11 +108,12 @@ void Recapture_State_FLAT::init() {
 //
 Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT(
 ) : Recapture_State_FLAT(), PHI(0,0), P(0,0),
-    log_likelihood(0), SES(0), ONES(0,0), ZEROS(0,0), fresh_ll(false)
+    log_likelihood(0), SES(0), fresh_ll(false)
 {
     init();
 }
 
+//number_of_occasions(*max_element(times_of_surveys.begin(),times_of_surveys.end())+1),
 Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT(
 	std::vector<int> times_of_surveys,
 	std::vector<std::vector<int> > times_of_recaptures,
@@ -120,13 +121,14 @@ Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT(
 	std::vector<bool> known_deaths
 ) : Recapture_State_FLAT(times_of_surveys, times_of_recaptures,
 			times_of_deaths, known_deaths),
-    PHI(times_of_recaptures.size(),times_of_surveys.size()-1),
-    P(times_of_recaptures.size(),times_of_surveys.size()),
+    PHI(times_of_recaptures.size(),
+				*max_element(times_of_surveys.begin(),times_of_surveys.end())),
+    P(times_of_recaptures.size(),
+				*max_element(times_of_surveys.begin(),times_of_surveys.end())+1),
     log_likelihood(0), 
 		ll_phi_components(times_of_recaptures.size()), 
 		ll_p_components(times_of_recaptures.size()), 
-		SES(3), ONES(times_of_recaptures.size(), times_of_surveys.size()),
-		ZEROS(times_of_recaptures.size(), times_of_surveys.size()),
+		SES(3), 
 		fresh_ll(false),
 		fresh_ll_p_components(times_of_recaptures.size()),
 		fresh_ll_phi_components(times_of_recaptures.size())

@@ -87,8 +87,6 @@ public:
 protected:
 	arma::Mat<double> PHI;
 	arma::Mat<double> P;
-	arma::Mat<double> ONES;
-	arma::Mat<double> ZEROS;
 
 	double log_likelihood;
 	double part_log_likelihood;
