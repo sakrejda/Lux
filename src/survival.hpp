@@ -93,14 +93,15 @@ protected:
 	arma::Col<double> ll_phi_components;
 	arma::Col<double> ll_p_components;
 
-	double get_ll();
-	double get_part_ll( arma::Col<arma::uword> indexes );
 	void update_ll_phi_components();
-	void update_ll_phi_components( arma::Col<arma::uword> indexes );
 	void update_ll_p_components();
-	void update_ll_p_components( arma::Col<arma::uword> indexes );
 	void update_ll();
+	double get_ll();
+
+	void update_ll_phi_components( arma::Col<arma::uword> indexes );
+	void update_ll_p_components( arma::Col<arma::uword> indexes );
 	void update_part_ll( arma::Col<arma::uword> indexes );
+	double get_part_ll( arma::Col<arma::uword> indexes );
 
 
 private:

@@ -118,7 +118,8 @@ Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT(
 	std::vector<int> times_of_surveys,
 	std::vector<std::vector<int> > times_of_recaptures,
 	std::vector<int> times_of_deaths,
-	std::vector<bool> known_deaths
+	std::vector<bool> known_deaths,
+	
 ) : Recapture_State_FLAT(times_of_surveys, times_of_recaptures,
 			times_of_deaths, known_deaths),
     PHI(times_of_recaptures.size(),
@@ -146,46 +147,12 @@ void Recapture_Likelihood_FLAT::resize_PHI( unsigned int scale) {
     ll_phi_components.set_size(phi_rows);
 }
 
-
-double Recapture_Likelihood_FLAT::get_ll() { 
-	if(fresh_ll) {
-		return log_likelihood; 
-	} else {
-		update_ll();
-		return log_likelihood;
-	}
-}
-
-double Recapture_Likelihood_FLAT::get_part_ll(
-	arma::Col<arma::uword> indexes		
-) {
-	update_ll_p_components(indexes);
-	update_ll_phi_components(indexes);
-	update_part_ll(indexes);
-	return part_log_likelihood;
-
-}
-
+// Likelihood calculations and getters, the meat.
 void Recapture_Likelihood_FLAT::update_ll_phi_components() {
     for ( arma::uword i=0; i < number_of_individuals; ++i ) {
 			ll_phi_components[i] = 0.0;
 			for ( unsigned int t=tb[i]; t < td[i]-1; ++t ) {
 				ll_phi_components[i] += log(PHI(i,t));
-			}
-			if (!known_death[i]) ll_phi_components[i] += log(1-PHI[i,td[i]-1]);
-    }
-}
-
-
-void Recapture_Likelihood_FLAT::update_ll_phi_components(
-    arma::Col<arma::uword> indexes
-) {
-		int i=0;
-    for ( int k=0; k < indexes.size(); ++k ) {
-			i = indexes[k];
-			ll_phi_components[i] = 0;
-			for ( unsigned int t=tb[i]; t < td[i]-1; ++t ) {
-				ll_phi_components[i] += log(PHI[i,t]);
 			}
 			if (!known_death[i]) ll_phi_components[i] += log(1-PHI[i,td[i]-1]);
     }
@@ -203,6 +170,37 @@ void Recapture_Likelihood_FLAT::update_ll_p_components() {
 			}
 		}
 }
+
+void Recapture_Likelihood_FLAT::update_ll() {
+	update_ll_phi_components();
+	update_ll_p_components();
+	log_likelihood = arma::accu(ll_phi_components) + arma::accu(ll_p_components);
+}
+
+double Recapture_Likelihood_FLAT::get_ll() { 
+	if(fresh_ll) {
+		return log_likelihood; 
+	} else {
+		update_ll();
+		return log_likelihood;
+	}
+}
+
+// Indexed likelihood getters, the partialy meat.
+void Recapture_Likelihood_FLAT::update_ll_phi_components(
+    arma::Col<arma::uword> indexes
+) {
+		int i=0;
+    for ( int k=0; k < indexes.size(); ++k ) {
+			i = indexes[k];
+			ll_phi_components[i] = 0;
+			for ( unsigned int t=tb[i]; t < td[i]-1; ++t ) {
+				ll_phi_components[i] += log(PHI[i,t]);
+			}
+			if (!known_death[i]) ll_phi_components[i] += log(1-PHI[i,td[i]-1]);
+    }
+}
+
 
 
 void Recapture_Likelihood_FLAT::update_ll_p_components(
@@ -225,11 +223,18 @@ void Recapture_Likelihood_FLAT::update_ll_p_components(
 
 }
 
-void Recapture_Likelihood_FLAT::update_ll() {
-	log_likelihood = arma::accu(ll_phi_components) + arma::accu(ll_p_components);
-}
 
 void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes ) {
+}
+
+double Recapture_Likelihood_FLAT::get_part_ll(
+	arma::Col<arma::uword> indexes		
+) {
+	update_ll_p_components(indexes);
+	update_ll_phi_components(indexes);
+	update_part_ll(indexes);
+	return part_log_likelihood;
+
 }
 
 void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
