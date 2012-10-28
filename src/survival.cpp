@@ -118,8 +118,7 @@ Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT(
 	std::vector<int> times_of_surveys,
 	std::vector<std::vector<int> > times_of_recaptures,
 	std::vector<int> times_of_deaths,
-	std::vector<bool> known_deaths,
-	
+	std::vector<bool> known_deaths
 ) : Recapture_State_FLAT(times_of_surveys, times_of_recaptures,
 			times_of_deaths, known_deaths),
     PHI(times_of_recaptures.size(),
