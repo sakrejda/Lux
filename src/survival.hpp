@@ -86,6 +86,9 @@ public:
 	arma::Mat<double> get_PHI();
 	arma::Mat<double> get_P();
 
+	void set_PHI( arma::Mat<double> );
+	void set_P( arma::Mat<double> );
+
 	double get_ll();
 	arma::Col<double> get_ll_phi_components();
 	arma::Col<double> get_ll_p_components();
