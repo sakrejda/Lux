@@ -147,7 +147,7 @@ void Recapture_Likelihood_FLAT::resize_PHI( unsigned int scale) {
 }
 
 double Recapture_Likelihood_FLAT::get_ll() { 
-	if(fresh_ll) {
+	if (fresh_ll) {
 		return log_likelihood; 
 	} else {
 		update_ll();
@@ -156,7 +156,7 @@ double Recapture_Likelihood_FLAT::get_ll() {
 }
 
 
-arma::Col<double> get_ll_phi_components() {
+arma::Col<double> Recapture_Likelihood_FLAT::get_ll_phi_components() {
 	if (fresh_ll) {
 		return ll_phi_components;
 	} else {
@@ -165,7 +165,7 @@ arma::Col<double> get_ll_phi_components() {
 	}
 }
 
-arma::Col<double> get_ll_p_components() {
+arma::Col<double> Recapture_Likelihood_FLAT::get_ll_p_components() {
 	if (fresh_ll) {
 		return ll_p_components;
 	} else {
