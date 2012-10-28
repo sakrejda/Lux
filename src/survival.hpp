@@ -20,6 +20,7 @@ public:
 	arma::Col<int> get_births()    const;
 	arma::Col<int> get_first_obs() const; 
 	arma::Col<int> get_last_obs()  const; 
+	std::vector<bool> get_sampled()  const;
 
 protected:
 	arma::Col<int> ts;
@@ -33,6 +34,7 @@ protected:
 	int number_of_individuals;
 	int number_of_occasions;
 	std::vector<bool> known_death;
+	std::map<unsigned int, bool> sampled;
 
 private:
 	void init();

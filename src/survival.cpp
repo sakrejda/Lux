@@ -43,6 +43,11 @@ arma::Col<int> Recapture_Data_FLAT::get_births()    const { return tb; }
 arma::Col<int> Recapture_Data_FLAT::get_first_obs() const { return fo; }
 arma::Col<int> Recapture_Data_FLAT::get_last_obs()  const { return lo; }
 
+std::vector<bool> Recapture_Data_FLAT::get_sampled()  const { 
+	std::vector<bool> sampled_vec(sampled.size());
+	for ( unsigned int i=0; i < sampled.size(); ++i ) sampled_vec[i] = sampled[i];
+	return sampled_vec; 
+}
 
 void Recapture_Data_FLAT::init() {
     for ( arma::uword i=0; i < caught.n_rows; ++i ) {
@@ -57,6 +62,8 @@ void Recapture_Data_FLAT::init() {
 				known_death[i] = false;
     }
     tb = fo;
+		for (unsigned int t=0; t < get_K(); ++t) sampled[t] = false;
+		for (unsigned int i=0; i < ts.size(); ++i) sampled[ts[i]] = true;
 }
 
 // Member functions for State_FLAT only:
