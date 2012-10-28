@@ -21,7 +21,7 @@ public:
 	arma::Col<int> get_births()    const;
 	arma::Col<int> get_first_obs() const; 
 	arma::Col<int> get_last_obs()  const; 
-	std::vector<bool> get_sampled()  const;
+	std::vector<bool> get_sampled();
 
 protected:
 	arma::Col<int> ts;
