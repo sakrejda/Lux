@@ -206,7 +206,7 @@ void Recapture_Likelihood_FLAT::update_ll_p_components() {
 				if ( caught[i,t] == 1 ) {
 					ll_p_components[i] += log(P(i,t));
 				} else {
-					ll_p_components[i] += log(1-log(P(i,t)));
+					ll_p_components[i] += log(1-P(i,t));
 				}
 			}
 		}
@@ -239,7 +239,6 @@ void Recapture_Likelihood_FLAT::update_ll_phi_components(
 void Recapture_Likelihood_FLAT::update_ll_p_components(
 	arma::Col<arma::uword> indexes		
 ) {
-	arma::Col<double> ONES_row = arma::ones< arma::Col<double> >(available.n_cols);
 		int i=0;
     for ( unsigned int k=0; k < indexes.size(); ++k ) {
 			i = indexes[k];
@@ -248,7 +247,7 @@ void Recapture_Likelihood_FLAT::update_ll_p_components(
 				if ( caught[i,t] == 1 ) {
 					ll_p_components[i] += log(P[i,t]);
 				} else {
-					ll_p_components[i] += log(1-log(P[i,t]));
+					ll_p_components[i] += log(1-P[i,t]);
 				}
 			}
 
