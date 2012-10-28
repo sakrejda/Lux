@@ -3,6 +3,7 @@
 
 #include <armadillo>
 #include <vector>
+#include <map>
 
 class Recapture_Data_FLAT {
 
