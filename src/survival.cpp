@@ -146,6 +146,10 @@ void Recapture_Likelihood_FLAT::resize_PHI( unsigned int scale) {
     ll_phi_components.set_size(phi_rows);
 }
 
+arma::Mat<double> Recapture_Likelihood_FLAT::get_PHI() { return PHI; }
+
+arma::Mat<double> Recapture_Likelihood_FLAT::get_P() { return P; }
+
 double Recapture_Likelihood_FLAT::get_ll() { 
 	if (fresh_ll) {
 		return log_likelihood; 

@@ -83,9 +83,13 @@ public:
 
 	void resize_PHI( unsigned int scale);
 	
+	arma::Mat<double> get_PHI();
+	arma::Mat<double> get_P();
+
 	double get_ll();
 	arma::Col<double> get_ll_phi_components();
 	arma::Col<double> get_ll_p_components();
+
 	double get_part_ll( arma::Col<arma::uword> indexes );
 
 protected:
