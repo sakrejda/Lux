@@ -150,7 +150,7 @@ arma::Mat<double> Recapture_Likelihood_FLAT::get_PHI() { return PHI; }
 arma::Mat<double> Recapture_Likelihood_FLAT::get_P() { return P; }
 
 void Recapture_Likelihood_FLAT::set_PHI( arma::Mat<double> PHI_ ) { PHI = PHI_ ; }
-void Recapture_Likelihood_FLAT::set_P(   arma::Mat<double> PHI_ ) { P   = P_ ; }
+void Recapture_Likelihood_FLAT::set_P(   arma::Mat<double> P_   ) { P   = P_ ; }
 
 
 double Recapture_Likelihood_FLAT::get_ll() { 
