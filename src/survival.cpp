@@ -215,6 +215,7 @@ void Recapture_Likelihood_FLAT::update_ll_p_components() {
 			for ( unsigned int t=tb[i]+1; t < td[i]; ++t ) {
 				if (sampled[t]) {
 					if ( caught[i,t] == 1 ) {
+						std::cout << "i: " << i << ", t: " << t << std::endl;
 						ll_p_components[i] += log(P(i,t));
 					} else {
 						ll_p_components[i] += log(1-P(i,t));
