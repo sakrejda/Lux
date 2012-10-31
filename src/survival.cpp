@@ -210,16 +210,13 @@ void Recapture_Likelihood_FLAT::update_ll_phi_components() {
 }
 
 void Recapture_Likelihood_FLAT::update_ll_p_components() {
-		std::cout << caught << std::endl << std::endl;
 		for ( unsigned int i=0; i < number_of_individuals; ++i ) {
 			ll_p_components[i] = 0.0;
 			for ( unsigned int t=tb[i]+1; t < td[i]; ++t ) {
 				if (sampled[t]) {
 					if ( caught(i,t) == 1 ) {
-						std::cout << "Recap at i: " << i << ", t: " << t << std::endl;
 						ll_p_components[i] += log(P(i,t));
 					} else {
-						std::cout << "Nocap at i: " << i << ", t: " << t << std::endl;
 						ll_p_components[i] += log(1-P(i,t));
 					}
 				}
