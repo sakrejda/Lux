@@ -240,9 +240,9 @@ void Recapture_Likelihood_FLAT::update_ll_phi_components(
 			i = indexes[k];
 			ll_phi_components[i] = 0;
 			for ( unsigned int t=tb[i]; t < td[i]-1; ++t ) {
-				ll_phi_components[i] += log(PHI[i,t]);
+				ll_phi_components[i] += log(PHI(i,t));
 			}
-			if (!known_death[i]) ll_phi_components[i] += log(1-PHI[i,td[i]-1]);
+			if (!known_death[i]) ll_phi_components[i] += log(1-PHI(i,td[i]-1));
     }
 }
 
@@ -258,9 +258,9 @@ void Recapture_Likelihood_FLAT::update_ll_p_components(
 			for ( unsigned int t=tb[i]+1; t < td[i]; ++t ) {
 				if (sampled[t]) {
 					if ( caught(i,t) == 1 ) {
-						ll_p_components[i] += log(P[i,t]);
+						ll_p_components[i] += log(P(i,t));
 					} else {
-						ll_p_components[i] += log(1-P[i,t]);
+						ll_p_components[i] += log(1-P(i,t));
 					}
 				}
 			}
