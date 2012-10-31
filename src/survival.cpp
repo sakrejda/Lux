@@ -191,11 +191,23 @@ arma::Col<double> Recapture_Likelihood_FLAT::get_ll_p_components() {
 double Recapture_Likelihood_FLAT::get_part_ll(
 	arma::Col<arma::uword> indexes		
 ) {
-	update_ll_p_components(indexes);
-	update_ll_phi_components(indexes);
 	update_part_ll(indexes);
 	return part_log_likelihood;
+}
 
+
+arma::Col<double> Recapture_Likelihood_FLAT::get_ll_phi_components(
+	arma::Col<arma::uword> indexes
+) {
+	update_ll_phi_components(indexes);
+	return part_ll_phi_components;
+}
+
+arma::Col<double> Recapture_Likelihood_FLAT::get_ll_p_components(
+	arma::Col<arma::uword> indexes
+) {
+	update_ll_p_components(indexes);
+	return part_ll_p_components;
 }
 
 // Likelihood calculations and getters, the meat.
@@ -271,7 +283,9 @@ void Recapture_Likelihood_FLAT::update_ll_p_components(
 
 
 void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes ) {
-	//            WRITE ME!!!!!!!!!!!!!!!!!!!!!!!!!
+	update_ll_p_components(indexes);
+	update_ll_phi_components(indexes);
+	part_log_likelihood = arma::accu(part_ll_phi_components) + arma::accu(part_ll_p_components);
 }
 
 

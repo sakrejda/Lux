@@ -97,15 +97,20 @@ public:
 	arma::Col<double> get_ll_p_components();
 
 	double get_part_ll( arma::Col<arma::uword> indexes );
+	arma::Col<double> get_ll_phi_components( arma::Col<arma::uword> indexes );
+	arma::Col<double> get_ll_p_components( arma::Col<arma::uword> indexes );
 
 protected:
 	arma::Mat<double> PHI;
 	arma::Mat<double> P;
 
 	double log_likelihood;
-	double part_log_likelihood;
 	arma::Col<double> ll_phi_components;
 	arma::Col<double> ll_p_components;
+
+	double part_log_likelihood;
+	arma::Col<double> part_ll_phi_components;
+	arma::Col<double> part_ll_p_components;
 
 	void update_ll_phi_components();
 	void update_ll_p_components();
