@@ -109,8 +109,6 @@ protected:
 	arma::Col<double> ll_p_components;
 
 	double part_log_likelihood;
-	arma::Col<double> part_ll_phi_components;
-	arma::Col<double> part_ll_p_components;
 
 	void update_ll_phi_components();
 	void update_ll_p_components();
