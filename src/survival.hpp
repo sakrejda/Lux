@@ -1,9 +1,12 @@
 #ifndef SURVIVAL_H
 #define SURVIVAL_H
 
-#include <armadillo>
 #include <vector>
 #include <map>
+
+#include <armadillo>
+#include <trng/yarn2.hpp>
+#include <trng/uniform01_dist.hpp>
 
 class Recapture_Data_FLAT {
 
@@ -131,20 +134,44 @@ private:
 class Recapture_Posterior_FLAT : public Recapture_Likelihood_FLAT {
 
 public:
+	Recapture_Posterior_FLAT();
+	Recapture_Posterior_FLAT(
+		std::vector<int> times_of_surveys,
+		std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
+	);
+
+public:
 	double get_lp();
 	double get_posterior();
+
+private:
+	void init();
 
 };
 
 class Recapture_Proposal_FLAT : public Recapture_Posterior_FLAT {
 
 public:
-	void simulate_td();
-	void simulate_td( arma::Col<arma::uword> indexes );
-	double get_log_proposal_asymmetry();
-	double get_log_proposal_asymmetry( arma::Col<arma::uword> indexes );
+	Recapture_Proposal_FLAT();
+	Recapture_Proposal_FLAT(
+		std::vector<int> times_of_surveys,
+		std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
+	);
+
+public:
+	double propose_td();
+	double propose_td( arma::Col<arma::uword> indexes );
 
 protected:
+	trng::yarn2 R;
+	trng::uniform01 U;
+
+private:
+	void init();
 
 };
 

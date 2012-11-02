@@ -307,6 +307,19 @@ void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 
 
 // Posterior functions. 
+Recapture_Posterior_FLAT::Recapture_Posterior_FLAT() : 
+	Recapture_Likelihood_FLAT() {}
+
+Recapture_Posterior_FLAT::Recapture_Posterior_FLAT(
+		std::vector<int> times_of_surveys,
+		std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
+) : Recapture_Likelihood_FLAT(times_of_surveys, times_of_recaptures,
+			times_of_deaths, known_deaths) {
+	init();
+}
+
 double Recapture_Posterior_FLAT::get_lp() { return 0; }   /// Flat priors....
 
 double Recapture_Posterior_FLAT::get_posterior() {
@@ -315,5 +328,46 @@ double Recapture_Posterior_FLAT::get_posterior() {
 	return ll + lp;
 };
 
-// Sampler functions:
+void Recapture_Posterior_FLAT::init() {}
 
+// Sampler functions:
+Recapture_Proposal_FLAT::Recapture_Proposal_FLAT() :
+	Recapture_Posterior_FLAT() {}
+
+Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
+		std::vector<int> times_of_surveys,
+		std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
+) : Recapture_Posterior_FLAT(
+		std::vector<int> times_of_surveys,
+		std::vector<std::vector<int> > times_of_recaptures,
+		std::vector<int> times_of_deaths,
+		std::vector<bool> known_deaths
+	) 
+{ 
+	init();
+}
+
+double Recapture_Proposal_FLAT::propose_td() {
+	double log_asymmetry = 0.0;
+	for ( arma::uword i=0; i < number_of_individuals; ++i) {
+		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
+			td[i] = t + 1;
+			if ( U(R) > PHI[i,t] ) break; 
+		}
+	}
+	return log_asymmetry;
+}
+
+double Recapture_Proposal_FLAT::propose_td( arma::Col<arma::uword> indexes ) {
+	double log_asymmetry = 0.0;
+
+	return log_asymmetry;
+}
+
+void Recapture_Proposal_FLAT::init() {
+	for (arma::uword i=0; i < number_of_individuals; ++i) {
+		
+	}
+}
