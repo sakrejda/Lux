@@ -156,8 +156,14 @@ void Recapture_Likelihood_FLAT::resize_PHI( unsigned int scale) {
 arma::Mat<double> Recapture_Likelihood_FLAT::get_PHI() { return PHI; }
 arma::Mat<double> Recapture_Likelihood_FLAT::get_P() { return P; }
 
-void Recapture_Likelihood_FLAT::set_PHI( arma::Mat<double> PHI_ ) { PHI = PHI_ ; }
-void Recapture_Likelihood_FLAT::set_P(   arma::Mat<double> P_   ) { P   = P_ ; }
+void Recapture_Likelihood_FLAT::set_PHI( arma::Mat<double> PHI_ ) { 
+	PHI = PHI_; 
+	fresh_ll = false;
+}
+void Recapture_Likelihood_FLAT::set_P(   arma::Mat<double> P_   ) { 
+	P   = P_; 
+	fresh_ll = false;
+}
 
 
 double Recapture_Likelihood_FLAT::get_ll() { 
@@ -301,7 +307,7 @@ void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 
 
 // Posterior functions. 
-double Recapture_Posterior_FLAT::get_lp() { return 1; }   /// Flat priors....
+double Recapture_Posterior_FLAT::get_lp() { return 0; }   /// Flat priors....
 
 double Recapture_Posterior_FLAT::get_posterior() {
 	double ll = get_ll();

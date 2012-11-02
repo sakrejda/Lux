@@ -136,4 +136,17 @@ public:
 
 };
 
+class Recapture_Proposal_FLAT : public Recapture_Posterior_FLAT {
+
+public:
+	void simulate_td();
+	void simulate_td( arma::Col<arma::uword> indexes );
+	double get_log_proposal_asymmetry();
+	double get_log_proposal_asymmetry( arma::Col<arma::uword> indexes );
+
+protected:
+
+};
+
+
 #endif
