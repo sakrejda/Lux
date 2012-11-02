@@ -300,6 +300,14 @@ void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 
 
 
+// Posterior functions. 
+double Recapture_Posterior_FLAT::get_lp() { return 1; }   /// Flat priors....
 
+double Recapture_Posterior_FLAT::get_posterior() {
+	double ll = get_ll();
+	double lp = get_lp();
+	return ll + lp;
+};
 
+// Sampler functions:
 

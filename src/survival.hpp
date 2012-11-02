@@ -128,6 +128,12 @@ private:
 
 };
 
+class Recapture_Posterior_FLAT : public Recapture_Likelihood_FLAT {
 
+public:
+	double get_lp();
+	double get_posterior();
+
+};
 
 #endif
