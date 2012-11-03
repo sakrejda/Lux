@@ -168,7 +168,7 @@ public:
 
 protected:
 	trng::yarn2 R;
-	trng::uniform01 U;
+	trng::uniform01_dist U;
 
 private:
 	void init();
