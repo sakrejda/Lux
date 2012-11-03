@@ -144,7 +144,7 @@ public:
 
 public:
 	double get_lp();
-	double get_posterior();
+	double get_log_posterior();
 
 private:
 	void init();

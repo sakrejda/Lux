@@ -322,7 +322,7 @@ Recapture_Posterior_FLAT::Recapture_Posterior_FLAT(
 
 double Recapture_Posterior_FLAT::get_lp() { return 0; }   /// Flat priors....
 
-double Recapture_Posterior_FLAT::get_posterior() {
+double Recapture_Posterior_FLAT::get_log_posterior() {
 	double ll = get_ll();
 	double lp = get_lp();
 	return ll + lp;
