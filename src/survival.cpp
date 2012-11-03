@@ -340,11 +340,8 @@ Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 		std::vector<int> times_of_deaths,
 		std::vector<bool> known_deaths
 ) : Recapture_Posterior_FLAT(
-		std::vector<int> times_of_surveys,
-		std::vector<std::vector<int> > times_of_recaptures,
-		std::vector<int> times_of_deaths,
-		std::vector<bool> known_deaths
-	) 
+		times_of_surveys, times_of_recaptures,
+		times_of_deaths, known_deaths) 
 { 
 	init();
 }
