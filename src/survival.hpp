@@ -168,6 +168,8 @@ public:
 	double get_last_pd() const;
 	double get_pd() const;
 	arma::Col<int> get_proposed_deaths() const;
+	arma::Col<double> calc_log_proposal_density();
+	arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes);
 
 
 protected:
@@ -177,8 +179,6 @@ protected:
 
 private:
 	void init();
-	arma::Col<double> calc_log_proposal_density();
-	arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes);
 	arma::Col<double> log_proposal_density;
 	arma::Col<double> last_log_proposal_density;
 	arma::Col<double> LPD;
