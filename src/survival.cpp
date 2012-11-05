@@ -351,7 +351,7 @@ Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 
 double Recapture_Proposal_FLAT::propose_td() {
 	if (!fresh_ll) {
-		last_log_proposal_density = calc_log_proposal_density()
+		last_log_proposal_density = calc_log_proposal_density();
 	}
 	fresh_ll = false;
 	for ( arma::uword i=0; i < number_of_individuals; ++i) {
@@ -376,7 +376,7 @@ double Recapture_Proposal_FLAT::propose_td( arma::Col<arma::uword> indexes ) {
 	// non-updated, so they have non-sense values.  In the "return"
 	// statement at the bottom, those are ignored (only indexes values are 
 	// summed, thus no caching here.
-	last_log_proposal_density = calc_log_proposal_density(indexes)
+	last_log_proposal_density = calc_log_proposal_density(indexes);
 	fresh_ll = false;
 	for ( arma::uword k=0; k < indexes.n_elem; ++k ) {
 		i = indexes[k];
