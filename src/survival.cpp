@@ -411,6 +411,10 @@ arma::Col<int> Recapture_Proposal_FLAT::get_proposed_deaths() const {
 	return td_proposed; 
 }
 
+void Recapture_Proposal_FLAT::accept() {
+	double log_a = 0.0; 
+}
+
 void Recapture_Proposal_FLAT::init() {
 	log_proposal_density.set_size(number_of_individuals);
 	log_proposal_density.zeros();
