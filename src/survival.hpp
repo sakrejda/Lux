@@ -121,11 +121,11 @@ protected:
 	void update_ll_p_components( arma::Col<arma::uword> indexes );
 	void update_part_ll( arma::Col<arma::uword> indexes );
 
+	bool fresh_ll;
 
 private:
 	void init();
 	unsigned int SES;
-	bool fresh_ll;
 	arma::Col<int> fresh_ll_p_components;
 	arma::Col<int> fresh_ll_phi_components;
 
