@@ -165,6 +165,8 @@ public:
 public:
 	double propose_td();
 	double propose_td( arma::Col<arma::uword> indexes );
+	double get_last_pd() const;
+	double get_pd() const;
 
 protected:
 	trng::yarn2 R;
