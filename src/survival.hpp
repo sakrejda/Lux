@@ -167,16 +167,21 @@ public:
 	double propose_td( arma::Col<arma::uword> indexes );
 	double get_last_pd() const;
 	double get_pd() const;
+	arma::Col<int> get_proposed_deaths() const;
+
 
 protected:
 	trng::yarn2 R;
 	trng::uniform01_dist<double> U;
+	arma::Col<int> td_proposed;
 
 private:
 	void init();
-	double log_proposal_density;
-	double last_log_proposal_density;
-
+	arma::Col<double> calc_log_proposal_density();
+	arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes);
+	arma::Col<double> log_proposal_density;
+	arma::Col<double> last_log_proposal_density;
+	arma::Col<double> LPD;
 };
 
 

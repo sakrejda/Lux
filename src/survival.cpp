@@ -350,45 +350,87 @@ Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 }
 
 double Recapture_Proposal_FLAT::propose_td() {
-	double log_asymmetry = 0.0;
+	if (!fresh_ll) {
+		last_log_proposal_density = calc_log_proposal_density()
+	}
+	fresh_ll = false;
 	for ( arma::uword i=0; i < number_of_individuals; ++i) {
+		log_proposal_density[i] = 0.0;
 		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
-			td[i] = t + 1;
+			td_proposed[i] = t + 1;
 			if ( U(R) > PHI(i,t) ) {
 				break; 
-				log_proposal_density += log(1.0-PHI(i,t));
+				log_proposal_density[i] += log(1.0-PHI(i,t));
 			} else {
-				log_proposal_density += log(PHI(i,t));
+				log_proposal_density[i] += log(PHI(i,t));
 			}
 		}
 	}
-	log_asymmetry = last_log_proposal_density - log_proposal_density;
 	// On an "accept" last_log_proposal_density would be set to
 	// log_proposal_density...
-	return log_asymmetry;
+	return arma::accu(last_log_proposal_density - log_proposal_density);
 }
 
 double Recapture_Proposal_FLAT::propose_td( arma::Col<arma::uword> indexes ) {
-	double log_proposal_density = 0.0;
-
-	return log_proposal_density;
+	// Non-indexed portions of last_log / log proposal densities are left
+	// non-updated, so they have non-sense values.  In the "return"
+	// statement at the bottom, those are ignored (only indexes values are 
+	// summed, thus no caching here.
+	last_log_proposal_density = calc_log_proposal_density(indexes)
+	fresh_ll = false;
+	for ( arma::uword k=0; k < indexes.n_elem; ++k ) {
+		i = indexes[k];
+		log_proposal_density[i] = 0.0;
+		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
+			td_proposed[i] = t + 1;
+			if ( U(R) > PHI(i,t) ) {
+				break; 
+				log_proposal_density[i] += log(1.0-PHI(i,t));
+			} else {
+				log_proposal_density[i] += log(PHI(i,t));
+			}
+		}
+	}
+	// On an "accept" last_log_proposal_density would be set to
+	// log_proposal_density...
+	return arma::accu(
+			last_log_proposal_density.elem(indexes) - log_proposal_density.elem(indexes));
 }
 
 double Recapture_Proposal_FLAT::get_last_pd() const {
-	return last_log_proposal_density;
+	return arma::accu(last_log_proposal_density);
 }
 
 double Recapture_Proposal_FLAT::get_pd() const {
-	return log_proposal_density;
+	return arma::accu(log_proposal_density);
+}
+
+arma::Col<int> Recapture_Proposal_FLAT::get_proposed_deaths() const { 
+	return td_proposed; 
 }
 
 void Recapture_Proposal_FLAT::init() {
-	last_log_proposal_density = 0.0;
+}
+
+arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density() {
 	for (arma::uword i=0; i < number_of_individuals; ++i) { 
 		// td[i]-1 is the interval # of death.
-		last_log_proposal_density += log(1-PHI(i,td[i]-1));		
+		LPD[i] = log(1-PHI(i,td[i]-1));		
 		for ( int t=lo[i]; t < td[i]-1; ++t ) {
-			last_log_proposal_density += log(PHI(i,t));
+			LPD[i] += log(PHI(i,t));
 		}
 	}
+	return LPD[i];
+}
+
+arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes)
+	for (arma::uword k=0; k < indexes.n_elem; ++k) { 
+		i = indexes[k];
+		// td[i]-1 is the interval # of death.
+		LPD[i] = log(1-PHI(i,td[i]-1));		
+		for ( int t=lo[i]; t < td[i]-1; ++t ) {
+			LPD[i] += log(PHI(i,t));
+		}
+	}
+	return LPD;
 }
