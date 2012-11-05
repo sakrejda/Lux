@@ -344,7 +344,8 @@ Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 		times_of_deaths, known_deaths),
 		log_proposal_density(number_of_individuals),
 		last_log_proposal_density(number_of_individuals),
-		LPD(number_of_individuals)
+		LPD(number_of_individuals),
+		td_proposed(number_of_individuals)
 { 
 	init();
 }
@@ -411,6 +412,13 @@ arma::Col<int> Recapture_Proposal_FLAT::get_proposed_deaths() const {
 }
 
 void Recapture_Proposal_FLAT::init() {
+	log_proposal_density.set_size(number_of_individuals);
+	log_proposal_density.zeros();
+	last_log_proposal_density.set_size(number_of_individuals);
+	last_log_proposal_density.zeros();
+	LPD.set_size(number_of_individuals);
+	LPD.set_size(number_of_individuals);
+		
 }
 
 arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density() {
