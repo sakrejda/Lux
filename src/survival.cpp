@@ -424,7 +424,7 @@ arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density() {
 	return LPD;
 }
 
-arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes)
+arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density(arma::Col<arma::uword> indexes) {
 	arma::uword i;
 	for (arma::uword k=0; k < indexes.n_elem; ++k) { 
 		i = indexes[k];
