@@ -172,6 +172,8 @@ protected:
 
 private:
 	void init();
+	double log_proposal_density;
+	double last_log_proposal_density;
 
 };
 

@@ -332,7 +332,8 @@ void Recapture_Posterior_FLAT::init() {}
 
 // Sampler functions:
 Recapture_Proposal_FLAT::Recapture_Proposal_FLAT() :
-	Recapture_Posterior_FLAT() {}
+	Recapture_Posterior_FLAT(), 
+	log_proposal_density(0), last_log_proposal_density(0) {}
 
 Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 		std::vector<int> times_of_surveys,
@@ -341,30 +342,40 @@ Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 		std::vector<bool> known_deaths
 ) : Recapture_Posterior_FLAT(
 		times_of_surveys, times_of_recaptures,
-		times_of_deaths, known_deaths) 
+		times_of_deaths, known_deaths),
+		log_proposal_density(0),
+		last_log_proposal_density(0)
 { 
 	init();
 }
 
 double Recapture_Proposal_FLAT::propose_td() {
-	double log_asymmetry = 0.0;
+	double log_asymmetry;
 	for ( arma::uword i=0; i < number_of_individuals; ++i) {
 		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
 			td[i] = t + 1;
-			if ( U(R) > PHI[i,t] ) break; 
+			if ( U(R) > PHI[i,t] ) {
+				break; 
+				log_proposal_density += log(1.0-PHI[i,t]);
+			} else {
+				log_proposal_density += log(PHI[i,t]);
+			}
 		}
 	}
+	log_asymmetry = last_log_proposal_density - log_proposal_density;
+	// On an "accept" last_log_proposal_density would be set to
+	// log_proposal_density...
 	return log_asymmetry;
 }
 
 double Recapture_Proposal_FLAT::propose_td( arma::Col<arma::uword> indexes ) {
-	double log_asymmetry = 0.0;
+	double log_proposal_density = 0.0;
 
-	return log_asymmetry;
+	return log_proposal_density;
 }
 
 void Recapture_Proposal_FLAT::init() {
 	for (arma::uword i=0; i < number_of_individuals; ++i) {
-		
+		// ... calculate the log density for the current state of td...	
 	}
 }
