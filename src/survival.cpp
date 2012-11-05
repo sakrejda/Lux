@@ -332,8 +332,7 @@ void Recapture_Posterior_FLAT::init() {}
 
 // Sampler functions:
 Recapture_Proposal_FLAT::Recapture_Proposal_FLAT() :
-	Recapture_Posterior_FLAT(), 
-	log_proposal_density(0), last_log_proposal_density(0) {}
+	Recapture_Posterior_FLAT() {}
 
 Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 		std::vector<int> times_of_surveys,
@@ -343,8 +342,9 @@ Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
 ) : Recapture_Posterior_FLAT(
 		times_of_surveys, times_of_recaptures,
 		times_of_deaths, known_deaths),
-		log_proposal_density(0),
-		last_log_proposal_density(0)
+		log_proposal_density(number_of_individuals),
+		last_log_proposal_density(number_of_individuals),
+		LPD(number_of_individuals)
 { 
 	init();
 }
