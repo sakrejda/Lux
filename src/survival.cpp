@@ -376,7 +376,7 @@ double Recapture_Proposal_FLAT::propose_td( arma::Col<arma::uword> indexes ) {
 	// non-updated, so they have non-sense values.  In the "return"
 	// statement at the bottom, those are ignored (only indexes values are 
 	// summed, thus no caching here.
-	int i;
+	arma::uword i;
 	last_log_proposal_density = calc_log_proposal_density(indexes);
 	fresh_ll = false;
 	for ( arma::uword k=0; k < indexes.n_elem; ++k ) {
@@ -421,11 +421,11 @@ arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density() {
 			LPD[i] += log(PHI(i,t));
 		}
 	}
-	return LPD[i];
+	return LPD;
 }
 
 arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes)
-	int i;
+	arma::uword i;
 	for (arma::uword k=0; k < indexes.n_elem; ++k) { 
 		i = indexes[k];
 		// td[i]-1 is the interval # of death.
