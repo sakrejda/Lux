@@ -170,9 +170,7 @@ public:
 	double get_pd( arma::Col<arma::uword> indexes) const;
 
 	arma::Col<int> get_proposed_deaths() const;
-	arma::Col<double> calc_log_proposal_density();
-	arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes);
-	void accept();
+	arma::Col<double> calc_log_proposal_density();  // For inits only.
 
 
 protected:
