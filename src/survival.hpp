@@ -163,10 +163,12 @@ public:
 	);
 
 public:
-	double propose_td();
-	double propose_td( arma::Col<arma::uword> indexes );
-	double get_last_pd() const;
+	arma::Col<int> propose_td();
+	arma::Col<int> propose_td( const arma::Col<int>& td_ );
 	double get_pd() const;
+	arma::Col<int> propose_td( arma::Col<arma::uword> indexes );
+	double get_pd( arma::Col<arma::uword> indexes) const;
+
 	arma::Col<int> get_proposed_deaths() const;
 	arma::Col<double> calc_log_proposal_density();
 	arma::Col<double> calc_log_proposal_density(arma::Col<arma::uword> indexes);
@@ -181,8 +183,6 @@ protected:
 private:
 	void init();
 	arma::Col<double> log_proposal_density;
-	arma::Col<double> last_log_proposal_density;
-	arma::Col<double> LPD;
 };
 
 
