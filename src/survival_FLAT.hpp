@@ -5,8 +5,8 @@
 #include <map>
 
 #include <armadillo>
-#include <trng/yarn2.hpp>
-#include <trng/uniform01_dist.hpp>
+
+#include "proposals_FLAT.hpp"
 
 class Recapture_Data_FLAT {
 
@@ -78,6 +78,9 @@ private:
 
 class Recapture_Likelihood_FLAT : public Recapture_State_FLAT {
 
+	friend Slice_Proposal_FLAT;
+	friend Simulation_Proposal_FLAT;
+
 public:
 	Recapture_Likelihood_FLAT();
 	Recapture_Likelihood_FLAT(
@@ -106,6 +109,7 @@ public:
 protected:
 	arma::Mat<double> PHI;
 	arma::Mat<double> P;
+	arma::Mat<double> td_pdf;
 
 	double log_likelihood;
 	arma::Col<double> ll_phi_components;
@@ -122,10 +126,13 @@ protected:
 	void update_part_ll( arma::Col<arma::uword> indexes );
 
 	bool fresh_ll;
+	void calc_td_pdf();
 
 private:
 	void init();
 	unsigned int SES;
+	arma::Mat<double> S;
+	arma::Mat<double> D;
 	arma::Col<int> fresh_ll_p_components;
 	arma::Col<int> fresh_ll_phi_components;
 
@@ -144,43 +151,10 @@ public:
 
 public:
 	double get_lp();
-	double get_log_posterior();
 
 private:
 	void init();
 
-};
-
-class Recapture_Proposal_FLAT : public Recapture_Posterior_FLAT {
-
-public:
-	Recapture_Proposal_FLAT();
-	Recapture_Proposal_FLAT(
-		std::vector<int> times_of_surveys,
-		std::vector<std::vector<int> > times_of_recaptures,
-		std::vector<int> times_of_deaths,
-		std::vector<bool> known_deaths
-	);
-
-public:
-	arma::Col<int> propose_td();
-	arma::Col<int> propose_td( const arma::Col<int>& td_ );
-	double get_pd() const;
-	arma::Col<int> propose_td( arma::Col<arma::uword> indexes );
-	double get_pd( arma::Col<arma::uword> indexes) const;
-
-	arma::Col<int> get_proposed_deaths() const;
-	arma::Col<double> calc_log_proposal_density();  // For inits only.
-
-
-protected:
-	trng::yarn2 R;
-	trng::uniform01_dist<double> U;
-	arma::Col<int> td_proposed;
-
-private:
-	void init();
-	arma::Col<double> log_proposal_density;
 };
 
 

@@ -160,6 +160,7 @@ void Recapture_Likelihood_FLAT::set_PHI( arma::Mat<double> PHI_ ) {
 	PHI = PHI_; 
 	fresh_ll = false;
 }
+
 void Recapture_Likelihood_FLAT::set_P(   arma::Mat<double> P_   ) { 
 	P   = P_; 
 	fresh_ll = false;
@@ -298,8 +299,27 @@ void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes )
 }
 
 
+void calc_td_pdf() {
+	for ( unsigned int i=0; i < number_of_individuals; ++i ) {
+		S(i,lo[i]+1) = 0.0;
+		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
+		td_pdf(i,lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1);
+		for ( unsigned int t=lo[i]+2; t < number_of_occasions; ++t ) {
+			S(i,t) = log(   PHI(i,t-2) ) + S(i,t-1);
+			D(i,t) = log( 1-PHI(i,t-1) );
+			td_pdf(i,t) = S(i,t) + D(i,t);
+		}
+	}
+}
+
 void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 	resize_PHI(SES);
+	td_pdf.set_size(PHI.n_rows, PHI.n_cols);
+	td_pdf.zeros();
+	S.set_size(PHI.n_rows, PHI.n_cols);
+	S.zeros();
+	D.set_size(PHI.n_rows, PHI.n_cols);
+	D.zeros();
 	PHI.zeros();
 	P.zeros();
 }
@@ -322,129 +342,6 @@ Recapture_Posterior_FLAT::Recapture_Posterior_FLAT(
 
 double Recapture_Posterior_FLAT::get_lp() { return 0; }   /// Flat priors....
 
-double Recapture_Posterior_FLAT::get_log_posterior() {
-	double ll = get_ll();
-	double lp = get_lp();
-	return ll + lp;
-};
 
 void Recapture_Posterior_FLAT::init() {}
 
-// Sampler functions:
-Recapture_Proposal_FLAT::Recapture_Proposal_FLAT() :
-	Recapture_Posterior_FLAT() {}
-
-Recapture_Proposal_FLAT::Recapture_Proposal_FLAT(
-		std::vector<int> times_of_surveys,
-		std::vector<std::vector<int> > times_of_recaptures,
-		std::vector<int> times_of_deaths,
-		std::vector<bool> known_deaths
-) : Recapture_Posterior_FLAT(
-		times_of_surveys, times_of_recaptures,
-		times_of_deaths, known_deaths),
-		log_proposal_density(number_of_individuals),
-		td_proposed(number_of_individuals)
-{ 
-	init();
-}
-
-arma::Col<int> Recapture_Proposal_FLAT::propose_td() {
-	for ( arma::uword i=0; i < number_of_individuals; ++i) {
-		log_proposal_density[i] = 0.0;
-		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
-			td_proposed[i] = t + 1;
-			if ( U(R) > PHI(i,t) ) {
-				break; 
-				log_proposal_density[i] += log(1.0-PHI(i,t));
-			} else {
-				log_proposal_density[i] += log(PHI(i,t));
-			}
-		}
-	}
-	return td_proposed;
-}
-
-arma::Col<int> Recapture_Proposal_FLAT::propose_td(
-	const arma::Col<int>& td_
-) {
-	for ( arma::uword i=0; i < number_of_individuals; ++i) {
-		log_proposal_density[i] = 0.0;
-		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
-			td_proposed[i] = t + 1;
-			if ( U(R) > PHI(i,t) ) {
-				break; 
-				log_proposal_density[i] += log(1.0-PHI(i,t));
-			} else {
-				log_proposal_density[i] += log(PHI(i,t));
-			}
-		}
-	}
-	return td_proposed;
-}
-
-arma::Col<int> Recapture_Proposal_FLAT::propose_td( arma::Col<arma::uword> indexes ) {
-	// Non-indexed portions of log proposal densities are left
-	// non-updated, so they have non-sense values.  User must deal
-	// with this properly (use matching call to get_pd.
-	arma::uword i;
-	for ( arma::uword k=0; k < indexes.n_elem; ++k ) {
-		i = indexes[k];
-		log_proposal_density[i] = 0.0;
-		for ( int t=lo[i]; t < PHI.n_cols; ++t) {
-			td_proposed[i] = t + 1;
-			if ( U(R) > PHI(i,t) ) {
-				break; 
-				log_proposal_density[i] += log(1.0-PHI(i,t));
-			} else {
-				log_proposal_density[i] += log(PHI(i,t));
-			}
-		}
-	}
-	return td_proposed;
-}
-
-
-double Recapture_Proposal_FLAT::get_pd() const {
-	return arma::accu(log_proposal_density);
-}
-
-double get_pd( arma::Col<arma::uword> indexes) const {
-	return arma::accu(log_proposal_density.elem(indexes));
-
-arma::Col<int> Recapture_Proposal_FLAT::get_proposed_deaths() const { 
-	propose_td();
-	return td_proposed; 
-}
-
-
-void Recapture_Proposal_FLAT::init() {
-	log_proposal_density.set_size(number_of_individuals);
-	log_proposal_density.zeros();
-	log_proposal_density = calc_log_proposal_density();
-}
-
-arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density() {
-	for (arma::uword i=0; i < number_of_individuals; ++i) { 
-		// td[i]-1 is the interval # of death.
-		log_proposal_density[i] = log(1-PHI(i,td[i]-1));		
-		for ( int t=lo[i]; t < td[i]-1; ++t ) {
-			log_proposal_density[i] += log(PHI(i,t));
-		}
-	}
-	return log_proposal_density;
-}
-
-//arma::Col<double> Recapture_Proposal_FLAT::calc_log_proposal_density(arma::Col<arma::uword> indexes) {
-//	arma::uword i;
-//	for (arma::uword k=0; k < indexes.n_elem; ++k) { 
-//		i = indexes[k];
-//		// td[i]-1 is the interval # of death.
-//		log_proposal_density[i] = log(1-PHI(i,td[i]-1));		
-//		for ( int t=lo[i]; t < td[i]-1; ++t ) {
-//			log_proposal_density[i] += log(PHI(i,t));
-//		}
-//	}
-//	return log_proposal_density;
-//}
-//
-//
