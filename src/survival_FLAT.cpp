@@ -299,7 +299,7 @@ void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes )
 }
 
 
-void calc_td_pdf() {
+void Recapture_Likelihood_FLAT::calc_td_pdf() {
 	for ( unsigned int i=0; i < number_of_individuals; ++i ) {
 		S(i,lo[i]+1) = 0.0;
 		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
