@@ -1,4 +1,4 @@
-#include "survival.hpp"
+#include "survival_FLAT.hpp"
 #include <iostream>
 // Member functions for Data_FLAT only:
 //
