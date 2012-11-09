@@ -88,13 +88,13 @@ Slice_Proposal_FLAT::Slice_Proposal_FLAT(
 	td_proposed.set_size(theta.number_of_individuals);
 	td_proposed.zeros();
 	td_proposed = theta.td;
-	calc_td_pdf();
-	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
-	td_pdf.zeros();
 	S.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
 	S.zeros();
 	D.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
 	D.zeros();
+	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
+	td_pdf.zeros();
+	calc_td_pdf();
 }
 
 arma::Col<int> Slice_Proposal_FLAT::propose_td() {
