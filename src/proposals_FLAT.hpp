@@ -14,7 +14,7 @@
 class Simulation_Proposal_FLAT {
 
 public:
-	Simulation_Proposal_FLAT();
+	//Simulation_Proposal_FLAT();
 	Simulation_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
 
 public:
@@ -45,7 +45,7 @@ private:
 class Slice_Proposal_FLAT {
 
 public:
-	Slice_Proposal_FLAT();
+	//Slice_Proposal_FLAT();
 	Slice_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
 
 public:
