@@ -7,7 +7,7 @@ Simulation_Proposal_FLAT::Simulation_Proposal_FLAT() {}
 
 Simulation_Proposal_FLAT::Simulation_Proposal_FLAT(
 	const Recapture_Posterior_FLAT& theta
-) : {
+) {
 	td_proposed.set_size(theta.number_of_individuals);
 	td_proposed.zeros();
 	td_proposed = theta.td;
