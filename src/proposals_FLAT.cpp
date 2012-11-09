@@ -14,7 +14,7 @@ Simulation_Proposal_FLAT::Simulation_Proposal_FLAT(
 	td_proposed = theta.td;
 	log_proposal_density.set_size(theta.number_of_individuals);
 	log_proposal_density.zeros();
-	log_proposal_density = calc_log_proposal_density(theta);
+	log_proposal_density = calc_log_proposal_density();
 }
 
 arma::Col<int> Simulation_Proposal_FLAT::propose_td() {
