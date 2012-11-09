@@ -132,8 +132,6 @@ protected:
 private:
 	void init();
 	unsigned int SES;
-	arma::Mat<double> S;
-	arma::Mat<double> D;
 	arma::Col<int> fresh_ll_p_components;
 	arma::Col<int> fresh_ll_phi_components;
 
@@ -152,6 +150,8 @@ public:
 
 public:
 	double get_lp();
+	double get_log_posterior();
+
 
 private:
 	void init();

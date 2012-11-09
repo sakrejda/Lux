@@ -299,27 +299,9 @@ void Recapture_Likelihood_FLAT::update_part_ll( arma::Col<arma::uword> indexes )
 }
 
 
-void Recapture_Likelihood_FLAT::calc_td_pdf() {
-	for ( unsigned int i=0; i < number_of_individuals; ++i ) {
-		S(i,lo[i]+1) = 0.0;
-		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
-		td_pdf(i,lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1);
-		for ( unsigned int t=lo[i]+2; t < number_of_occasions; ++t ) {
-			S(i,t) = log(   PHI(i,t-2) ) + S(i,t-1);
-			D(i,t) = log( 1-PHI(i,t-1) );
-			td_pdf(i,t) = S(i,t) + D(i,t);
-		}
-	}
-}
 
 void Recapture_Likelihood_FLAT::Recapture_Likelihood_FLAT::init() {
 	resize_PHI(SES);
-	td_pdf.set_size(PHI.n_rows, PHI.n_cols);
-	td_pdf.zeros();
-	S.set_size(PHI.n_rows, PHI.n_cols);
-	S.zeros();
-	D.set_size(PHI.n_rows, PHI.n_cols);
-	D.zeros();
 	PHI.zeros();
 	P.zeros();
 }
@@ -341,6 +323,11 @@ Recapture_Posterior_FLAT::Recapture_Posterior_FLAT(
 }
 
 double Recapture_Posterior_FLAT::get_lp() { return 0; }   /// Flat priors....
+
+
+double Recapture_Posterior_FLAT::get_log_posterior() {
+	return get_ll() + get_lp();
+}
 
 
 void Recapture_Posterior_FLAT::init() {}
