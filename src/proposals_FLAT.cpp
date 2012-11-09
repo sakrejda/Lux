@@ -92,9 +92,13 @@ Slice_Proposal_FLAT::Slice_Proposal_FLAT(
 	td_proposed.set_size(theta.number_of_individuals);
 	td_proposed.zeros();
 	td_proposed = theta.td;
-	log_proposal_density.set_size(theta.number_of_individuals);
-	log_proposal_density.zeros();
-	log_proposal_density = calc_log_proposal_density(theta);
+	calc_td_pdf(theta);
+	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
+	td_pdf.zeros();
+	S.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
+	S.zeros();
+	D.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
+	D.zeros();
 }
 
 arma::Col<int> Slice_Proposal_FLAT::propose_td(
@@ -102,11 +106,11 @@ arma::Col<int> Slice_Proposal_FLAT::propose_td(
 ) {
 	double h;
 	int tmax;
-	//if (!theta.fresh_ll) theta.calc_td_pdf();
+	if (!theta.fresh_ll) calc_td_pdf(theta);
 	for ( arma::uword i=0; i < theta.number_of_individuals; ++i) {
 		h = U(R) * theta.td_pdf(i,theta.td[i]);
 		tmax = theta.lo[i]+1;
-		for( unsigned int t=theta.lo[i]+2; h < theta.td_pdf(i,t); ++t ) {
+		for( unsigned int t=theta.lo[i]+2; h < td_pdf(i,t); ++t ) {
 			tmax = t;
 		}
 		td_proposed[i] = int(U(R) * (double(tmax) + 1.0));
@@ -115,34 +119,19 @@ arma::Col<int> Slice_Proposal_FLAT::propose_td(
 }
 
 
-
-double Slice_Proposal_FLAT::get_pd() const {
-	return arma::accu(log_proposal_density);
-}
-
-arma::Col<double> Slice_Proposal_FLAT::calc_log_proposal_density(
+void Slice_Proposal_FLAT::calc_td_pdf(
 	const Recapture_Posterior_FLAT& theta		
 ) {
-	for (arma::uword i=0; i < theta.number_of_individuals; ++i) { 
-		// td[i]-1 is the interval # of death.
-		log_proposal_density[i] = log(1-theta.PHI(i,theta.td[i]-1));		
-		for ( int t=theta.lo[i]; t < theta.td[i]-1; ++t ) {
-			log_proposal_density[i] += log(theta.PHI(i,t));
+	for ( unsigned int i=0; i < theta.number_of_individuals; ++i ) {
+		S(i,theta.lo[i]+1) = 0.0;
+		D(i,theta.lo[i]+1) = log( 1-theta.PHI(i,theta.lo[i]) );
+		td_pdf(i,theta.lo[i]+1) = S(i,theta.lo[i]+1) + D(i,theta.lo[i]+1);
+		for ( unsigned int t=theta.lo[i]+2; t < theta.number_of_occasions; ++t ) {
+			S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1);
+			D(i,t) = log( 1-theta.PHI(i,t-1) );
+			td_pdf(i,t) = S(i,t) + D(i,t);
 		}
 	}
-	return log_proposal_density;
 }
 
 
-/// To calculate horizontal extent of slice, for each i, I need
-/// the density for death at t (therefore 2d).  Run this once
-/// for everyone will let me reuse the calculations
-arma::Mat<double> Slice_Proposal_FLAT::calc_log_proposal_density(
-	const Recapture_Posterior_FLAT& theta		
-) {
-	log_proposal_density[i] = log(1-theta.PHI(i,td[i]-1));		
-	for ( int t=theta.lo[i]; t < td[i]-1; ++t ) {
-		log_proposal_density[i] += log(theta.PHI(i,t));
-	}
-	return log_proposal_density;
-}

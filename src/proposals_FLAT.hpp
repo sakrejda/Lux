@@ -58,9 +58,6 @@ public:
 	);
 	double get_pd() const;
 
-	arma::Col<double> calc_log_proposal_density(
-		const Recapture_Posterior_FLAT& theta
-	);  // For current state.
 
 
 protected:
@@ -70,6 +67,12 @@ protected:
 
 private:
 	void init();
-	arma::Col<double> log_proposal_density;
+	arma::Mat<double> S;
+	arma::Mat<double> D;
+	arma::Mat<double> td_pdf;
+	void calc_td_pdf( const Recapture_Posterior_FLAT& theta );
 };
+
+
+
 #endif
