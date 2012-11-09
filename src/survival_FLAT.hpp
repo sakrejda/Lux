@@ -6,8 +6,6 @@
 
 #include <armadillo>
 
-#include "proposals_FLAT.hpp"
-
 class Recapture_Data_FLAT {
 
 public:
