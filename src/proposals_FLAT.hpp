@@ -15,29 +15,25 @@ class Simulation_Proposal_FLAT {
 
 public:
 	Simulation_Proposal_FLAT();
-	Simulation_Proposal_FLAT( const Recapture_Posterior_FLAT& theta );
+	Simulation_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
 
 public:
-	arma::Col<int> propose_td( 
-			const Recapture_Posterior_FLAT& theta 
-	);
+	arma::Col<int> propose_td();
 	double get_pd() const;
 
 	arma::Col<int> propose_td( 
-			const Recapture_Posterior_FLAT& theta,
 			arma::Col<arma::uword> indexes 
 	);
 	double get_pd( arma::Col<arma::uword> indexes) const;
 
-	arma::Col<double> calc_log_proposal_density(
-		const Recapture_Posterior_FLAT& theta
-	);  // For current state.
+	arma::Col<double> calc_log_proposal_density();  // For current state.
 
 
 protected:
 	trng::yarn2 R;
 	trng::uniform01_dist<double> U;
 	arma::Col<int> td_proposed;
+	const Recapture_Posterior_FLAT& theta;
 
 private:
 	void init();
@@ -50,27 +46,23 @@ class Slice_Proposal_FLAT {
 
 public:
 	Slice_Proposal_FLAT();
-	Slice_Proposal_FLAT( const Recapture_Posterior_FLAT& theta );
+	Slice_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
 
 public:
-	arma::Col<int> propose_td( 
-			const Recapture_Posterior_FLAT& theta 
-	);
-	double get_pd() const;
-
-
+	arma::Col<int> propose_td();
 
 protected:
 	trng::yarn2 R;
 	trng::uniform01_dist<double> U;
 	arma::Col<int> td_proposed;
+	const Recapture_Posterior_FLAT& theta;
 
 private:
 	void init();
 	arma::Mat<double> S;
 	arma::Mat<double> D;
 	arma::Mat<double> td_pdf;
-	void calc_td_pdf( const Recapture_Posterior_FLAT& theta );
+	void calc_td_pdf();
 };
 
 

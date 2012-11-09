@@ -6,8 +6,9 @@
 Simulation_Proposal_FLAT::Simulation_Proposal_FLAT() {}
 
 Simulation_Proposal_FLAT::Simulation_Proposal_FLAT(
-	const Recapture_Posterior_FLAT& theta
+	const Recapture_Posterior_FLAT& theta_
 ) {
+	theta = theta_;
 	td_proposed.set_size(theta.number_of_individuals);
 	td_proposed.zeros();
 	td_proposed = theta.td;
@@ -16,9 +17,7 @@ Simulation_Proposal_FLAT::Simulation_Proposal_FLAT(
 	log_proposal_density = calc_log_proposal_density(theta);
 }
 
-arma::Col<int> Simulation_Proposal_FLAT::propose_td(
-	const Recapture_Posterior_FLAT& theta		
-) {
+arma::Col<int> Simulation_Proposal_FLAT::propose_td() {
 	for ( arma::uword i=0; i < theta.number_of_individuals; ++i) {
 		log_proposal_density[i] = 0.0;
 		for ( int t=theta.lo[i]; t < theta.PHI.n_cols; ++t) {
@@ -35,8 +34,7 @@ arma::Col<int> Simulation_Proposal_FLAT::propose_td(
 }
 
 arma::Col<int> Simulation_Proposal_FLAT::propose_td( 
-	const Recapture_Posterior_FLAT& theta,
-	arma::Col<arma::uword> indexes 
+		arma::Col<arma::uword> indexes 
 ) {
 	// Non-indexed portions of log proposal densities are left
 	// non-updated, so they have non-sense values.  User must deal
@@ -67,9 +65,7 @@ double Simulation_Proposal_FLAT::get_pd( arma::Col<arma::uword> indexes) const {
 	return arma::accu(log_proposal_density.elem(indexes));
 }
 
-arma::Col<double> Simulation_Proposal_FLAT::calc_log_proposal_density(
-	const Recapture_Posterior_FLAT& theta		
-) {
+arma::Col<double> Simulation_Proposal_FLAT::calc_log_proposal_density() {
 	for (arma::uword i=0; i < theta.number_of_individuals; ++i) { 
 		// td[i]-1 is the interval # of death.
 		log_proposal_density[i] = log(1-theta.PHI(i,theta.td[i]-1));		
@@ -87,8 +83,9 @@ arma::Col<double> Simulation_Proposal_FLAT::calc_log_proposal_density(
 Slice_Proposal_FLAT::Slice_Proposal_FLAT() {}
 
 Slice_Proposal_FLAT::Slice_Proposal_FLAT(
-	const Recapture_Posterior_FLAT& theta
+	const Recapture_Posterior_FLAT& theta_
 ) {
+	theta = theta_;
 	td_proposed.set_size(theta.number_of_individuals);
 	td_proposed.zeros();
 	td_proposed = theta.td;
@@ -101,9 +98,7 @@ Slice_Proposal_FLAT::Slice_Proposal_FLAT(
 	D.zeros();
 }
 
-arma::Col<int> Slice_Proposal_FLAT::propose_td(
-	const Recapture_Posterior_FLAT& theta		
-) {
+arma::Col<int> Slice_Proposal_FLAT::propose_td() {
 	double h;
 	int tmax;
 	if (!theta.fresh_ll) calc_td_pdf(theta);
@@ -119,9 +114,7 @@ arma::Col<int> Slice_Proposal_FLAT::propose_td(
 }
 
 
-void Slice_Proposal_FLAT::calc_td_pdf(
-	const Recapture_Posterior_FLAT& theta		
-) {
+void Slice_Proposal_FLAT::calc_td_pdf() {
 	for ( unsigned int i=0; i < theta.number_of_individuals; ++i ) {
 		S(i,theta.lo[i]+1) = 0.0;
 		D(i,theta.lo[i]+1) = log( 1-theta.PHI(i,theta.lo[i]) );
