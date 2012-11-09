@@ -84,11 +84,11 @@ arma::Col<double> Simulation_Proposal_FLAT::calc_log_proposal_density(
 //////
 
 // Sampler functions:
-Slice_Proposal_FLAT::Slice_Proposal_FLAT() : {}
+Slice_Proposal_FLAT::Slice_Proposal_FLAT() {}
 
 Slice_Proposal_FLAT::Slice_Proposal_FLAT(
 	const Recapture_Posterior_FLAT& theta
-) : {
+) {
 	td_proposed.set_size(theta.number_of_individuals);
 	td_proposed.zeros();
 	td_proposed = theta.td;
