@@ -65,6 +65,7 @@ double Simulation_Proposal_FLAT::get_pd() const {
 
 double Simulation_Proposal_FLAT::get_pd( arma::Col<arma::uword> indexes) const {
 	return arma::accu(log_proposal_density.elem(indexes));
+}
 
 arma::Col<double> Simulation_Proposal_FLAT::calc_log_proposal_density(
 	const Recapture_Posterior_FLAT& theta		
