@@ -99,19 +99,20 @@ Slice_Proposal_FLAT::Slice_Proposal_FLAT(
 
 arma::Col<int> Slice_Proposal_FLAT::propose_td() {
 	double h;
-	int tmax;
+	int tmin, tmax;
 	if (!theta.fresh_ll) calc_td_pdf();
 	for ( arma::uword i=0; i < theta.number_of_individuals; ++i) {
 		h = U(R) * exp(td_pdf(i,theta.td[i]));
 		std::cout << "i: " << i << ", td[i]: " << theta.td[i];
 		std::cout << ", h: " << h << std::endl;
-		tmax = theta.lo[i]+1;
-		for( unsigned int t=theta.lo[i]+2; 
-				h < exp(td_pdf(i,t)) && t < theta.PHI.n_cols; ++t ) {
+		tmin = theta.lo[i]+1;
+		tmax = 0;
+		for( unsigned int t=1; 
+				h < exp(td_pdf(i,t+tmin)) && (t+tmin) < theta.PHI.n_cols; ++t ) {
 			std::cout << "\ttmax: " << tmax << std::endl;
 			tmax = t;
 		}
-		td_proposed[i] = int(U(R) * (double(tmax) + 1.0));
+		td_proposed[i] = tmin + int(U(R) * (double(tmax) + 1.0));
 	}
 	return td_proposed;
 }
