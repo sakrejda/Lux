@@ -3,7 +3,7 @@
 #include <math.h>
 
 // Sampler functions:
-Simulation_Proposal_FLAT::Simulation_Proposal_FLAT() : {}
+Simulation_Proposal_FLAT::Simulation_Proposal_FLAT() {}
 
 Simulation_Proposal_FLAT::Simulation_Proposal_FLAT(
 	const Recapture_Posterior_FLAT& theta
