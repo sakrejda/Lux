@@ -110,7 +110,6 @@ public:
 protected:
 	arma::Mat<double> PHI;
 	arma::Mat<double> P;
-	arma::Mat<double> td_pdf;
 
 	double log_likelihood;
 	arma::Col<double> ll_phi_components;
@@ -127,7 +126,6 @@ protected:
 	void update_part_ll( arma::Col<arma::uword> indexes );
 
 	bool fresh_ll;
-	void calc_td_pdf();
 
 private:
 	void init();
