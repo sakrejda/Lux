@@ -106,7 +106,8 @@ arma::Col<int> Slice_Proposal_FLAT::propose_td() {
 		std::cout << "i: " << i << ", td[i]: " << theta.td[i];
 		std::cout << "h: " << h << std::endl;
 		tmax = theta.lo[i]+1;
-		for( unsigned int t=theta.lo[i]+2; h < td_pdf(i,t); ++t ) {
+		for( unsigned int t=theta.lo[i]+2; 
+				h < td_pdf(i,t) && t < theta.PHI.n_cols; ++t ) {
 			std::cout << "\ttmax: " << tmax << std::endl;
 			tmax = t;
 		}
