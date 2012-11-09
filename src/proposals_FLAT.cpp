@@ -102,7 +102,7 @@ arma::Col<int> Slice_Proposal_FLAT::propose_td(
 ) {
 	double h;
 	int tmax;
-	if (!theta.fresh_ll) theta.calc_td_pdf();
+	//if (!theta.fresh_ll) theta.calc_td_pdf();
 	for ( arma::uword i=0; i < theta.number_of_individuals; ++i) {
 		h = U(R) * theta.td_pdf(i,theta.td[i]);
 		tmax = theta.lo[i]+1;
