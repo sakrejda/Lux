@@ -9,6 +9,8 @@
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
 
+#include "survival_FLAT.hpp"
+
 class Simulation_Proposal_FLAT {
 
 public:
