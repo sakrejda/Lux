@@ -6,6 +6,9 @@
 
 #include <armadillo>
 
+class Slice_Proposal_FLAT;
+class Simulation_Proposal_FLAT;
+
 class Recapture_Data_FLAT {
 
 public:
