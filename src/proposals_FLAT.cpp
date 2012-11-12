@@ -9,16 +9,16 @@
 Simulation_td_Proposal_FLAT::Simulation_td_Proposal_FLAT(
 	const Recapture_Posterior_FLAT& theta_
 ) : theta(theta_) {
-	td_proposed.set_size(theta.number_of_individuals);
+	td_proposed.set_size(theta.PHI.n_rows);
 	td_proposed.zeros();
 	td_proposed = theta.td;
-	log_proposal_density.set_size(theta.number_of_individuals);
+	log_proposal_density.set_size(theta.PHI.n_rows);
 	log_proposal_density.zeros();
 	log_proposal_density = calc_log_proposal_density();
 }
 
 arma::Col<int> Simulation_td_Proposal_FLAT::propose_td() {
-	for ( arma::uword i=0; i < theta.number_of_individuals; ++i) {
+	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
 		log_proposal_density[i] = 0.0;
 		for ( int t=theta.lo[i]; t < theta.PHI.n_cols; ++t) {
 			td_proposed[i] = t + 1;
@@ -66,7 +66,7 @@ double Simulation_td_Proposal_FLAT::get_pd( arma::Col<arma::uword> indexes) cons
 }
 
 arma::Col<double> Simulation_td_Proposal_FLAT::calc_log_proposal_density() {
-	for (arma::uword i=0; i < theta.number_of_individuals; ++i) { 
+	for (arma::uword i=0; i < theta.PHI.n_rows; ++i) { 
 		// td[i]-1 is the interval # of death.
 		log_proposal_density[i] = log(1-theta.PHI(i,theta.td[i]-1));		
 		for ( int t=theta.lo[i]; t < theta.td[i]-1; ++t ) {
@@ -85,7 +85,7 @@ arma::Col<double> Simulation_td_Proposal_FLAT::calc_log_proposal_density() {
 Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	const Recapture_Posterior_FLAT& theta_
 ) : theta(theta_) {
-	td_proposed.set_size(theta.number_of_individuals);
+	td_proposed.set_size(theta.PHI.n_rows);
 	td_proposed.zeros();
 	td_proposed = theta.td;
 	S.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
@@ -101,7 +101,7 @@ arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
 	double h;
 	int tmin, tmax;
 	if (!theta.fresh_ll) calc_td_pdf();
-	for ( arma::uword i=0; i < theta.number_of_individuals; ++i) {
+	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
 		h = U(R) * exp(td_pdf(i,theta.td[i]));
 		tmin = theta.lo[i]+1;
 		tmax = 0;
@@ -116,12 +116,12 @@ arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
 
 
 void Slice_td_Proposal_FLAT::calc_td_pdf() {
-	for ( unsigned int i=0; i < theta.number_of_individuals; ++i ) {
+	for ( unsigned int i=0; i < theta.PHI.n_rows; ++i ) {
 		S(i,theta.lo[i]+1) = 0.0;
 		D(i,theta.lo[i]+1) = log( 1-theta.PHI(i,theta.lo[i]) );
 		td_pdf(i,theta.lo[i]+1) = S(i,theta.lo[i]+1) + D(i,theta.lo[i]+1);
 		for ( unsigned int t=theta.lo[i]+2; t < theta.PHI.n_cols; ++t ) {
-			if ( t >= theta.number_of_occasions ) {
+			if ( t > theta.P.n_cols ) {
 				S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1);
 			} else {
 				S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1) + log( 1 - P[i,t-1]);
