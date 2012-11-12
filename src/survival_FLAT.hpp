@@ -79,8 +79,6 @@ private:
 
 class Recapture_Likelihood_FLAT : public Recapture_State_FLAT {
 
-	friend class Slice_Proposal_FLAT;
-	friend class Simulation_Proposal_FLAT;
 
 public:
 	Recapture_Likelihood_FLAT();
@@ -136,6 +134,9 @@ private:
 };
 
 class Recapture_Posterior_FLAT : public Recapture_Likelihood_FLAT {
+
+friend class Slice_Proposal_FLAT;
+friend class Simulation_Proposal_FLAT;
 
 public:
 	Recapture_Posterior_FLAT();
