@@ -11,11 +11,11 @@
 
 #include "survival_FLAT.hpp"
 
-class Simulation_Proposal_FLAT {
+class Simulation_td_Proposal_FLAT {
 
 public:
-	//Simulation_Proposal_FLAT();
-	Simulation_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
+	//Simulation_td_Proposal_FLAT();
+	Simulation_td_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
 
 public:
 	arma::Col<int> propose_td();
@@ -42,14 +42,15 @@ private:
 
 /////
 
-class Slice_Proposal_FLAT {
+class Slice_td_Proposal_FLAT {
 
 public:
-	//Slice_Proposal_FLAT();
-	Slice_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
+	//Slice_td_Proposal_FLAT();
+	Slice_td_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
 
 public:
 	arma::Col<int> propose_td();
+	arma::Mat<double> get_td_pdf();
 
 protected:
 	trng::yarn2 R;
