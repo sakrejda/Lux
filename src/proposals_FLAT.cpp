@@ -124,7 +124,7 @@ void Slice_td_Proposal_FLAT::calc_td_pdf() {
 			if ( t > theta.P.n_cols ) {
 				S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1);
 			} else {
-				S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1) + log( 1 - P[i,t-1]);
+				S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1) + log( 1 - theta.P[i,t-1]);
 			}
 			D(i,t) = log( 1-theta.PHI(i,t-1) );
 			td_pdf(i,t) = S(i,t) + D(i,t);
