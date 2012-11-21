@@ -85,6 +85,8 @@ arma::Col<double> Simulation_td_Proposal_FLAT::calc_log_proposal_density() {
 Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	const Recapture_Posterior_FLAT& theta_
 ) : theta(theta_) {
+	std::vector<double> ps;
+	std::vector<std::vector<double> > pss;
 	td_proposed.set_size(theta.PHI.n_rows);
 	td_proposed.zeros();
 	td_proposed = theta.td;
@@ -95,10 +97,16 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
 	td_pdf.zeros();
 	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
-		CH.push_back(new trng::discrete_dist(theta.PHI.n_cols));
-		for (unsigned int t=0; t <= theta.lo[i]; ++t) {
-			CH[i]->param(t,0.0);
+		std::fill(ps.begin(), ps.begin + theta.lo[i]    , 0.0);
+		std::fill(ps.begin() + theta.lo[i] + 1, ps.end(), 1.0);
+		for(unsigned int t=0; t < ps.size(); ++t) {
+			std::cout << ps[t] << ", ";
 		}
+		std::cout << std::endl;
+		pss.push_back(ps);
+	}
+	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
+		CH.push_back(new trng::discrete_dist(pss[i].begin(), pss[i].end()));
 	}
 	calc_td_pdf();
 }
@@ -107,6 +115,7 @@ Slice_td_Proposal_FLAT::~Slice_td_Proposal_FLAT() {
 	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
 		delete CH[i];
 	}
+	CH.clear();
 }
 
 arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
