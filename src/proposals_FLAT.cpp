@@ -97,7 +97,7 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
 		CH.push_back(new trng::discrete_dist(td_pdf.n_cols));
 		for (unsigned int t=0; t <= theta.lo[i]; ++t) {
-			*(CH[i]).param(t,0.0);
+			CH[i]->param(t,0.0);
 		}
 	}
 	calc_td_pdf();
@@ -147,7 +147,7 @@ void Slice_td_Proposal_FLAT::calc_td_pdf() {
 			}
 			D(i,t) = log( 1-theta.PHI(i,t-1) );
 			td_pdf(i,t) = S(i,t) + D(i,t);
-			*(CH[i]).param(t,td_pdf(i,t));
+			CH[i]->param(t,td_pdf(i,t));
 		}
 	}
 }
