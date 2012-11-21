@@ -47,6 +47,7 @@ class Slice_td_Proposal_FLAT {
 public:
 	//Slice_td_Proposal_FLAT();
 	Slice_td_Proposal_FLAT( const Recapture_Posterior_FLAT& theta_ );
+	~Slice_td_Proposal_FLAT();
 
 public:
 	arma::Col<int> propose_td();
@@ -55,6 +56,7 @@ public:
 protected:
 	trng::yarn2 R;
 	trng::uniform01_dist<double> U;
+	std::vector<trng::discrete_dist*> CH;
 	arma::Col<int> td_proposed;
 	const Recapture_Posterior_FLAT& theta;
 

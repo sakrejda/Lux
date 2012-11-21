@@ -94,25 +94,44 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	D.zeros();
 	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
 	td_pdf.zeros();
+	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
+		CH.push_back(new theta_.PHI.n_cols(td_pdf.n_cols));
+		for (unsigned int t=0; t <= theta.lo[i]; ++t) {
+			*(CH[i]).param(t,0.0);
+		}
+	}
 	calc_td_pdf();
 }
 
+Slice_td_Proposal_FLAT::~Slice_td_Proposal_FLAT() {
+	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
+		delete CH[i];
+	}
+}
+
 arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
-	double h;
-	int tmin, tmax;
 	if (!theta.fresh_ll) calc_td_pdf();
 	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
-		h = U(R) * exp(td_pdf(i,theta.td[i]));
-		tmin = theta.lo[i]+1;
-		tmax = 0;
-		for( unsigned int t=1; 
-				h < exp(td_pdf(i,t+tmin)) && (t+tmin) < theta.PHI.n_cols; ++t ) {
-			tmax = t;
-		}
-		td_proposed[i] = tmin + int(U(R) * (double(tmax) + 1.0));
+		td_proposed[i] = *(CH[i])(R);
 	}
 	return td_proposed;
 }
+//arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
+//	double h;
+//	int tmin, tmax;
+//	if (!theta.fresh_ll) calc_td_pdf();
+//	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
+//		h = U(R) * exp(td_pdf(i,theta.td[i]));
+//		tmin = theta.lo[i]+1;
+//		tmax = 0;
+//		for( unsigned int t=1; 
+//				h < exp(td_pdf(i,t+tmin)) && (t+tmin) < theta.PHI.n_cols; ++t ) {
+//			tmax = t;
+//		}
+//		td_proposed[i] = tmin + int(U(R) * (double(tmax) + 1.0));
+//	}
+//	return td_proposed;
+//}
 
 
 void Slice_td_Proposal_FLAT::calc_td_pdf() {
@@ -128,6 +147,7 @@ void Slice_td_Proposal_FLAT::calc_td_pdf() {
 			}
 			D(i,t) = log( 1-theta.PHI(i,t-1) );
 			td_pdf(i,t) = S(i,t) + D(i,t);
+			*(CH[i]).param(t,td_pdf(i,t));
 		}
 	}
 }
