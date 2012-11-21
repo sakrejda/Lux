@@ -95,7 +95,7 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
 	td_pdf.zeros();
 	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
-		CH.push_back(new trng::discrete_dist(td_pdf.n_cols));
+		CH.push_back(new trng::discrete_dist(int(td_pdf.n_cols)));
 		for (unsigned int t=0; t <= theta.lo[i]; ++t) {
 			CH[i]->param(t,0.0);
 		}
@@ -113,6 +113,7 @@ arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
 	if (!theta.fresh_ll) calc_td_pdf();
 	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
 		td_proposed[i] = (*CH[i])(R);
+		std::cout << td_proposed[i] << ", " << U(R) << std::endl;
 	}
 	return td_proposed;
 }
