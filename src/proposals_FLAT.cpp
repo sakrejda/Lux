@@ -150,6 +150,7 @@ void Slice_td_Proposal_FLAT::calc_td_pdf() {
 		S(i,theta.lo[i]+1) = 0.0;
 		D(i,theta.lo[i]+1) = log( 1-theta.PHI(i,theta.lo[i]) );
 		td_pdf(i,theta.lo[i]+1) = S(i,theta.lo[i]+1) + D(i,theta.lo[i]+1);
+		CH[i]->param(theta.lo[i]+1, td_pdf(i,theta.lo[i]+1));
 		for ( unsigned int t=theta.lo[i]+2; t < theta.PHI.n_cols; ++t ) {
 			if ( t > theta.P.n_cols ) {
 				S(i,t) = log(   theta.PHI(i,t-2) ) + S(i,t-1);
