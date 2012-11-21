@@ -98,7 +98,7 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	td_pdf.set_size(theta.PHI.n_rows, theta.PHI.n_cols);
 	td_pdf.zeros();
 	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
-		ps.resize(td_pdf.n_rows);
+		ps.resize(td_pdf.n_cols);
 		std::fill(ps.begin(), ps.begin() + theta.lo[i]    , 0.0);
 		std::fill(ps.begin() + theta.lo[i] + 1, ps.end(), 1.0);
 		for(unsigned int t=0; t < ps.size(); ++t) {
