@@ -1,4 +1,5 @@
 #include "proposals_FLAT.hpp"
+#include <algorithm>
 #include <iostream>
 #include <math.h>
 
