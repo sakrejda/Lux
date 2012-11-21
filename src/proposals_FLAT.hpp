@@ -8,6 +8,7 @@
 #include <armadillo>
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
+#include <trng/discrete_dist.hpp>
 
 #include "survival_FLAT.hpp"
 
