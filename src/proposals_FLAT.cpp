@@ -100,7 +100,7 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 	for (unsigned int i=0; i < td_pdf.n_rows; ++i) {
 		ps.resize(td_pdf.n_cols);
 		std::fill(ps.begin(), ps.begin() + theta.lo[i]    , 0.0);
-		std::fill(ps.begin() + theta.lo[i] + 1, ps.end(), 1.0);
+		std::fill(ps.begin() + theta.lo[i] + 1, ps.end(), 0.0);
 		for(unsigned int t=0; t < ps.size(); ++t) {
 			std::cout << ps[t] << ", ";
 		}
