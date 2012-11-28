@@ -161,6 +161,7 @@ void Slice_td_Proposal_FLAT::calc_td_pdf() {
 			D(i,t) = log( 1-theta.PHI(i,t-1) );
 			td_pdf(i,t) = S(i,t) + D(i,t);
 			CH[i]->param(t,exp(td_pdf(i,t)));
+			std::cout << "i: " << i << ", t: " << t << ", pdf: " << exp(td_pdf(i,t)) << std::endl;
 		}
 	}
 }
