@@ -124,7 +124,7 @@ Slice_td_Proposal_FLAT::~Slice_td_Proposal_FLAT() {
 arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
 	if (!theta.fresh_ll) calc_td_pdf();
 	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
-		td_proposed[i] = (*CH[i])(R);
+		td_proposed[i] = (*(CH[i]))(R);
 		std::cout << td_proposed[i] << std::endl;
 	}
 	return td_proposed;
