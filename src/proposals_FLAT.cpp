@@ -101,10 +101,10 @@ Slice_td_Proposal_FLAT::Slice_td_Proposal_FLAT(
 		ps.resize(td_pdf.n_cols);
 		std::fill(ps.begin(), ps.begin() + theta.lo[i]    , 0.0);
 		std::fill(ps.begin() + theta.lo[i] + 1, ps.end(), 0.0);
-		for(unsigned int t=0; t < ps.size(); ++t) {
-			std::cout << ps[t] << ", ";
-		}
-		std::cout << std::endl;
+//		for(unsigned int t=0; t < ps.size(); ++t) {
+//			std::cout << ps[t] << ", ";
+//		}
+//		std::cout << std::endl;
 		pss.push_back(ps);
 		ps.clear();
 	}
@@ -125,7 +125,7 @@ arma::Col<int> Slice_td_Proposal_FLAT::propose_td() {
 	if (!theta.fresh_ll) calc_td_pdf();
 	for ( arma::uword i=0; i < theta.PHI.n_rows; ++i) {
 		td_proposed[i] = (*(CH[i]))(R);
-		std::cout << (*(CH[i])).pdf(td_proposed[i]) << std::endl;
+//		std::cout << (*(CH[i])).pdf(td_proposed[i]) << std::endl;
 	}
 	return td_proposed;
 }
@@ -162,7 +162,7 @@ void Slice_td_Proposal_FLAT::calc_td_pdf() {
 			D(i,t) = log( 1-theta.PHI(i,t-1) );
 			td_pdf(i,t) = S(i,t) + D(i,t);
 			CH[i]->param(t,exp(td_pdf(i,t)));
-			std::cout << "i: " << i << ", t: " << t << ", pdf: " << exp(td_pdf(i,t)) << std::endl;
+//			std::cout << "i: " << i << ", t: " << t << ", pdf: " << exp(td_pdf(i,t)) << std::endl;
 		}
 	}
 }
