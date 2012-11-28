@@ -1,6 +1,5 @@
 #include "survival_FLAT.hpp"
 #include <iostream>
-#include <iomanip>
 // Member functions for Data_FLAT only:
 //
 Recapture_Data_FLAT::Recapture_Data_FLAT() : number_of_individuals(0) {}
@@ -23,8 +22,6 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
             caught(i,times_of_recaptures[i][j]) = 1;          }
     }
-		caught_double.set_size(caught.n_rows, caught.n_cols);
-		uncaught_double.set_size(uncaught.n_rows, uncaught.n_cols);
     init();
 }
 
@@ -40,7 +37,7 @@ arma::Row<int> Recapture_Data_FLAT::get_recaptures(int i) const {
 	return recaptures;
 }
 
-arma::Col<int> Recapture_Data_FLAT::get_surveys()   const { return ts; }
+arma::Row<int> Recapture_Data_FLAT::get_surveys()   const { return ts; }
 
 arma::Col<int> Recapture_Data_FLAT::get_births()    const { return tb; }
 arma::Col<int> Recapture_Data_FLAT::get_first_obs() const { return fo; }
