@@ -32,8 +32,8 @@ Recapture_Data_FLAT::Recapture_Data_FLAT(
 int Recapture_Data_FLAT::get_N() const { return number_of_individuals; }
 int Recapture_Data_FLAT::get_K() const { return number_of_occasions; }
 
-arma::Row<int> Recapture_Data_FLAT::get_recaptures(int i) const { 
-	arma::Row<int> recaptures(caught.n_cols);
+arma::Col<int> Recapture_Data_FLAT::get_recaptures(int i) const { 
+	arma::Col<int> recaptures(caught.n_cols);
 	for ( arma::uword j=0; j < caught.n_cols; ++j ) {
 		recaptures(j) = caught(i,j);
 	}

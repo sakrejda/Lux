@@ -9,16 +9,16 @@
 class Recapture_Theta {
 
 public:
-	Recapture_Data_FLAT();  // required
-	Recapture_Data_FLAT(
+	Recapture_Theta_FLAT();  // required
+	Recapture_Theta_FLAT(
 		std::vector<int> times_of_surveys,  // ts
 		std::vector<std::vector<int> > times_of_recaptures   //  build 'caught'
 	);
 
 	int get_N() const;
 	int get_K() const;
-	arma::Row<int> get_recaptures(int i) const;
-	arma::Row<int> get_surveys()   const;
+	arma::Col<int> get_recaptures(int i) const;
+	arma::Col<int> get_surveys()   const;
 	arma::Col<int> get_births()    const;
 	arma::Col<int> get_first_obs() const; 
 	arma::Col<int> get_last_obs()  const; 

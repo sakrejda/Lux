@@ -20,7 +20,7 @@ public:
 
 	int get_N() const;
 	int get_K() const;
-	arma::Row<int> get_recaptures(int i) const;
+	arma::Col<int> get_recaptures(int i) const;
 	arma::Col<int> get_surveys()   const;
 	arma::Col<int> get_births()    const;
 	arma::Col<int> get_first_obs() const; 
