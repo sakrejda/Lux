@@ -165,57 +165,61 @@ void calc_ll_phi(const arma::uword & i) {
 	log_likelihood_phi[i] = 0.0;
 	int tb = arma::as.scalar(state.get_births(i));
 	int td = arma::as.scalar(state.get_deaths(i));
+	arma::Mat<double>& PHI = parameters.get_PHI();
 	for(unsigned int t=tb; t < td-1; ++t) {
-		log_likelihood_phi[i] += log(parameters.get_PHI()(i,t));
+		log_likelihood_phi[i] += log(PHI(i,t));
 	}
 	if (!state.get_known_deaths(i)) 
-		log_likelihood_phi[i] += log(1-parameters.get_PHI()(i,td-1));
+		log_likelihood_phi[i] += log(1-PHI(i,td-1));
 }
 
 void calc_ll_p(const arma::uword & i) {
 	log_likelihood_p[i] = 0.0;
 	int tb = arma::as.scalar(state.get_births(i));
 	int td = arma::as.scalar(state.get_deaths(i));
+	arma::Mat<double>& P = parameters.get_P();
 	for (unsigned int t=tb+1; t < td; ++t) {	
 		if (caught(i,t) == 1) {
-			ll_p_components[i] += log(parameters.get_P()(i,t));
+			ll_p_components[i] += log(P(i,t));
 		} else {
-			ll_p_components[i] += log(1-parameters.get_P()(i,t));
+			ll_p_components[i] += log(1-P(i,t));
 		}
 	}
 }
 
+//
+//	Member functions for Recapture_Priors:
+//
 
-
-
-
-
-
-
-
-
-
-// Posterior functions. 
-Recapture_Posterior::Recapture_Posterior() : 
-	Recapture_Likelihood() {}
-
-Recapture_Posterior::Recapture_Posterior(
-		std::vector<int> times_of_surveys,
-		std::vector<std::vector<int> > times_of_recaptures,
-		std::vector<int> times_of_deaths,
-		std::vector<bool> known_deaths
-) : Recapture_Likelihood(times_of_surveys, times_of_recaptures,
-			times_of_deaths, known_deaths) {
-	init();
+Recapture_Priors::Recapture_Priors() {
+	parameters = new(Recapture_Parameters);
+	default_par = true;
+	priors = 0;
 }
 
-double Recapture_Posterior::get_lp() { return 0; }   /// Flat priors....
-
-
-double Recapture_Posterior::get_log_posterior() {
-	return get_ll() + get_lp();
+Recapture_Priors::Recapture_Priors(
+	Recapture_Parameters const & parameters,
+	double (*priors)(Recapture_Parameters const & parameters)
+) {
+	parameters = parameters_;
+	default_par = false;
+	priors = priors_;
 }
 
+Recapture_Priors::~Recapture_Priors() {
+	if (default_par) delete parameters;
+}
 
-void Recapture_Posterior::init() {}
-
+Recapture_Priors::get_prior_density(bool log=true) {
+	if (default_par) {
+		if (log) 
+			return 0;
+		else 
+			return 1;
+	} else {
+		if (log)
+			return log(priors(parameters));
+		else 
+			return priors(parameters);
+	}
+}

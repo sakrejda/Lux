@@ -80,7 +80,7 @@ private:
 	arma::Mat<double> PHI;
 	arma::Mat<double> P;
 
-}
+};
 
 
 class Recapture_Likelihood {
@@ -113,12 +113,20 @@ class Recapture_Priors {
 public:
 	Recapture_Priors();
 	Recapture_Priors(
-		Recapture_Parameters const & parameters,
-
+		Recapture_Parameters const & parameters_,
+		double (*priors_)(Recapture_Parameters const & parameters)
 	)
+	~Recapture_Priors();
+
+	double get_prior_density(bool log=true);
+
+private:
+	Recapture_Parameters const & parameters;
+	double (*priors)(Recapture_Parameters const & parameters);
+	
 
 
-}
+};
 
 
 #endif
