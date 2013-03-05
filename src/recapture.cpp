@@ -8,7 +8,7 @@ Recapture_State::Recapture_State() : number_of_individuals(0) {}
 
 Recapture_State::Recapture_State(
     std::vector<int> times_of_surveys,
-    std::vector<std::vector<int> > times_of_recaptures
+    std::vector<std::vector<int> > times_of_recaptures,
 		std::vector<int> times_of_deaths,
 		std::vector<bool> known_deaths
 ) : ts(times_of_surveys), 
@@ -26,7 +26,9 @@ Recapture_State::Recapture_State(
 {
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
-            caught(i,times_of_recaptures[i][j]) = 1;          }
+            caught(i,times_of_recaptures[i][j]) = 1;          
+				}
+		known_death(i) = known_deaths[i];
     }
     init();
 }
@@ -36,44 +38,20 @@ const int& Recapture_State::get_N() const { return number_of_individuals; }
 const int& Recapture_State::get_K() const { return number_of_occasions; }
 const arma::Col<int>& Recapture_State::get_surveys()   const { return ts; }
 
+const arma::Mat<int> & 
+Recapture_State::get_recaptures() const { return caught; }
 
 const arma::Col<int> & 
-Recapture_State::get_recaptures(const arma::uvec& row_nums) const { 
-	return caught.rows(row_nums);
-}
+Recapture_State::get_births() const { return tb; }
 
 const arma::Col<int> & 
-Recapture_State::get_recaptures(const span& span = arma::span::all) const { 
-	return caught.rows(span);
-}
+Recapture_State::get_deaths() const { return td; }
 
-const arma::Col<int>& get_births(const arma::uvec & i_nums) const {
-	return tb.elem(i_nums);
-}
-const arma::Col<int>& get_births(const span & span = arma::span::all) const {
-	return tb(span);
-}
+const arma::Col<int> & 
+Recapture_State::get_first_obs() const { return fo; }
 
-const arma::Col<int>& get_deaths(const arma::uvec & i_nums) const {
-	return td.elem(i_nums);
-}
-const arma::Col<int>& get_deaths(const span & span = arma::span::all) const {
-	return td(span);
-}
-
-const arma::Col<int>& get_first_obs(const arma::uvec & i_nums) const {
-	return fo.elem(i_nums);
-}
-const arma::Col<int>& get_first_obs(const span & span = arma::span::all) const {
-	return fo(span);
-}
-
-const arma::Col<int>& get_last_obs(const arma::uvec & i_nums) const {
-	return lo.elem(i_nums);
-}
-const arma::Col<int>& get_last_obs(const span & span = arma::span::all) const {
-	return lo(span);
-}
+const arma::Col<int> & 
+Recapture_State::get_last_obs() const { return lo; }
 
 
 void Recapture_State::init() {
@@ -89,7 +67,6 @@ void Recapture_State::init() {
                 available(i,j) = 1.0;
             }
         }
-				known_death[i] = known_deaths[i];
     }
     tb = fo;
 }
@@ -108,13 +85,12 @@ void Recapture_State::set_td(
 //  Member functions for Recapture_Parameters.
 //
 
-Recapture_Parameters::Recapture_Parameters() : PHI(1,1), P(1,1) {}
-
 Recapture_Parameters::Recapture_Parameters(
-		Recapture_State const & state,
+		Recapture_State const & state_,
 		unsigned int scale = 5
 ) : PHI(state.get_N(), state.get_K() ),
-    P(state.get_N(), state.get_K())
+    P(state.get_N(), state.get_K()),
+		state(state_)
 {
 	resize_PHI(scale);
 }
@@ -126,8 +102,8 @@ void Recapture_Parameters::resize_PHI( unsigned int scale) {
 		P.zeros(phi_rows, scale * phi_cols);
 }
 
-const arma::Mat<double>& Recapture_Parameters::get_PHI() { return PHI; }
-const arma::Mat<double>& Recapture_Parameters::get_P() { return P; }
+const arma::Mat<double>& Recapture_Parameters::get_PHI() const { return PHI; }
+const arma::Mat<double>& Recapture_Parameters::get_P() const { return P; }
 
 void Recapture_Parameters::set_PHI( arma::Mat<double> PHI_ ) { PHI = PHI_; }
 void Recapture_Parameters::set_P(   arma::Mat<double> P_   ) { P   = P_; }
@@ -137,19 +113,18 @@ void Recapture_Parameters::set_P(   arma::Mat<double> P_   ) { P   = P_; }
 //  Member functions for Recapture_Likelihood;
 //
 //
-Recapture_Likelihood::Recapture_Likelihood() {}
 
 Recapture_Likelihood::Recapture_Likelihood(
-		Recapture_State const & state,
-		Recapture_Parameters const & parameters
-) :
+		Recapture_State const & state_,
+		Recapture_Parameters const & parameters_
+) : state(state_), parameters(parameters_)
 {
-	int rows = parameters.get_PHI().n_rows
+	int rows = (parameters.get_PHI()).n_rows;
 	log_likelihood_phi.zeros(rows);
 	log_likelihood_p.zeros(rows);
 }
 
-double get_likelihood(bool log=true) {
+double Recapture_Likelihood::get_likelihood(bool log) {
 	for (unsigned int i=0; i < state.get_N(); ++i) {
 		calc_ll_phi(i); calc_ll_p(i);
 	}
@@ -161,28 +136,29 @@ double get_likelihood(bool log=true) {
 		return exp(log_likelihood);
 }
 
-void calc_ll_phi(const arma::uword & i) {
+void Recapture_Likelihood::calc_ll_phi(const arma::uword & i) {
 	log_likelihood_phi[i] = 0.0;
-	int tb = arma::as.scalar(state.get_births(i));
-	int td = arma::as.scalar(state.get_deaths(i));
-	arma::Mat<double>& PHI = parameters.get_PHI();
+	int tb = arma::as_scalar(state.get_births()(i));
+	int td = arma::as_scalar(state.get_deaths()(i));
+	const arma::Mat<double>& PHI = parameters.get_PHI();
 	for(unsigned int t=tb; t < td-1; ++t) {
 		log_likelihood_phi[i] += log(PHI(i,t));
 	}
-	if (!state.get_known_deaths(i)) 
+	if (!state.get_known_deaths()(i)) 
 		log_likelihood_phi[i] += log(1-PHI(i,td-1));
 }
 
-void calc_ll_p(const arma::uword & i) {
+void Recapture_Likelihood::calc_ll_p(const arma::uword & i) {
 	log_likelihood_p[i] = 0.0;
-	int tb = arma::as.scalar(state.get_births(i));
-	int td = arma::as.scalar(state.get_deaths(i));
-	arma::Mat<double>& P = parameters.get_P();
+	int tb = arma::as_scalar(state.get_births()(i));
+	int td = arma::as_scalar(state.get_deaths()(i));
+	const arma::Mat<double>& P = parameters.get_P();
+	const arma::Mat<int>& caught = state.get_recaptures();
 	for (unsigned int t=tb+1; t < td; ++t) {	
 		if (caught(i,t) == 1) {
-			ll_p_components[i] += log(P(i,t));
+			log_likelihood_p[i] += log(P(i,t));
 		} else {
-			ll_p_components[i] += log(1-P(i,t));
+			log_likelihood_p[i] += log(1-P(i,t));
 		}
 	}
 }
@@ -191,35 +167,17 @@ void calc_ll_p(const arma::uword & i) {
 //	Member functions for Recapture_Priors:
 //
 
-Recapture_Priors::Recapture_Priors() {
-	parameters = new(Recapture_Parameters);
-	default_par = true;
-	priors = 0;
-}
 
 Recapture_Priors::Recapture_Priors(
-	Recapture_Parameters const & parameters,
-	double (*priors)(Recapture_Parameters const & parameters)
-) {
-	parameters = parameters_;
-	default_par = false;
-	priors = priors_;
+	Recapture_Parameters const & parameters_,
+	double (*log_priors_)(Recapture_Parameters const & parameters)
+) : parameters(parameters_) {
+	log_priors = log_priors_;
 }
 
-Recapture_Priors::~Recapture_Priors() {
-	if (default_par) delete parameters;
-}
-
-Recapture_Priors::get_prior_density(bool log=true) {
-	if (default_par) {
-		if (log) 
-			return 0;
-		else 
-			return 1;
-	} else {
-		if (log)
-			return log(priors(parameters));
-		else 
-			return priors(parameters);
-	}
+double Recapture_Priors::get_prior_density(bool log) {
+	if (log)
+		return log_priors(parameters);
+	else 
+		return exp(log_priors(parameters));
 }
