@@ -121,6 +121,7 @@ public:
 	double get_prior_density(bool log=true);
 
 private:
+	bool default_par;
 	Recapture_Parameters const & parameters;
 	double (*priors)(Recapture_Parameters const & parameters);
 	
