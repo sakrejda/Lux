@@ -181,3 +181,18 @@ double Recapture_Priors::get_prior_density(bool log) {
 	else 
 		return exp(log_priors(parameters));
 }
+
+//
+//	Member functions for Recapture_td_Posterior:
+//
+
+
+Recapture_td_Posterior::Recapture_td_Posterior(
+	Recapture_Parameters const & parameters_,
+	Recapture_Data const & data_
+) {}
+
+Recapture_td_Posterior::arma::Col<int> draw() {}
+
+Recapture_td_Posterior::arma::Col<int> calc_log_mass_function() {}
+

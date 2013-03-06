@@ -124,8 +124,20 @@ private:
 
 class Recapture_td_Posterior {	
 
+public:
+	Recapture_td_Posterior(
+		Recapture_Parameters const & parameters_,
+		Recapture_Data const & data_
+	);
+
+	arma::Col<int> draw();
+	arma::Col<int> calc_log_mass_function();
 
 private:
+	// Acutally, maybe a better strategy is to keep just a reference to
+	// the relevant data members?
+	Recapture_Parameters const & parameters_,
+	Recapture_Data const & data_
 	arma::Mat<double> S;
 	arma::Mat<double> D;
 	arma::Mat<double> td_PMF;
