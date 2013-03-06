@@ -122,5 +122,13 @@ private:
 
 };
 
+class Recapture_td_Posterior {	
 
+
+private:
+	arma::Mat<double> S;
+	arma::Mat<double> D;
+	arma::Mat<double> td_PMF;
+
+}
 #endif
