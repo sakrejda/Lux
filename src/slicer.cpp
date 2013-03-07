@@ -4,8 +4,8 @@ Slicer_Discrete::Slicer_Discrete() :
 	ppmf(0), val(0), CH(0), pR(0) {}
 
 Slicer_Discrete::Slicer_Discrete( 
-	const arma::Col<int> * values,
-	const arma::Col<double> * pmf,
+	const arma::Row<int> * values,
+	const arma::Row<double> * pmf,
 	trng::yarn2 * pR;
 	) : 
 	ppmf(pmf), val(values), CH((*pmf).n_elem) {} 

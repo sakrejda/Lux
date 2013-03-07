@@ -127,7 +127,8 @@ class Recapture_td_Posterior {
 public:
 	Recapture_td_Posterior(
 		Recapture_Parameters const & parameters_,
-		Recapture_Data const & data_
+		Recapture_Data const & data_,
+		trng::yarn2 * R_
 	);
 
 	arma::Col<int> draw();
@@ -136,11 +137,16 @@ public:
 private:
 	// Acutally, maybe a better strategy is to keep just a reference to
 	// the relevant data members?
-	Recapture_Parameters const & parameters_,
-	Recapture_Data const & data_
+	trng::yarn2 & R;
+	Recapture_Parameters const & parameters;
+	Recapture_Data const & data;
 	arma::Mat<double> S;
 	arma::Mat<double> D;
-	arma::Mat<double> td_PMF;
+	arma::Mat<double> ltd_PMF;
+	arma::Row<int> choices;
+	arma::Col<int> td;
+	arma::field<Slicer_Discrete> slicers;
+	unsigned int N, K;
 
 }
 #endif

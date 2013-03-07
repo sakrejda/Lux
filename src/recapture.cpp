@@ -189,10 +189,54 @@ double Recapture_Priors::get_prior_density(bool log) {
 
 Recapture_td_Posterior::Recapture_td_Posterior(
 	Recapture_Parameters const & parameters_,
-	Recapture_Data const & data_
-) {}
+	Recapture_Data const & data_,
+	trng::yarn2 & R_
+) : parameters(parameters_), data(data_), R(R_) {
+	N = data.get_PHI().n_rows;
+	K = data.get_PHI().n_cols;
+	slicers.resize(N);
+	S.resize(N, K);
+	D.resize(N, K);
+	td_lPMF.resize(N, K);
+	choices.resize(K);
+	for ( unsigned int i=0; i < K; ++i ) {
+		choices(i) = i;
+	}
+	for ( unsigned int i=0; i < N; ++i ) {
+		slicers(i) = Slicer_Discrete slicer(&choices, &td_lPMF.row(i), &R);
+	}
 
-Recapture_td_Posterior::arma::Col<int> draw() {}
+}
 
-Recapture_td_Posterior::arma::Col<int> calc_log_mass_function() {}
+arma::Col<int> Recapture_td_Posterior::draw() {
+	calc_log_mass_function();
+	for ( unsigned int i=0; i < N; ++i ) {
+		td(i) = slicers(i).draw();
+	}
+	return td;	
+}
+
+arma::Mat<int> Recapture_td_Posterior::calc_log_mass_function() {
+	const arma::Col<int> & lo = data.get_last_obs();
+	const arma::Mat<double> & PHI = parameters.get_PHI();
+	S.zeros();
+	D.zeros();
+	td_lPMF.zeros();
+
+	for ( unsigned int i=0; i < N; ++i ) {
+		S(i,lo[i]+1) = 0.0;
+		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
+		td_lPMF(i,lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1);
+		for ( unsigned int t=lo[i]+2; t < K; ++t ) {
+			if ( t > parameters.get_P().n_cols ) {
+				S(i,t) = log( PHI(i,t-2) ) + S(i,t-1);
+			} else {
+				S(i,t) = log( PHI(i,t-2) ) + S(i,t-1) + log( 1 - P[i,t-1]);
+			}
+			D(i,t) = log( 1-PHI(i,t-1) );
+			td_lPMF(i,t) = S(i,t) + D(i,t);
+		}
+	}
+	return td_lPMF;
+}
 

@@ -13,16 +13,16 @@ class Slicer_Discrete {
 public:
 	Slicer_Discrete();
 	Slicer_Discrete(
-		const arma::Col<int> * values,
-		const arma::Col<double> * pmf,
+		const arma::Row<int> * values,
+		const arma::Row<double> * pmf,
 		trng::yarn2 * pR
 	);
 	unsigned int draw();
 
 private:
 	trng::discrete_dist CH;
-	const arma::Col<double> * ppmf; // Pointer to the PMF.
-	const arma::Col<int> * val;
+	const arma::Row<double> * ppmf; // Pointer to the PMF.
+	const arma::Row<int> * val;
 	
 };
 
