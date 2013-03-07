@@ -71,13 +71,8 @@ void Recapture_State::init() {
     tb = fo;
 }
 
-void Recapture_State::set_td(
-        arma::Col<arma::uword> indexes,
-        arma::Col<int> times_of_deaths
-) {
-    for ( int k=0; k < indexes.n_elem; ++k ) {
-        td[indexes[k]] = times_of_deaths[k];
-    }
+void Recapture_State::set_td(arma::Col<int> times_of_deaths) {
+	td = times_of_deaths;
 }
 
 
@@ -189,21 +184,21 @@ double Recapture_Priors::get_prior_density(bool log) {
 
 Recapture_td_Posterior::Recapture_td_Posterior(
 	Recapture_Parameters const & parameters_,
-	Recapture_Data const & data_,
+	Recapture_State const & state_,
 	trng::yarn2 & R_
-) : parameters(parameters_), data(data_), R(R_) {
-	N = data.get_PHI().n_rows;
-	K = data.get_PHI().n_cols;
-	slicers.resize(N);
+) : parameters(parameters_), state(state_), R(R_) {
+	N = parameters.get_PHI().n_rows;
+	K = parameters.get_PHI().n_cols;
+	slicers.set_size(N);
 	S.resize(N, K);
 	D.resize(N, K);
-	td_lPMF.resize(N, K);
+	td_lPMF.set_size(N);
 	choices.resize(K);
 	for ( unsigned int i=0; i < K; ++i ) {
 		choices(i) = i;
 	}
 	for ( unsigned int i=0; i < N; ++i ) {
-		slicers(i) = Slicer_Discrete slicer(&choices, &td_lPMF.row(i), &R);
+		slicers(i) = *(new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(&choices, &td_lPMF(i), &R));
 	}
 
 }
@@ -216,17 +211,18 @@ arma::Col<int> Recapture_td_Posterior::draw() {
 	return td;	
 }
 
-arma::Mat<int> Recapture_td_Posterior::calc_log_mass_function() {
-	const arma::Col<int> & lo = data.get_last_obs();
+arma::field<arma::Row<double> > Recapture_td_Posterior::calc_log_mass_function() {
+	const arma::Col<int> & lo = state.get_last_obs();
 	const arma::Mat<double> & PHI = parameters.get_PHI();
+	const arma::Mat<double> & P = parameters.get_P();
 	S.zeros();
 	D.zeros();
-	td_lPMF.zeros();
 
 	for ( unsigned int i=0; i < N; ++i ) {
+		td_lPMF(i).zeros();
 		S(i,lo[i]+1) = 0.0;
 		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
-		td_lPMF(i,lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1);
+		td_lPMF(i)(lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1);
 		for ( unsigned int t=lo[i]+2; t < K; ++t ) {
 			if ( t > parameters.get_P().n_cols ) {
 				S(i,t) = log( PHI(i,t-2) ) + S(i,t-1);
@@ -234,7 +230,7 @@ arma::Mat<int> Recapture_td_Posterior::calc_log_mass_function() {
 				S(i,t) = log( PHI(i,t-2) ) + S(i,t-1) + log( 1 - P[i,t-1]);
 			}
 			D(i,t) = log( 1-PHI(i,t-1) );
-			td_lPMF(i,t) = S(i,t) + D(i,t);
+			td_lPMF(i)(t) = S(i,t) + D(i,t);
 		}
 	}
 	return td_lPMF;

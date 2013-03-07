@@ -5,6 +5,9 @@
 #include <map>
 
 #include <armadillo>
+#include <trng/yarn2.hpp>
+
+#include "slicer.hpp"
 
 class Recapture_State {
 
@@ -27,8 +30,7 @@ public:
 	const arma::Col<int> & get_last_obs() const;
 	const arma::Col<int> & get_known_deaths() const;
 
-
-	void set_td( arma::Col<arma::uword> indexes, arma::Col<int> times_of_deaths);
+	void set_td(arma::Col<int> times_of_deaths);
 
 private:
 	arma::Col<int> ts;
@@ -43,7 +45,6 @@ private:
 	arma::Mat<double> available;
 	int number_of_individuals;
 	int number_of_occasions;
-//	std::vector<bool> known_death;
 	arma::Col<int> known_death;
 
 	void init();
@@ -127,26 +128,26 @@ class Recapture_td_Posterior {
 public:
 	Recapture_td_Posterior(
 		Recapture_Parameters const & parameters_,
-		Recapture_Data const & data_,
-		trng::yarn2 * R_
+		Recapture_State const & state_,
+		trng::yarn2 & R_
 	);
 
 	arma::Col<int> draw();
-	arma::Col<int> calc_log_mass_function();
+	arma::field<arma::Row<double> > calc_log_mass_function();
 
 private:
 	// Acutally, maybe a better strategy is to keep just a reference to
-	// the relevant data members?
+	// the relevant state members?
 	trng::yarn2 & R;
 	Recapture_Parameters const & parameters;
-	Recapture_Data const & data;
+	Recapture_State const & state;
 	arma::Mat<double> S;
 	arma::Mat<double> D;
-	arma::Mat<double> ltd_PMF;
+	arma::field< arma::Row<double> > td_lPMF;
 	arma::Row<int> choices;
 	arma::Col<int> td;
-	arma::field<Slicer_Discrete> slicers;
+	arma::field<Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> > slicers;
 	unsigned int N, K;
 
-}
+};
 #endif

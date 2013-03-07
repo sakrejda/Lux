@@ -1,16 +1,19 @@
 #include "slicer.hpp"
 
+template <class T_VAL, class T_PMF, class T_RET> 
 Slicer_Discrete::Slicer_Discrete() : 
 	ppmf(0), val(0), CH(0), pR(0) {}
 
+template <class T_VAL, class T_PMF, class T_RET> 
 Slicer_Discrete::Slicer_Discrete( 
-	const arma::Row<int> * values,
-	const arma::Row<double> * pmf,
+	const T_VAL * values,
+	const T_PMF * pmf,
 	trng::yarn2 * pR;
 	) : 
 	ppmf(pmf), val(values), CH((*pmf).n_elem) {} 
 
-unsigned int Slicer_Discrete::draw() {
+template <class T_VAL, class T_PMF, class T_RET> 
+T_RET Slicer_Discrete::draw() {
 	// for_each?
 	for (unsigned int i=0; i < (*ppmf).n_elem; ++i) CH.param(i,(*ppmf)[i]);
 	return (*val)[CH(*pR)];	
