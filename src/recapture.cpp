@@ -47,6 +47,9 @@ Recapture_State::get_births() const { return tb; }
 const arma::Col<int> & 
 Recapture_State::get_deaths() const { return td; }
 
+const arma::Col<int> &
+Recapture_State::get_known_deaths() const { return known_death; }
+
 const arma::Col<int> & 
 Recapture_State::get_first_obs() const { return fo; }
 
