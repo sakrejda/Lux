@@ -54,7 +54,7 @@ template <class T_VAL, class T_PMF, class T_RET>
 Slicer_Discrete<T_VAL, T_PMF, T_RET>::Slicer_Discrete( 
 	const T_VAL * values,
 	const T_PMF * pmf,
-	trng::yarn2 * pR;
+	trng::yarn2 * pR
 	) : 
 	ppmf(pmf), val(values), CH((*pmf).n_elem), R(pR) {} 
 
