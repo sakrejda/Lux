@@ -28,22 +28,6 @@ private:
 	
 };
 
-class Slicer_Continuous {
-
-public:
-	Slicer_Continuous();
-	Slicer_Continuous( 
-		double (*pdf)(double x),
-		trng::yarn2 * pR
-	);
-	double draw();
-
-private:
-	trng::uniform01_dist<double> U;
-	double sample;
-
-};
-
 
 
 template <class T_VAL, class T_PMF, class T_RET> 
@@ -64,11 +48,5 @@ T_RET Slicer_Discrete<T_VAL, T_PMF, T_RET>::draw() {
 	for (unsigned int i=0; i < (*ppmf).n_elem; ++i) CH.param(i,(*ppmf)[i]);
 	return (*val)[CH(*R)];	
 }
-
-Slicer_Continuous::Slicer_Continuous() {}
-
-Slicer_Continuous::Slicer_Continuous( double (*pdf)(double x) ) {}
-
-double Slicer_Continuous::draw() {}
 
 #endif
