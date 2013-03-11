@@ -24,6 +24,7 @@ Recapture_State::Recapture_State(
 		td(times_of_deaths),
     available(times_of_recaptures.size(),times_of_surveys.size())
 {
+		caught.zeros();
     for ( int i=0; i < number_of_individuals; ++i ) {
         for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
             caught(i,times_of_recaptures[i][j]) = 1;          
