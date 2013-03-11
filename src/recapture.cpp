@@ -26,10 +26,10 @@ Recapture_State::Recapture_State(
 {
 		caught.zeros();
     for ( int i=0; i < number_of_individuals; ++i ) {
-        for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
-            caught(i,times_of_recaptures[i][j]) = 1;          
-				}
-		known_death(i) = known_deaths[i];
+      for ( int j=0; j < times_of_recaptures[i].size(); ++j ) {
+				caught(i,times_of_recaptures[i][j]) = 1;          
+			}
+			if (known_deaths[i]) known_death(i) = 1; else known_death(i) = 0;
     }
     init();
 }
