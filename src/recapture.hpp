@@ -127,7 +127,7 @@ private:
 	arma::field< arma::Row<double> > td_lPMF;
 	arma::Row<int> choices;
 	arma::Col<int> td;
-	arma::field<Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> > slicers;
+	arma::field<Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * > slicers;
 	unsigned int N, K;
 
 };
