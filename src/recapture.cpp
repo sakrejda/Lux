@@ -192,7 +192,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 arma::Col<int> Recapture_td_Posterior::draw() {
 	calc_log_mass_function();
 	for ( unsigned int i=0; i < N; ++i ) {
-		td(i) = *(slicers(i)).draw();
+		td(i) = (*slicers(i)).draw();
 	}
 	return td;	
 }
