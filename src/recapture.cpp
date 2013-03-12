@@ -162,33 +162,15 @@ void Recapture_Likelihood::calc_ll_p(const arma::uword & i) {
 	}
 }
 
-//
-//	Member functions for Recapture_Priors:
-//
-
-
-Recapture_Priors::Recapture_Priors(
-	Recapture_Parameters const & parameters_,
-	double (*log_priors_)(Recapture_Parameters const & parameters)
-) : parameters(parameters_) {
-	log_priors = log_priors_;
-}
-
-double Recapture_Priors::get_prior_density(bool log) {
-	if (log)
-		return log_priors(parameters);
-	else 
-		return exp(log_priors(parameters));
-}
 
 //
-//	Member functions for Recapture_td_Posterior:
+//  Member functions for Recapture_td_Posterior
 //
-
+//
 
 Recapture_td_Posterior::Recapture_td_Posterior(
-	Recapture_Parameters const & parameters_,
 	Recapture_State const & state_,
+	Recapture_Parameters const & parameters_,
 	trng::yarn2 & R_
 ) : parameters(parameters_), state(state_), R(R_) {
 	N = parameters.get_PHI().n_rows;

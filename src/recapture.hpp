@@ -104,31 +104,12 @@ private:
 
 };
 
-class Recapture_Priors {
-
-public:
-	Recapture_Priors(
-		Recapture_Parameters const & parameters_,
-		double (*log_priors_)(Recapture_Parameters const & parameters)
-	);
-
-	double get_prior_density(bool log=true);
-
-private:
-	bool default_par;
-	Recapture_Parameters const & parameters;
-	double (*log_priors)(Recapture_Parameters const & parameters);
-	
-
-
-};
-
 class Recapture_td_Posterior {	
 
 public:
 	Recapture_td_Posterior(
-		Recapture_Parameters const & parameters_,
 		Recapture_State const & state_,
+		Recapture_Parameters const & parameters_,
 		trng::yarn2 & R_
 	);
 
