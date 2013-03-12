@@ -39,9 +39,7 @@ private:
 	arma::Col<int> fo;
 	arma::Col<int> lo;
 	arma::Mat<int> caught;
-	arma::Mat<double> caught_double;
 	arma::Mat<int> uncaught;
-	arma::Mat<double> uncaught_double;
 	arma::Mat<double> available;
 	int number_of_individuals;
 	int number_of_occasions;

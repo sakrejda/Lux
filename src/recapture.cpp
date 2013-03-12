@@ -64,12 +64,8 @@ void Recapture_State::init() {
         for ( arma::uword j=0; j < caught.n_cols; ++j ) {
             if (find_fo && caught(i,j) == 1 ) { fo[i] = j; find_fo = false;}
             if (           caught(i,j) == 1 ) { lo[i] = j;                  }
-						caught_double(i,j) == (double)caught(i,j);
 						if ( caught(i,j) == 0 ) uncaught(i,j) = 1;
-						uncaught_double(i,j) == (double)caught(i,j);
-            if ( j > tb[i] && j < td[i] ) {
-                available(i,j) = 1.0;
-            }
+            if ( j > tb[i] && j < td[i] ) { available(i,j) = 1.0; }
         }
     }
     tb = fo;
@@ -183,8 +179,11 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 	for ( unsigned int i=0; i < K; ++i ) {
 		choices(i) = i;
 	}
+	Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * s;
 	for ( unsigned int i=0; i < N; ++i ) {
-		slicers(i) = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(&choices, &td_lPMF(i), &R);
+		td_lPMF(i).resize(K);
+		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(&choices, &td_lPMF(i), &R);
+		slicers(i) = s;
 	}
 
 }
