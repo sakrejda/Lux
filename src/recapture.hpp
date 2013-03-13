@@ -122,7 +122,7 @@ private:
 	Recapture_State const & state;
 	arma::Mat<double> S;
 	arma::Mat<double> D;
-	arma::field< arma::Row<double> > td_lPMF;
+	arma::field< arma::Row<double> > td_PMF;
 	arma::Row<int> choices;
 	arma::Col<int> td;
 	arma::field<Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * > slicers;
