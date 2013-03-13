@@ -182,6 +182,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 	Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * s;
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).resize(K);
+		std::cout << td_PMF(i);
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(&choices, &td_PMF(i), &R);
 		slicers(i) = s;
 	}
@@ -191,6 +192,8 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 arma::Col<int> Recapture_td_Posterior::draw() {
 	calc_log_mass_function();
 	for ( unsigned int i=0; i < N; ++i ) {
+		std::cout << "i:   " << i << std::endl;
+		std::cout << "PMF: " << td_PMF(i) << std::endl;
 		td(i) = (*slicers(i)).draw();
 	}
 	return td;	
@@ -209,11 +212,7 @@ arma::field<arma::Row<double> > Recapture_td_Posterior::calc_log_mass_function()
 		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
 		td_PMF(i)(lo[i]+1) = exp(  S(i,lo[i]+1) + D(i,lo[i]+1)  ); // exp(
 		for ( unsigned int t=lo[i]+2; t < K; ++t ) {
-			if ( t > parameters.get_P().n_cols ) {
-				S(i,t) = log( PHI(i,t-2) ) + S(i,t-1);
-			} else {
-				S(i,t) = log( PHI(i,t-2) ) + S(i,t-1) + log( 1 - P[i,t-1]);
-			}
+			S(i,t) = log( PHI(i,t-2) ) + S(i,t-1) + log( 1 - P[i,t-1]);
 			D(i,t) = log( 1-PHI(i,t-1) );
 			td_PMF(i)(t) = exp(  S(i,t) + D(i,t)  ); // exp(
 		}
