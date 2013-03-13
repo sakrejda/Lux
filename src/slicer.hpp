@@ -49,7 +49,8 @@ T_RET Slicer_Discrete<T_VAL, T_PMF, T_RET>::draw() {
 	for (unsigned int i=0; i < (*ppmf).n_elem; ++i) CH.param(i,(*ppmf)[i]);
 	std::cout << "2" << std::endl;
 	int ch = CH(*R);
-	std::cout << ch << std::endl;
+	std::cout << "choice: " << ch << std::endl;
+	std::cout << *val << std::endl;
 	return (*val)[ch];	
 }
 
