@@ -53,6 +53,7 @@ T_RET Slicer_Discrete<T_VAL, T_PMF, T_RET>::draw() {
 	std::cout << *val << std::endl;
 	std::cout << (*val)(ch) << std::endl;
 	T_RET out = (*val)(ch);
+	std::cout << out << std::endl;
 	return out;	
 }
 
