@@ -151,7 +151,7 @@ void Recapture_Likelihood::calc_ll_p(const arma::uword & i) {
 	int td = arma::as_scalar(state.get_deaths()(i));
 	const arma::Mat<double>& P = parameters.get_P();
 	const arma::Mat<int>& caught = state.get_recaptures();
-	for (unsigned int t=tb+1; t < td; ++t) {	
+	for (unsigned int t=tb+1; t < state.get_K(); ++t) {	
 		if (caught(i,t) == 1) {
 			log_likelihood_p[i] += log(P(i,t));
 		} else {
