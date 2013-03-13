@@ -52,7 +52,7 @@ T_RET Slicer_Discrete<T_VAL, T_PMF, T_RET>::draw() {
 	std::cout << "choice: " << ch << std::endl;
 	std::cout << *val << std::endl;
 	std::cout << (*val)(ch) << std::endl;
-	T_VAL out as_scalar((*val)(ch));
+	T_VAL out = as_scalar((*val)(ch));
 	return out;	
 }
 
