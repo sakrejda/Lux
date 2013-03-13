@@ -123,6 +123,8 @@ double Recapture_Likelihood::get_likelihood(bool log) {
 	for (unsigned int i=0; i < state.get_N(); ++i) {
 		calc_ll_phi(i); calc_ll_p(i);
 	}
+	std::cout << arma::accu(log_likelihood_phi) << std::endl;
+	std::cout << arma::accu(log_likelihood_p)   << std::endl;
 	double log_likelihood = 
 		arma::accu(log_likelihood_phi) + arma::accu(log_likelihood_p);
 	if (log) 
