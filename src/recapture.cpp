@@ -182,8 +182,6 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 	Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * s;
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).resize(K);
-		std::cout << td_PMF(i) << std::endl;
-		std::cout << choices << std::endl;
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(&choices, &td_PMF(i), &R);
 		slicers(i) = s;
 	}
@@ -193,11 +191,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 arma::Col<int> Recapture_td_Posterior::draw() {
 	calc_log_mass_function();
 	for ( unsigned int i=0; i < N; ++i ) {
-		std::cout << "i:   " << i << std::endl;
-		std::cout << "PMF: " << td_PMF(i) << std::endl;
-//		td(i) = (*slicers(i)).draw();
-		(*slicers(i)).draw();
-		std::cout << "Draw: " << std::endl;
+		td(i) = (*slicers(i)).draw();
 	}
 	return td;	
 }

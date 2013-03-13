@@ -45,15 +45,9 @@ Slicer_Discrete<T_VAL, T_PMF, T_RET>::Slicer_Discrete(
 template <class T_VAL, class T_PMF, class T_RET> 
 T_RET Slicer_Discrete<T_VAL, T_PMF, T_RET>::draw() {
 	// for_each?
-	std::cout << "1" << std::endl;
 	for (unsigned int i=0; i < (*ppmf).n_elem; ++i) CH.param(i,(*ppmf)[i]);
-	std::cout << "2" << std::endl;
 	int ch = CH(*R);
-	std::cout << "choice: " << ch << std::endl;
-	std::cout << *val << std::endl;
-	std::cout << (*val)(ch) << std::endl;
 	T_RET out = (*val)(ch);
-	std::cout << out << std::endl;
 	return out;	
 }
 
