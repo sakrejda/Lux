@@ -51,9 +51,9 @@ T_RET Slicer_Discrete<T_VAL, T_PMF, T_RET>::draw() {
 	int ch = CH(*R);
 	std::cout << "choice: " << ch << std::endl;
 	std::cout << *val << std::endl;
-	std::cout << (*val)[ch];
+	std::cout << (*val)(ch) << std::endl;
 	T_VAL out (*val)[ch];
-	return (*val)[ch];	
+	return out;	
 }
 
 #endif
