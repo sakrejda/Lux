@@ -171,6 +171,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 ) : parameters(parameters_), state(state_), R(R_) {
 	N = parameters.get_PHI().n_rows;
 	K = parameters.get_PHI().n_cols;
+	td.set_size(N);
 	slicers.set_size(N);
 	S.resize(N, K);
 	D.resize(N, K);
