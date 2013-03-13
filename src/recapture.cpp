@@ -196,6 +196,7 @@ arma::Col<int> Recapture_td_Posterior::draw() {
 		std::cout << "i:   " << i << std::endl;
 		std::cout << "PMF: " << td_PMF(i) << std::endl;
 		td(i) = (*slicers(i)).draw();
+		std::cout << "Draw: " << td(i) << std::endl;
 	}
 	return td;	
 }
