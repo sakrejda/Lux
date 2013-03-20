@@ -14,3 +14,4 @@ SET(CMAKE_BUILD_TYPE Debug)
 # through
 # the project's entire directory structure.
 add_subdirectory (src) 
+add_subdirectory (include)
