@@ -7,7 +7,6 @@
 #include <trng/discrete_dist.hpp>
 #include <iostream>
 
-// This could be templated for return type?
 template <class T_VAL, class T_PMF, class T_RET> 
 class Slicer_Discrete {
 

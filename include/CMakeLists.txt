@@ -1,1 +1,1 @@
-INSTALL(FILES slicer.hpp flipper.hpp DESTINATION include)
+INSTALL(FILES slicer-continuous.hpp slicer.hpp flipper.hpp DESTINATION include)
