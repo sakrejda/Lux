@@ -113,6 +113,7 @@ public:
 
 	arma::Col<int> draw();
 	arma::field<arma::Row<double> > calc_log_mass_function();
+	arma::Mat<double> get_pdf();
 
 private:
 	// Acutally, maybe a better strategy is to keep just a reference to
