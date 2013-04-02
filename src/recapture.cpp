@@ -187,7 +187,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 		td_PMF(i).resize(K);
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(0, &choices, &td_PMF(i), &R);
 		slicers(i) = s;
-		(slicers(i)).draw()
+		(*slicers(i)).draw();
 	}
 
 }
