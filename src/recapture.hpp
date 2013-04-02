@@ -7,7 +7,7 @@
 #include <armadillo>
 #include <trng/yarn2.hpp>
 
-#include "slicer.hpp"
+#include "slicer-discrete.hpp"
 
 class Recapture_State {
 
