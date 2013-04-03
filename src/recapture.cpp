@@ -185,6 +185,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 	Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * s;
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).resize(K);
+		for ( unsigned int j=0; j < K; ++j) td_PMF(i)(j) = -arma::datum::inf;
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(state.get_deaths()(i), &choices, &td_PMF(i), &R);
 		slicers(i) = s;
 		(*slicers(i)).draw();
@@ -209,7 +210,7 @@ arma::field<arma::Row<double> > Recapture_td_Posterior::calc_log_mass_function()
 
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).zeros();
-		S(i,lo[i]+1) = 0.0;
+		S(i,lo[i]+1) = -arma::datum::inf;   // -Inf, not 0.0!!!
 		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
 //		td_PMF(i)(lo[i]+1) = exp(  S(i,lo[i]+1) + D(i,lo[i]+1)  );
 		td_PMF(i)(lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1) ;
