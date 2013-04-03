@@ -187,8 +187,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 		td_PMF(i).resize(K);
 		td_PMF(i).zeros();
 		for ( unsigned int t=0; t < state.get_last_obs()(i)+1 ; ++t) { 
-			std::cout << i << "," << t << std::endl;
-			(td_PMF(i))(t) = -arma::datum::inf; 
+			td_PMF(i)(t) = -arma::datum::inf; 
 		}
 	}
 	calc_log_mass_function();
@@ -197,8 +196,6 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>
 							(state.get_deaths()(i), &choices, &td_PMF(i), &R);
 		slicers(i) = s;
-		std::cout << "Draw in constructor for: " << i << std::endl;
-		std::cout << td_PMF(i);
 		(*slicers(i)).draw();
 	}
 	
@@ -217,8 +214,6 @@ arma::field<arma::Row<double> > Recapture_td_Posterior::calc_log_mass_function()
 	const arma::Col<int> & lo = state.get_last_obs();
 	const arma::Mat<double> & PHI = parameters.get_PHI();
 	const arma::Mat<double> & P = parameters.get_P();
-	std::cout << "PHI: " << std::endl << PHI << std::endl;
-	std::cout << "P: " << std::endl << P << std::endl;
 	S.zeros();
 	D.zeros();
 
