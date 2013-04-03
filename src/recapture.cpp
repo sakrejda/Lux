@@ -186,7 +186,7 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).resize(K);
 		std::cout << i << std::endl;
-//		for ( unsigned int j=0; j < K; ++j) { td_PMF(i)(j) = -arma::datum::inf; std::cout << j << " "; }
+		for ( unsigned int j=0; j < K; ++j) { td_PMF(i)(j) = -arma::datum::inf; std::cout << j << " "; }
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>(state.get_deaths()(i), &choices, &td_PMF(i), &R);
 		slicers(i) = s;
 		(*slicers(i)).draw();
