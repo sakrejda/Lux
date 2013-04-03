@@ -210,7 +210,7 @@ arma::field<arma::Row<double> > Recapture_td_Posterior::calc_log_mass_function()
 
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).zeros();
-		S(i,lo[i]+1) = -arma::datum::inf;   // -Inf, not 0.0!!!
+		S(i,lo[i]+1) = 0.0; 
 		D(i,lo[i]+1) = log( 1-PHI(i,lo[i]) );
 //		td_PMF(i)(lo[i]+1) = exp(  S(i,lo[i]+1) + D(i,lo[i]+1)  );
 		td_PMF(i)(lo[i]+1) = S(i,lo[i]+1) + D(i,lo[i]+1) ;
