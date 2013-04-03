@@ -185,8 +185,9 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 	Slicer_Discrete<arma::Row<int>, arma::Row<double>, int> * s;
 	for ( unsigned int i=0; i < N; ++i ) {
 		td_PMF(i).resize(K);
-		for ( unsigned int j=0; j < K; ++j) { 
-			td_PMF(i)(j) = -arma::datum::inf; 
+		td_PMF(i).zeros();
+		for ( unsigned int t=0; t < state.get_last_obs()(i)+1 ; ++t) { 
+			td_PMF(i)(t) = -arma::datum::inf; 
 		}
 	}
 	calc_log_mass_function();
@@ -195,8 +196,11 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 		s = new Slicer_Discrete<arma::Row<int>, arma::Row<double>, int>
 							(state.get_deaths()(i), &choices, &td_PMF(i), &R);
 		slicers(i) = s;
+		std::cout << "Draw in constructor for: " << i << std::endl;
+		std::cout << td_PMF(i);
 		(*slicers(i)).draw();
 	}
+	
 
 }
 
