@@ -202,6 +202,13 @@ Recapture_td_Posterior::Recapture_td_Posterior(
 
 }
 
+Recapture_td_Posterior::~Recapture_td_Posterior() {
+	for (unsigned int i=0; i < N; ++i) {
+		delete slicers(i);
+	}
+
+}
+
 arma::Col<int> Recapture_td_Posterior::draw() {
 	calc_log_mass_function();
 	for ( unsigned int i=0; i < N; ++i ) {

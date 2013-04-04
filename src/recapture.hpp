@@ -110,6 +110,7 @@ public:
 		Recapture_Parameters const & parameters_,
 		trng::yarn2 & R_
 	);
+	~Recapture_td_Posterior();
 
 	arma::Col<int> draw();
 	arma::field<arma::Row<double> > calc_log_mass_function();
