@@ -35,6 +35,8 @@ std::map<std::string, double> t_walk_Posterior::state() const {
 	out["s2"] = s2;
 	std::cout << out["x1"] << std::endl;
 	std::cout << out["x2"] << std::endl;
+	std::cout << x1 << std::endl;
+	std::cout << x2 << std::endl;
 	return out;
 }
 
