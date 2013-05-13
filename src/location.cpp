@@ -16,7 +16,10 @@ t_walk_Posterior::t_walk_Posterior(
 		trng::yarn2 & R_
 ) :	x1(x1_), x2(x2_), x3(x3_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), R(R_) 
-{}
+{
+	std::cout << x1;
+	std::cout << x2;
+}
 
 std::map<std::string, double> t_walk_Posterior::state() const {
 	std::map<std::string, double> out;
