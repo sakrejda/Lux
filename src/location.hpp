@@ -36,7 +36,7 @@ public:
 private:
 	trng::yarn2 & R;
 	double const & x1; 
-	double const & x2;
+	double       & x2;
 	double const & x3;
 	double const & p1;
 	double const & p2;
@@ -47,35 +47,7 @@ private:
 
 
 
-class Location_State {
-
-public:
-	Location_State();
-	Location_State(
-		arma::Mat<double> location;
-	);
-
-
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
 
 
 

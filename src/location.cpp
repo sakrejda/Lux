@@ -1,5 +1,5 @@
 #include "location.hpp"
-#include "math.h"
+#include <math.h>
 #include <boost/math/special_functions/gamma.hpp>
 
 using boost::math::lgamma;
@@ -15,10 +15,10 @@ t_walk_Posterior::t_walk_Posterior(
 		double const & s2_,   // scale 2
 		trng::yarn2 & R_
 ) :	x1(x1_), x2(x2_), x3(x3_),
-		p1(p1_), p2(p2_), s1(s1_), s2(s2_) 
+		p1(p1_), p2(p2_), s1(s1_), s2(s2_), R(R_) 
 {}
 
-std::map<std::string, double> state() const {
+std::map<std::string, double> t_walk_Posterior::state() const {
 	std::map<std::string, double> out;
 	out["x1"] = x1;
 	out["x2"] = x2;
@@ -30,20 +30,20 @@ std::map<std::string, double> state() const {
 	return out;
 }
 
-t_walk_Posterior::jump(double x2_) {
+void t_walk_Posterior::jump(double x2_) {
 	x2 = x2_;
 }
 // Don't divide doubles by integers, etc...
 double t_walk_Posterior::lpdf(double x2_) {
 	double lpdf;
 	lpdf = 	lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
-		0.5 * log(p1*pi*s1^2) - 
-		(p1+1)/2 * log(1 + ((x2_-x1)^2)/(p1*s1^2) ) +
+		0.5 * log(p1*pi*pow(s1,2)) - 
+		(p1+1)/2 * log(1 + (pow(x2_-x1,2))/(p1*pow(s1,2)) ) +
 					lgamma((p2+1)/2) - lgamma(p2/2) -
-		0.5 * log(p2*pi*s2^2) - 
-		(p2+1)/2 * log(1 + ((x3-x2_)^2)/(p2*s2^2) )
+		0.5 * log(p2*pi*pow(s2,2)) - 
+		(p2+1)/2 * log(1 + (pow(x3-x2_,2))/(p2*pow(s2,2)) );
 	return lpdf;
 }
 
-t_walk_Posterior::lpdf() { return lpdf(x2); }
+double t_walk_Posterior::lpdf() { return lpdf(x2); }
 
