@@ -24,6 +24,8 @@ t_walk_Posterior::t_walk_Posterior(
 
 std::map<std::string, double> t_walk_Posterior::state() const {
 	std::map<std::string, double> out;
+	std::cout << x1 << std::endl;
+	std::cout << x2 << std::endl;
 	out["x1"] = x1;
 	out["x2"] = x2;
 	out["x3"] = x3;
@@ -31,6 +33,8 @@ std::map<std::string, double> t_walk_Posterior::state() const {
 	out["p2"] = p2;
 	out["s1"] = s1;
 	out["s2"] = s2;
+	std::cout << out["x1"] << std::endl;
+	std::cout << out["x2"] << std::endl;
 	return out;
 }
 
