@@ -1,6 +1,7 @@
 #include "location.hpp"
 #include <math.h>
 #include <boost/math/special_functions/gamma.hpp>
+#include <iostream>
 
 using boost::math::lgamma;
 const double pi = boost::math::constants::pi<double>();
@@ -17,8 +18,8 @@ t_walk_Posterior::t_walk_Posterior(
 ) :	x1(x1_), x2(x2_), x3(x3_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), R(R_) 
 {
-	std::cout << x1;
-	std::cout << x2;
+	std::cout << x1 << std::endl;
+	std::cout << x2 << std::endl;
 }
 
 std::map<std::string, double> t_walk_Posterior::state() const {
