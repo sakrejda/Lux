@@ -16,16 +16,10 @@ t_walk_Posterior::t_walk_Posterior(
 		double const & s2_,   // scale 2
 		trng::yarn2 & R_
 ) :	x1(x1_), x2(x2_), x3(x3_),
-		p1(p1_), p2(p2_), s1(s1_), s2(s2_), R(R_) 
-{
-	std::cout << x1 << std::endl;
-	std::cout << x2 << std::endl;
-}
+		p1(p1_), p2(p2_), s1(s1_), s2(s2_), R(R_) { }
 
 std::map<std::string, double> t_walk_Posterior::state() const {
 	std::map<std::string, double> out;
-	std::cout << x1 << std::endl;
-	std::cout << x2 << std::endl;
 	out["x1"] = x1;
 	out["x2"] = x2;
 	out["x3"] = x3;
@@ -33,10 +27,6 @@ std::map<std::string, double> t_walk_Posterior::state() const {
 	out["p2"] = p2;
 	out["s1"] = s1;
 	out["s2"] = s2;
-	std::cout << out["x1"] << std::endl;
-	std::cout << out["x2"] << std::endl;
-	std::cout << x1 << std::endl;
-	std::cout << x2 << std::endl;
 	return out;
 }
 
