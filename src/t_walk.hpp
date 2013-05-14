@@ -1,5 +1,5 @@
-#ifndef LOCATION_H
-#define LOCATION_H
+#ifndef TWALK_H
+#define TWALK_H
 
 #include <vector>
 #include <map>

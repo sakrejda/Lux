@@ -1,4 +1,4 @@
-#include "location.hpp"
+#include "t_walk.hpp"
 #include <math.h>
 #include <boost/math/special_functions/gamma.hpp>
 #include <iostream>
