@@ -1,7 +1,8 @@
-#include <armadillo>
 
+#include "locations.hpp"
+
+#include <armadillo>
 #include <trng/yarn2.hpp>
-#include <locations.hpp>
 
 Location::Location(arma::vec & vec, trng::yarn2 & R_) : locations(vec), R(R_) { }
 

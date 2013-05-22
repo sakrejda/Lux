@@ -19,6 +19,6 @@ private:
 	trng::yarn2 & R;
 	arma::vec & locations;
 
-}
+};
 
 #endif
