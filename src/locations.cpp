@@ -11,4 +11,4 @@ arma::vec Locations::state() const {
 	return out;
 }
 
-Locations::~Locations() { delete vec; }
+Locations::~Locations() { }
