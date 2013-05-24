@@ -28,7 +28,7 @@ double RV_Constant::lpdf() { return std::numeric_limits<double>::infinity(); }
 
 RV_Uniform::RV_Uniform(
 		double & X, 
-		double const & min, double const & max, 
+		double const & minimum, double const & maximum, 
 		trng::yarn2 & R_
 ) : x(X), min(minimum), max(maximum), R(R_) { }
 
