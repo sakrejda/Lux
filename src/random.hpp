@@ -55,8 +55,8 @@ public:
 private:
 		trng::yarn2  & R;
 		double 			 & x;
-		double const & minimum;
-		double const & maximum;
+		double const & min;
+		double const & max;
   	trng::uniform01_dist<> U;
 
 };
