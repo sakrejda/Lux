@@ -88,7 +88,7 @@ public:
 private:
 	void find_peaks();
 	double peak1, peak2;
-	arma::Mat<double> companion(3,3);
+	arma::Mat<double> companion;
 
 	void find_slice();
 	double l_bound1, l_bound2;

@@ -60,7 +60,8 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 		double const & s2_,   // scale 2
 		trng::yarn2 & R_
 ) :	x1(x1_), x2(X), x3(x3_),
-		p1(p1_), p2(p2_), s1(s1_), s2(s2_), R(R_) 
+		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
+		companion(3,3), R(R_)
 {
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
