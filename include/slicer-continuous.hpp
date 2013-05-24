@@ -4,7 +4,6 @@
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
 #include <trng/exponential_dist.hpp>
-#include <iostream>
 #include <cmath>
 #include <algorithm>
 
