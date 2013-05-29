@@ -11,7 +11,8 @@ class Locations {
 
 public:
 	Locations(arma::vec & vec, trng::yarn2 & R_);
-	arma::vec state() const;
+	arma::vec & state() const;
+	double & state(arma::uword which) const;
 	~Locations();  // delete vec, which is just a wrapper for 
 								// some R memory, but should not leak.
 
