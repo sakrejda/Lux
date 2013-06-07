@@ -13,7 +13,7 @@
 class Locations {
 
 public:
-	Locations(arma::vec & vec, arma::vec & tails_, arma::vec & scales, 
+	Locations(arma::vec & locations_, arma::vec & tails_, arma::vec & scales_, 
 			trng::yarn2 & R_);
 	arma::vec & state() const;
 	double & state(arma::uword which) const;

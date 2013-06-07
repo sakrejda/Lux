@@ -4,13 +4,13 @@
 #include <armadillo>
 #include <trng/yarn2.hpp>
 
-Locations::Locations(arma::vec & vec, 
+Locations::Locations(arma::vec & locations_, 
 		arma::vec & tails_, arma::vec & scales_, trng::yarn2 & R_
-) : locations(vec), 
+) : locations(locations_), 
 		tails(tails_),
 		scales(scales_),
 		R(R_),
-		distributions(vec.size()) { }
+		distributions(locations_.size()) { }
 
 arma::vec & Locations::state() const { return locations; }
 double & Locations::state(arma::uword which) const { return locations[which]; }
