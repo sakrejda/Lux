@@ -7,7 +7,9 @@ cmake_minimum_required (VERSION 2.8)
 project (LUX)
 SET(CMAKE_BUILD_TYPE Debug)
 #SET(CMAKE_BUILD_TYPE Release)
-
+ADD_DEFINITIONS(
+	    -std=c++0x
+)
 # Recurse into the "Hello" and "Demo" subdirectories. This does not
 # actually
 # cause another cmake executable to run. The same process will walk
