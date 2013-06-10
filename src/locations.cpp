@@ -4,11 +4,14 @@
 #include <armadillo>
 #include <trng/yarn2.hpp>
 
-Locations::Locations(arma::vec & locations_, 
-		arma::vec & tails_, arma::vec & scales_, trng::yarn2 & R_
+Locations::Locations(
+		arma::vec & locations_, arma::vec & tails_, arma::vec & scales_, 
+		arma::vec & minima_, arma::vec & maxima_, trng::yarn2 & R_
 ) : locations(locations_), 
 		tails(tails_),
 		scales(scales_),
+		minima(minima_),
+		maxima(maxima_),
 		R(R_),
 		distributions(locations_.size()) { }
 
@@ -25,15 +28,14 @@ void Locations::bind_constant_distribution	(
 
 
 void Locations::bind_uniform_distribution (
-		unsigned int which, 
-		double const & minimum,
-		double const & maximum, trng::yarn2 & R
+		unsigned int which, trng::yarn2 & R
 ) {
 	distributions[which] = 
-		std::unique_ptr<Random>(new RV_Uniform(locations[which], minimum, maximum, R));
+		std::unique_ptr<Random>(
+				new RV_Uniform(locations[which], minima[which], maxima[which], R));
 }
 
-void Locations::bind_uniform_distribution (
+void Locations::bind_ordered_uniform_distribution (
 		unsigned int which, 
 		trng::yarn2 & R
 ) {
