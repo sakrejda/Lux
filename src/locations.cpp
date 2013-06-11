@@ -22,8 +22,13 @@ double & Locations::state(arma::uword which) const { return locations[which]; }
 void Locations::bind_constant_distribution	(
 		unsigned int which
 ) {
-	distributions[which] = 
-		std::unique_ptr<Random>(new RV_Constant(locations[which]));
+	if (distributions[which] == NULL) {
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Constant(locations[which]));
+	} else {
+		std::string msg("The location already has a distribution.");
+		throw(std::logic_error(msg));
+	}
 }
 
 
