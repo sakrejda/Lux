@@ -5,15 +5,17 @@
 #include <trng/yarn2.hpp>
 
 Locations::Locations(
-		arma::vec & locations_, arma::vec & tails_, arma::vec & scales_, 
-		arma::vec & minima_, arma::vec & maxima_, trng::yarn2 & R_
+		arma::vec & locations_, arma::vec & tails_,  arma::vec & scales_, 
+		arma::vec & minima_,    arma::vec & maxima_, arma::vec & draws_, 
+		trng::yarn2 & R_
 ) : locations(locations_), 
 		tails(tails_),
 		scales(scales_),
 		minima(minima_),
 		maxima(maxima_),
 		R(R_),
-		distributions(locations_.size()) { }
+		distributions(locations_.size()),
+		draws(draws_) { }
 
 arma::vec & Locations::state() const { return locations; }
 double & Locations::state(arma::uword which) const { return locations[which]; }
@@ -110,6 +112,19 @@ void Locations::drop_distribution(unsigned int which) {
 		distributions[which].reset(NULL);
 	}	
 	
+}
+
+void Locations::draw() {
+	for (unsigned int which=0; which < draws.size(); ++which) { 
+		if (distributions[which] == NULL) {
+			std::stringstream msg;
+			msg << "The location " << which << " (" << (which+1) << ")"
+						 " lacks has a distribution.  Not drawing.\n";
+			throw(std::logic_error(msg.str()));
+		} else {
+			draws[which] = distributions[which]->draw();
+		}
+	}
 }
 
 Locations::~Locations() { distributions.clear(); }

@@ -14,7 +14,7 @@ class Locations {
 
 public:
 	Locations(arma::vec & locations_, arma::vec & tails_, arma::vec & scales_, 
-			arma::vec & minima, arma::vec & maxima, trng::yarn2 & R_);
+			arma::vec & minima_, arma::vec & maxima_, arma::vec & draws_, trng::yarn2 & R_);
 	arma::vec & state() const;
 	double & state(arma::uword which) const;
 
@@ -34,6 +34,8 @@ public:
 	// Drop distribution:
 	void drop_distribution(unsigned int which);
 
+	void draw();
+
 	~Locations();  
 
 private:
@@ -43,7 +45,9 @@ private:
 	arma::vec & scales;
 	arma::vec & minima;
 	arma::vec & maxima;
+
 	std::vector<std::unique_ptr<Random> > distributions;
+	arma::vec & draws;
 
 };
 
