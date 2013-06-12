@@ -26,8 +26,9 @@ void Locations::bind_constant_distribution	(
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Constant(locations[which]));
 	} else {
-		std::string msg("The location already has a distribution.");
-		throw(std::logic_error(msg));
+		std::stringstream msg;
+		msg << "The location " << which << " already has a distribution.  Not adding.";
+		throw(std::logic_error(msg.str()));
 	}
 }
 
