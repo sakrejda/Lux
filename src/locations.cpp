@@ -37,18 +37,32 @@ void Locations::bind_constant_distribution	(
 void Locations::bind_uniform_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
-	distributions[which] = 
-		std::unique_ptr<Random>(
+	if (distributions[which] == NULL) {
+		distributions[which] = 
+			std::unique_ptr<Random>(
 				new RV_Uniform(locations[which], minima[which], maxima[which], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.";
+		throw(std::logic_error(msg.str()));
+	}
 }
 
 void Locations::bind_ordered_uniform_distribution (
 		unsigned int which, 
 		trng::yarn2 & R
 ) {
-	distributions[which] = 
-		std::unique_ptr<Random>(new RV_Uniform(
+	if (distributions[which] == NULL) {
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Uniform(
 				locations[which], locations[which-1], locations[which+1], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.";
+		throw(std::logic_error(msg.str()));
+	}
 }
 
 void Locations::bind_t_walk_distribution (
@@ -56,20 +70,34 @@ void Locations::bind_t_walk_distribution (
 		double const & p1, double const & p2,
 		double const & s1, double const & s2, trng::yarn2 & R
 ) {
-	distributions[which] = 
-		std::unique_ptr<Random>(new RV_Missing_t_walk(
-			locations[which-1], locations[which], locations[which+1], 
+	if (distributions[which] == NULL) {
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Missing_t_walk(
+				locations[which-1], locations[which], locations[which+1], 
 			p1, p2, s1, s2, R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.";
+		throw(std::logic_error(msg.str()));
+	}
 }
 
 void Locations::bind_t_walk_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
-	distributions[which] = 
-		std::unique_ptr<Random>(new RV_Missing_t_walk(
-			locations[which-1], locations[which], locations[which+1], 
-			tails[which-1], tails[which],
-			scales[which-1], scales[which], R));
+	if (distributions[which] == NULL) {
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Missing_t_walk(
+				locations[which-1], locations[which], locations[which+1], 
+				tails[which-1], tails[which],
+				scales[which-1], scales[which], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.";
+		throw(std::logic_error(msg.str()));
+	}
 }
 
 
