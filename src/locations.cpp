@@ -28,7 +28,7 @@ void Locations::bind_constant_distribution	(
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
-					 " already has a distribution.  Not adding.";
+					 " already has a distribution.  Not adding.\n";
 		throw(std::logic_error(msg.str()));
 	}
 }
@@ -44,7 +44,7 @@ void Locations::bind_uniform_distribution (
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
-					 " already has a distribution.  Not adding.";
+					 " already has a distribution.  Not adding.\n";
 		throw(std::logic_error(msg.str()));
 	}
 }
@@ -60,7 +60,7 @@ void Locations::bind_ordered_uniform_distribution (
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
-					 " already has a distribution.  Not adding.";
+					 " already has a distribution.  Not adding.\n";
 		throw(std::logic_error(msg.str()));
 	}
 }
@@ -78,7 +78,7 @@ void Locations::bind_t_walk_distribution (
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
-					 " already has a distribution.  Not adding.";
+					 " already has a distribution.  Not adding.\n";
 		throw(std::logic_error(msg.str()));
 	}
 }
@@ -95,10 +95,21 @@ void Locations::bind_t_walk_distribution (
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
-					 " already has a distribution.  Not adding.";
+					 " already has a distribution.  Not adding.\n";
 		throw(std::logic_error(msg.str()));
 	}
 }
 
+void Locations::drop_distribution(unsigned int which) {
+	if (distributions[which] == NULL) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " does not have a distribution.  Not deleting.\n";
+		throw(std::logic_error(msg.str()));
+	} else {
+		distributions[which].reset(NULL);
+	}	
+	
+}
 
 Locations::~Locations() { distributions.clear(); }

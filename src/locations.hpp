@@ -31,6 +31,9 @@ public:
 	void bind_t_walk_distribution (
 			unsigned int which, trng::yarn2 & R);
 
+	// Drop distribution:
+	void drop_distribution(unsigned int which);
+
 	~Locations();  
 
 private:
