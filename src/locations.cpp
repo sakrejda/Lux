@@ -26,7 +26,7 @@ void Locations::bind_constant_distribution	(
 ) {
 	if (distributions[which] == NULL) {
 		distributions[which] = 
-			std::unique_ptr<Random>(new RV_Constant(locations[which]));
+			std::unique_ptr<Random>(new RV_Constant(draws[which]));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
@@ -42,7 +42,7 @@ void Locations::bind_uniform_distribution (
 	if (distributions[which] == NULL) {
 		distributions[which] = 
 			std::unique_ptr<Random>(
-				new RV_Uniform(locations[which], minima[which], maxima[which], R));
+				new RV_Uniform(draws[which], minima[which], maxima[which], R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
@@ -58,7 +58,7 @@ void Locations::bind_ordered_uniform_distribution (
 	if (distributions[which] == NULL) {
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Uniform(
-				locations[which], locations[which-1], locations[which+1], R));
+				draws[which], draws[which-1], draws[which+1], R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
@@ -75,7 +75,7 @@ void Locations::bind_t_walk_distribution (
 	if (distributions[which] == NULL) {
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Missing_t_walk(
-				locations[which-1], locations[which], locations[which+1], 
+				draws[which-1], draws[which], draws[which+1], 
 			p1, p2, s1, s2, R));
 	} else {
 		std::stringstream msg;
@@ -91,7 +91,7 @@ void Locations::bind_t_walk_distribution (
 	if (distributions[which] == NULL) {
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Missing_t_walk(
-				locations[which-1], locations[which], locations[which+1], 
+				draws[which-1], draws[which], draws[which+1], 
 				tails[which-1], tails[which],
 				scales[which-1], scales[which], R));
 	} else {

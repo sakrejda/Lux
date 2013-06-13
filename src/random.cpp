@@ -37,7 +37,13 @@ void RV_Uniform::jump(double X) {
 		x = X;
 }
 
-double RV_Uniform::draw() { return min + (U(R) * (max - min)); }
+double RV_Uniform::draw() { 
+	std::cout << "x:   " << x << ", ";
+	std::cout << "min: " << min << ", ";
+	std::cout << "max: " << max << ", " << std::endl;
+	x = min + (U(R) * (max - min)); 
+	return x;
+}
 
 double RV_Uniform::lpdf(double X) {
 	if ((X > min) && (X < max)) 
@@ -46,7 +52,12 @@ double RV_Uniform::lpdf(double X) {
 		return 0.0;
 }
 
-double RV_Uniform::lpdf() { return (1/(max-min)); }
+double RV_Uniform::lpdf() { 
+	if ((x > min) && (x < max))
+		return (1/(max-min)); 
+	else
+		return 0;
+}
 
 
 
