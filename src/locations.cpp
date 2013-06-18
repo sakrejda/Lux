@@ -131,14 +131,18 @@ void Locations::drop_distribution(unsigned int which) {
 void Locations::draw() {
 	// Modify this loop to respect the sample_order vector...
 	// Need to also add correct removal order.
-	for (unsigned int which=0; which < draws.size(); ++which) { 
-		if (distributions[which] == NULL) {
-			std::stringstream msg;
-			msg << "The location " << which << " (" << (which+1) << ")"
-						 " lacks has a distribution.  Not drawing.\n";
-			throw(std::logic_error(msg.str()));
-		} else {
-			draws[which] = distributions[which]->draw();
+	unsigned int which=0;
+	for (unsigned int level=0; level < sample_order.size(); ++level) {
+		for (unsigned int i = 0; i < sample_order[level].size(); ++i) { 
+			which = sample_order[level][i];
+			if (distributions[which] == NULL) {
+				std::stringstream msg;
+				msg << "The location " << which << " (" << (which+1) << ")"
+							 " lacks has a distribution.  Not drawing.\n";
+				throw(std::logic_error(msg.str()));
+			} else {
+				draws[which] = distributions[which]->draw();
+			}
 		}
 	}
 }
