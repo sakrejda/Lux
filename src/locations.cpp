@@ -15,6 +15,7 @@ Locations::Locations(
 		maxima(maxima_),
 		R(R_),
 		distributions(locations_.size()),
+		sample_order(),
 		draws(draws_) { }
 
 arma::vec & Locations::state() const { return locations; }
@@ -25,6 +26,7 @@ void Locations::bind_constant_distribution	(
 		unsigned int which
 ) {
 	if (distributions[which] == NULL) {
+		sample_order[0].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Constant(draws[which]));
 	} else {
@@ -40,6 +42,7 @@ void Locations::bind_uniform_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
 	if (distributions[which] == NULL) {
+		sample_order[1].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(
 				new RV_Uniform(draws[which], minima[which], maxima[which], R));
@@ -56,6 +59,7 @@ void Locations::bind_ordered_uniform_distribution (
 		trng::yarn2 & R
 ) {
 	if (distributions[which] == NULL) {
+		sample_order[2].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Uniform(
 				draws[which], draws[which-1], draws[which+1], R));
@@ -73,6 +77,7 @@ void Locations::bind_t_walk_distribution (
 		double const & s1, double const & s2, trng::yarn2 & R
 ) {
 	if (distributions[which] == NULL) {
+		sample_order[2].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Missing_t_walk(
 				draws[which-1], draws[which], draws[which+1], 
@@ -89,6 +94,7 @@ void Locations::bind_t_walk_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
 	if (distributions[which] == NULL) {
+		sample_order[2].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Missing_t_walk(
 				draws[which-1], draws[which], draws[which+1], 
@@ -109,12 +115,22 @@ void Locations::drop_distribution(unsigned int which) {
 					 " does not have a distribution.  Not deleting.\n";
 		throw(std::logic_error(msg.str()));
 	} else {
+		// Reverse lookup in sample_order to remove the value from the
+		// correct key...
+		for (unsigned int i = 0; i < sample_order.size(); ++i) {
+			for (unsigned int j = 0; j < sample_order[i].size(); ++i) {
+				if (sample_order[i][j] == which) 
+					sample_order[i].erase(sample_order[i].begin()+j);
+			}
+		}
 		distributions[which].reset(NULL);
 	}	
 	
 }
 
 void Locations::draw() {
+	// Modify this loop to respect the sample_order vector...
+	// Need to also add correct removal order.
 	for (unsigned int which=0; which < draws.size(); ++which) { 
 		if (distributions[which] == NULL) {
 			std::stringstream msg;

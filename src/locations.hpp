@@ -47,6 +47,8 @@ private:
 	arma::vec & maxima;
 
 	std::vector<std::unique_ptr<Random> > distributions;
+	std::map<unsigned int, std::vector<unsigned int> > sample_order;
+	std::map<unsigned int, std::vector<unsigned int> > sample_order_bk;
 	arma::vec & draws;
 
 };
