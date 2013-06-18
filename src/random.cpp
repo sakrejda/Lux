@@ -38,10 +38,10 @@ void RV_Uniform::jump(double X) {
 }
 
 double RV_Uniform::draw() { 
+	x = min + (U(R) * (max - min)); 
 	std::cout << "x:   " << x << ", ";
 	std::cout << "min: " << min << ", ";
 	std::cout << "max: " << max << ", " << std::endl;
-	x = min + (U(R) * (max - min)); 
 	return x;
 }
 
