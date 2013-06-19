@@ -9,7 +9,7 @@ SET(CMAKE_BUILD_TYPE Debug)
 #SET(CMAKE_BUILD_TYPE Release)
 ADD_DEFINITIONS(
 	    -std=c++0x
-			-fno-lto
+			-O2
 )
 # Recurse into the "Hello" and "Demo" subdirectories. This does not
 # actually
