@@ -12,6 +12,7 @@ ADD_DEFINITIONS(
 			-O2
 			-llapack
 			-lblas
+			-Wl,-z,defs
 )
 # Recurse into the "Hello" and "Demo" subdirectories. This does not
 # actually
