@@ -39,9 +39,9 @@ void RV_Uniform::jump(double X) {
 
 double RV_Uniform::draw() { 
 	x = min + (U(R) * (max - min)); 
-	std::cout << "x:   " << x << ", ";
+/*	std::cout << "x:   " << x << ", ";
 	std::cout << "min: " << min << ", ";
-	std::cout << "max: " << max << ", " << std::endl;
+	std::cout << "max: " << max << ", " << std::endl; */
 	return x;
 }
 
@@ -99,10 +99,10 @@ double RV_Missing_t_walk::lpdf(double X) {
 	double lpdf;
 	lpdf = 	lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) - 
-		(p1+1)/2 * log(1 + (pow(X-x1,2))/(p1*pow(s1,2)) ) +
-					lgamma((p2+1)/2) - lgamma(p2/2) -
+		(p1+1.0)/2.0 * log(1.0 + (pow(X-x1,2))/(p1*pow(s1,2)) ) +
+					lgamma((p2+1.0)/2.0) - lgamma(p2/2.0) -
 		0.5 * log(p2*pi*pow(s2,2)) - 
-		(p2+1)/2 * log(1 + (pow(x3-X,2))/(p2*pow(s2,2)) );
+		(p2+1.0)/2.0 * log(1.0 + (pow(x3-X,2))/(p2*pow(s2,2)) );
 	return lpdf;
 }
 
@@ -112,8 +112,10 @@ void RV_Missing_t_walk::find_peaks() {
 	companion(0,2) = 0.5 * (x1*x1*x3 + x1*p2*s2*s2 + x3*p1*s1*s1 + x3*x3*x1);
 	companion(1,2) = -0.5 * (p1*s1*s1 + x1*x1 + 4.0*x1*x3 + x3*x3 + p2*s2*s2);
 	companion(2,2) = 1.5 * (x1+x3);
-		
-
+	eigval = eig_sym(companion);	
+	peak1 = eigval[1];
+	peak2 = eigval[3];
+	std::cout << eigval << std::endl;
 }
 
 

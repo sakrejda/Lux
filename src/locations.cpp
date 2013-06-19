@@ -58,6 +58,8 @@ void Locations::bind_ordered_uniform_distribution (
 		unsigned int which, 
 		trng::yarn2 & R
 ) {
+	// ONLY works if distributions[-1/+1] are drawn on the
+	// prior "level".
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
