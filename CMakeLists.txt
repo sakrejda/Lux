@@ -10,6 +10,8 @@ SET(CMAKE_BUILD_TYPE Debug)
 ADD_DEFINITIONS(
 	    -std=c++0x
 			-O2
+			-llapack
+			-lblas
 )
 # Recurse into the "Hello" and "Demo" subdirectories. This does not
 # actually
