@@ -85,8 +85,9 @@ public:
 	double lpdf(double X);
 	double lpdf();
 
-private:
+	// Temporarily public...
 	void find_peaks();
+private:
 	double peak1, peak2;
 	arma::Mat<double> companion;
 	arma::vec eigval;

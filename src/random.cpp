@@ -92,9 +92,13 @@ std::map<std::string, double> RV_Missing_t_walk::state() const {
 
 void RV_Missing_t_walk::jump(double X) { x2 = X; }
 
-double RV_Missing_t_walk::draw() { return x2; }
+double RV_Missing_t_walk::draw() { 
+	// Slice sampler here, complicaterated a little by the fact that the
+	// slice will usually/often consist of two parts.	
+	
+	return x2; 
+}
 
-// Don't divide doubles by integers, etc...
 double RV_Missing_t_walk::lpdf(double X) {
 	double lpdf;
 	lpdf = 	lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
@@ -107,6 +111,10 @@ double RV_Missing_t_walk::lpdf(double X) {
 }
 
 double RV_Missing_t_walk::lpdf() { return lpdf(x2); }
+
+void find_slice() {
+	// set l_bound/r_bound 1 and 2 starting from peak1 and peak2!!!
+}
 
 void RV_Missing_t_walk::find_peaks() {
 	companion(0,2) = 0.5 * (x1*x1*x3 + x1*p2*s2*s2 + x3*p1*s1*s1 + x3*x3*x1);
