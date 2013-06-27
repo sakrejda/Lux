@@ -108,7 +108,6 @@ void Locations::bind_t_walk_distribution (
 					 " already has a distribution.  Not adding.\n";
 		throw(std::logic_error(msg.str()));
 	}
-	(*(distributions[which])).find_peaks();
 }
 
 void Locations::drop_distribution(unsigned int which) {

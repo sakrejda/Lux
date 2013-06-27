@@ -76,6 +76,7 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 {
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
+	find_peaks();
 }
 
 std::map<std::string, double> RV_Missing_t_walk::state() const {
