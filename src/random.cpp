@@ -124,6 +124,7 @@ void RV_Missing_t_walk::find_peaks() {
 	eigval = arma::eig_sym(companion);	
 	peak1 = eigval[1];
 	peak2 = eigval[3];
+	std::cout << companion << std::endl;
 	std::cout << eigval << std::endl;
 }
 
