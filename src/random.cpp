@@ -72,7 +72,7 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 		trng::yarn2 & R_
 ) :	x1(x1_), x2(X), x3(x3_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
-		companion(3,3), R(R_), eigval(3)
+		companion(3,3), R(R_), eigvalues(3)
 {
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
@@ -121,12 +121,13 @@ void RV_Missing_t_walk::find_peaks() {
 	companion(0,2) = 0.5 * (x1*x1*x3 + x1*p2*s2*s2 + x3*p1*s1*s1 + x3*x3*x1);
 	companion(1,2) = -0.5 * (p1*s1*s1 + x1*x1 + 4.0*x1*x3 + x3*x3 + p2*s2*s2);
 	companion(2,2) = 1.5 * (x1+x3);
-	arma::eig_gen(eigval, eigvec, companion);	
-	eigval = arma::sort(eigval);
-	peak1 = eigval[1];
-	peak2 = eigval[3];
+	arma::eig_gen(cx_eigval, cx_eigvec, companion);	
+	eigvalues = arma::real(cx_eigval);
+	eigvalues = arma::sort(eigvalues);
+	peak1 = eigvalues[1];
+	peak2 = eigvalues[3];
 	std::cout << companion << std::endl;
-	std::cout << eigval << std::endl;
+	std::cout << eigvalues << std::endl;
 }
 
 
