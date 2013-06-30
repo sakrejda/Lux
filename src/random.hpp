@@ -90,7 +90,8 @@ public:
 private:
 	double peak1, peak2;
 	arma::Mat<double> companion;
-	arma::vec eigval;
+	arma::cx_vec eigval;
+	arma::cx_mat eigvec;
 
 	void find_slice();
 	double l_bound1, l_bound2;
