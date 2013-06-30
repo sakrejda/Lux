@@ -114,6 +114,7 @@ double RV_Missing_t_walk::lpdf(double X) {
 double RV_Missing_t_walk::lpdf() { return lpdf(x2); }
 
 void find_slice() {
+	find_peaks()
 	// set l_bound/r_bound 1 and 2 starting from peak1 and peak2!!!
 }
 
@@ -124,10 +125,8 @@ void RV_Missing_t_walk::find_peaks() {
 	arma::eig_gen(cx_eigval, cx_eigvec, companion);	
 	eigvalues = arma::real(cx_eigval);
 	eigvalues = arma::sort(eigvalues);
-	peak1 = eigvalues[1];
-	peak2 = eigvalues[3];
-	std::cout << companion << std::endl;
-	std::cout << eigvalues << std::endl;
+	peak1 = eigvalues[0];
+	peak2 = eigvalues[2];
 }
 
 
