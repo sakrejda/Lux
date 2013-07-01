@@ -78,7 +78,6 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 {
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
-	find_peaks();
 }
 
 std::map<std::string, double> RV_Missing_t_walk::state() const {
@@ -98,7 +97,17 @@ void RV_Missing_t_walk::jump(double X) { x2 = X; }
 double RV_Missing_t_walk::draw() { 
 	// Slice sampler here, complicaterated a little by the fact that the
 	// slice will usually/often consist of two parts.	
-	
+  ly = lpdf() - EXPO(R);
+	find_slice();
+	while(true) {
+		x_new = choose();	
+		ly_new = lpdf(x_new);
+		if (ly_new > ly) // && (x_new > min) && (x_new < max))  truncation.
+			break; 
+		else 
+			trim();
+	}
+	x2 = x_new;
 	return x2; 
 }
 
@@ -146,6 +155,22 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 		k = k - 1;
 	}
 	return bounds;
+}
+
+void RV_Missing_t_walk::trim() {
+	if (x_new <= bounds_pk1[1]) {
+		if (x_new <= x2) {
+			bounds_pk1[0] = x_new;
+		} else {
+			bounds_pk1[1] = x_new;
+		}
+	} else {
+		if (x_new <= x2) {
+			bounds_pk2[0] = x_new;
+		} else {
+			bounds_pk2[1] = x_new;
+		}
+	}
 }
 
 double RV_Missing_t_walk::choose() {

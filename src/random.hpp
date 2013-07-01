@@ -99,6 +99,10 @@ private:
 	std::vector<double> bounds_pk2;
 	std::vector<double> step_out(double peak);
 	double choose();
+	void trim();
+	double ly; // cached log pdf at current value...
+	double x_new; // temporary new sampled value...
+	double ly_new; // temporary pdf at sampled value...
 
 	trng::yarn2 & R;  
 	trng::uniform01_dist<double> U;
