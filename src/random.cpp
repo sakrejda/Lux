@@ -166,6 +166,7 @@ void RV_Missing_t_walk::find_peaks() {
 	eigvalues = arma::sort(eigvalues);
 	peak1 = eigvalues[0];
 	peak2 = eigvalues[2];
+	std::cout << "Peak 1: " << peak1 << ", peak 2: " << peak2 << std::endl;
 }
 
 
