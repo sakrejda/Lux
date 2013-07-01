@@ -85,7 +85,6 @@ public:
 	double lpdf(double X);
 	double lpdf();
 
-	// Temporarily public...
 private:
 	void find_peaks();
 	double peak1, peak2;
@@ -95,8 +94,9 @@ private:
 	arma::cx_mat cx_eigvec;
 
 	void find_slice();
-	double l_bound1, l_bound2;
-	double r_bound1, r_bound2;
+	std::vector<double> bounds1;
+	std::vector<double> bounds2;
+	std::vector<double> step_out(double peak);
 
 	trng::yarn2 & R;
 	double const & x1; 
