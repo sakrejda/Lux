@@ -1,5 +1,6 @@
 #include "random.hpp"
 #include <math.h>
+#include <cmath>
 #include <boost/math/special_functions/gamma.hpp>
 #include <iostream>
 
@@ -73,7 +74,7 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 ) :	x1(x1_), x2(X), x3(x3_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
 		companion(3,3), R(R_), eigvalues(3),
-		bounds1(2), bounds2(2)
+		bounds1(2), bounds2(2), EXPO(1.0)
 {
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
@@ -114,7 +115,7 @@ double RV_Missing_t_walk::lpdf(double X) {
 
 double RV_Missing_t_walk::lpdf() { return lpdf(x2); }
 
-void find_slice() {
+void RV_Missing_t_walk::find_slice() {
 	find_peaks();
 	bounds1 = step_out(peak1);
 	bounds2 = step_out(peak2);
@@ -130,15 +131,15 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	std::vector<double> bounds(2);
 	int m = 10;
 	double w = (s1+s2)/2;
-	bounds[0] = peak - w * U(*R);  // w = use (s1+s2)/2
+	bounds[0] = peak - w * U(R);  // w = use (s1+s2)/2
 	bounds[1] = bounds[0] + w;
-	int j = std::floor(m * U(*R));    // m needed...
+	int j = std::floor(m * U(R));    // m needed...
 	int k = (m-1) - j;
 	while ((j>0) && lpdf() < lpdf(bounds[0]) ) { // trunc. can be added here.
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
 	}
-	while ((k>0) && lpdf() < lpdf(bound[1]) ) { // truncation can be added here.
+	while ((k>0) && lpdf() < lpdf(bounds[1]) ) { // truncation can be added here.
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
 	}
@@ -148,7 +149,7 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 double RV_Missing_t_walk::choose() {
 	double d = (bounds2[1] - bounds2[0]) + (bounds1[1] - bounds1[0]);
 	double q = (bounds2[0] - bounds1[1]);
-	double l = U(*R) * d;
+	double l = U(R) * d;
 	if ((bounds1[0] + l) > bounds1[1]) {
 		return (l + q + bounds1[0]);
 	} else {

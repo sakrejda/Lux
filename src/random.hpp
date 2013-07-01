@@ -6,10 +6,11 @@
 
 #include <armadillo>
 #include <trng/yarn2.hpp>
+#include <trng/uniform01_dist.hpp>
+#include <trng/exponential_dist.hpp>
 
 #include "slicer-discrete.hpp"
 #include "slicer-continuous.hpp"
-#include <trng/uniform01_dist.hpp>
 
 class Random { 
 
@@ -97,8 +98,12 @@ private:
 	std::vector<double> bounds1;
 	std::vector<double> bounds2;
 	std::vector<double> step_out(double peak);
+	double choose();
 
-	trng::yarn2 & R;
+	trng::yarn2 & R;  
+	trng::uniform01_dist<double> U;
+	trng::exponential_dist<double> EXPO;
+
 	double const & x1; 
 	double       & x2;
 	double const & x3;
