@@ -74,7 +74,7 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 ) :	x1(x1_), x2(X), x3(x3_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
 		companion(3,3), R(R_), eigvalues(3),
-		bounds1(2), bounds2(2), EXPO(1.0)
+		bounds_pk1(2), bounds_pk2(2), EXPO(1.0)
 {
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
@@ -117,14 +117,16 @@ double RV_Missing_t_walk::lpdf() { return lpdf(x2); }
 
 void RV_Missing_t_walk::find_slice() {
 	find_peaks();
-	bounds1 = step_out(peak1);
-	bounds2 = step_out(peak2);
-	if (bounds1[1] > bounds2[0]) {
-		double x = bounds1[1];
-		bounds1[1] = bounds2[0];
-		bounds2[0] = x;
+	bounds_pk1 = step_out(peak1);
+	bounds_pk2 = step_out(peak2);
+	if (
+		(bounds_pk1[0] < std::min(bounds_pk1[1], bounds_pk2[1])) &&
+		(bounds_pk2[0] < std::min(bounds_pk1[1], bounds_pk2[1]))
+	) {
+		double x = (bounds_pk1[0]+bounds_pk2[1])/2.0;
+		bounds_pk1[1] = x;
+		bounds_pk2[0] = x;
 	}
-
 }
 
 std::vector<double> RV_Missing_t_walk::step_out(double peak) {
@@ -147,13 +149,13 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 }
 
 double RV_Missing_t_walk::choose() {
-	double d = (bounds2[1] - bounds2[0]) + (bounds1[1] - bounds1[0]);
-	double q = (bounds2[0] - bounds1[1]);
+	double d = (bounds_pk2[1] - bounds_pk2[0]) + (bounds_pk1[1] - bounds_pk1[0]);
+	double q = (bounds_pk2[0] - bounds_pk1[1]);
 	double l = U(R) * d;
-	if ((bounds1[0] + l) > bounds1[1]) {
-		return (l + q + bounds1[0]);
+	if ((bounds_pk1[0] + l) > bounds_pk1[1]) {
+		return (l + q + bounds_pk1[0]);
 	} else {
-		return (l + bounds1[0]);
+		return (l + bounds_pk1[0]);
 	}
 }
 
@@ -164,6 +166,8 @@ void RV_Missing_t_walk::find_peaks() {
 	arma::eig_gen(cx_eigval, cx_eigvec, companion);	
 	eigvalues = arma::real(cx_eigval);
 	eigvalues = arma::sort(eigvalues);
+	// Calculate condition number, if it's < 10^(-6) or so, 
+	// set both peaks to the average value... 
 	peak1 = eigvalues[0];
 	peak2 = eigvalues[2];
 	std::cout << "Peak 1: " << peak1 << ", peak 2: " << peak2 << std::endl;

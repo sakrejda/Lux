@@ -95,8 +95,8 @@ private:
 	arma::cx_mat cx_eigvec;
 
 	void find_slice();
-	std::vector<double> bounds1;
-	std::vector<double> bounds2;
+	std::vector<double> bounds_pk1;
+	std::vector<double> bounds_pk2;
 	std::vector<double> step_out(double peak);
 	double choose();
 
