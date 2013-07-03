@@ -12,6 +12,7 @@ ADD_DEFINITIONS(
 			-O2
 			-llapack
 			-lblas
+			-I/usr/include/eigen3
 			-Wl,-z,defs
 )
 # Recurse into the "Hello" and "Demo" subdirectories. This does not

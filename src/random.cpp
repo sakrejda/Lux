@@ -6,6 +6,8 @@
 
 #include <limits>
 #include <trng/uniform01_dist.hpp>
+#include <Eigen/Dense>
+#include <Eigen/Eigenvalues>
 
 using boost::math::lgamma;
 const double pi = boost::math::constants::pi<double>();
@@ -74,10 +76,15 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 ) :	x1(x1_), x2(X), x3(x3_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
 		companion(3,3), R(R_), eigvalues(3),
-		bounds_pk1(2), bounds_pk2(2), EXPO(1.0)
+		bounds_pk1(2), bounds_pk2(2), EXPO(1.0),
+		ecompanion(3,3)
 {
+	companion.zeros();
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
+ 	ecompanion(0,0) = 0.0; ecompanion(0,1) = 0.0;
+	ecompanion(1,0) = 1.0; ecompanion(1,1) = 0.0;
+	ecompanion(2,0) = 0.0; ecompanion(2,1) = 1.0;
 }
 
 std::map<std::string, double> RV_Missing_t_walk::state() const {
@@ -204,9 +211,8 @@ void RV_Missing_t_walk::find_peaks() {
 	companion(0,2) = 0.5 * (x1*x1*x3 + x1*p2*s2*s2 + x3*p1*s1*s1 + x3*x3*x1);
 	companion(1,2) = -0.5 * (p1*s1*s1 + x1*x1 + 4.0*x1*x3 + x3*x3 + p2*s2*s2);
 	companion(2,2) = 1.5 * (x1+x3);
-	while(!arma::eig_gen(cx_eigval, cx_eigvec, companion)) { 
-		std::cout << "Fail." << std::endl; 
-	}
+	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
+		throw std::runtime_error("Failed eigenvalue decomposition.");
 	eigvalues = arma::real(cx_eigval);
 	eigvalues = arma::sort(eigvalues);
 	// Calculate condition number, if it's < 10^(-6) or so, 
@@ -214,6 +220,12 @@ void RV_Missing_t_walk::find_peaks() {
 	peak1 = eigvalues[0];
 	peak2 = eigvalues[2];
 	//	std::cout << "Peak 1: " << peak1 << ", peak 2: " << peak2 << std::endl;
+	ecompanion(0,2) = companion(0,2);
+	ecompanion(1,2) = companion(1,2);
+	ecompanion(2,2) = companion(2,2);
+	Eigen::EigenSolver<Eigen::MatrixXd> es(ecompanion);
+	std::cout << "Peaks: " << es.eigenvalues() << std::endl;
+	
 }
 
 

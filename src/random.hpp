@@ -5,6 +5,7 @@
 #include <map> 
 
 #include <armadillo>
+#include <Eigen/Dense>
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
 #include <trng/exponential_dist.hpp>
@@ -93,6 +94,8 @@ private:
 	arma::cx_vec cx_eigval;
 	arma::vec    eigvalues;
 	arma::cx_mat cx_eigvec;
+
+	Eigen::MatrixXd ecompanion;
 
 	void print_slice(std::string s);
 
