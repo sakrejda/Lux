@@ -204,11 +204,15 @@ void RV_Missing_t_walk::find_peaks() {
 	//	std::cout << "Peak 1: " << peak1 << ", peak 2: " << peak2 << std::endl;
 }
 
+
 void RV_Missing_t_walk::print_slice(std::string s) {
-	std::cout << s;
+	std::cout << s << "   ";
 	double d = (bounds_pk2[1] - bounds_pk2[0]) + (bounds_pk1[1] - bounds_pk1[0]);
 	double q = (bounds_pk2[0] - bounds_pk1[1]);
 	std::cout << "Bounds: " << bounds_pk1[0] << "---" << bounds_pk1[1];
 	std::cout << "        " << bounds_pk2[0] << "---" << bounds_pk2[1];
 	std::cout << std::endl;
+	if (
+			(bounds_pk1[0] < 100) || (bounds_pk1[1] > 200) ||
+			(bounds_pk2[0] < 100) || (bounds_pk2[1] > 200)) throw std::logic_error("OOPS.");
 }
