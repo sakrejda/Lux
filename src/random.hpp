@@ -94,6 +94,8 @@ private:
 	arma::vec    eigvalues;
 	arma::cx_mat cx_eigvec;
 
+	void print_slice(std::string s);
+
 	void find_slice();
 	std::vector<double> bounds_pk1;
 	std::vector<double> bounds_pk2;

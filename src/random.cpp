@@ -106,6 +106,7 @@ double RV_Missing_t_walk::draw() {
 			break; 
 		else 
 			trim();
+		print_slice("jump");
 	}
 	x2 = x_new;
 	return x2; 
@@ -149,15 +150,18 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	while ((j>0) && lpdf() < lpdf(bounds[0]) ) { // trunc. can be added here.
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
+		print_slice("step_out_lhs");
 	}
 	while ((k>0) && lpdf() < lpdf(bounds[1]) ) { // truncation can be added here.
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
+		print_slice("step_out_rhs");
 	}
 	return bounds;
 }
 
 void RV_Missing_t_walk::trim() {
+	print_slice("trim 1");
 	if (x_new <= bounds_pk1[1]) {
 		if (x_new <= x2) {
 			bounds_pk1[0] = x_new;
@@ -171,6 +175,7 @@ void RV_Missing_t_walk::trim() {
 			bounds_pk2[1] = x_new;
 		}
 	}
+	print_slice("trim 2");
 }
 
 double RV_Missing_t_walk::choose() {
@@ -182,6 +187,7 @@ double RV_Missing_t_walk::choose() {
 	} else {
 		return (l + bounds_pk1[0]);
 	}
+	print_slice("choose");
 }
 
 void RV_Missing_t_walk::find_peaks() {
@@ -198,4 +204,11 @@ void RV_Missing_t_walk::find_peaks() {
 	//	std::cout << "Peak 1: " << peak1 << ", peak 2: " << peak2 << std::endl;
 }
 
-
+void RV_Missing_t_walk::print_slice(std::string s) {
+	std::cout << s;
+	double d = (bounds_pk2[1] - bounds_pk2[0]) + (bounds_pk1[1] - bounds_pk1[0]);
+	double q = (bounds_pk2[0] - bounds_pk1[1]);
+	std::cout << "Bounds: " << bounds_pk1[0] << "---" << bounds_pk1[1];
+	std::cout << "        " << bounds_pk2[0] << "---" << bounds_pk2[1];
+	std::cout << std::endl;
+}
