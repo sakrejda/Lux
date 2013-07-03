@@ -127,6 +127,14 @@ double RV_Missing_t_walk::lpdf() { return lpdf(x2); }
 
 void RV_Missing_t_walk::find_slice() {
 	find_peaks();
+	std::cout << "State: " << std::endl;
+	std::cout << "\t\tx1: " << x1 << std::endl;
+	std::cout << "\t\tx2: " << x1 << std::endl;
+	std::cout << "\t\tx3: " << x1 << std::endl;
+	std::cout << "\t\tp1: " << x1 << std::endl;
+	std::cout << "\t\tp2: " << x1 << std::endl;
+	std::cout << "\t\ts1: " << x1 << std::endl;
+	std::cout << "\t\ts2: " << x1 << std::endl;
 	std::cout << "Peak 1: " << peak1 << std::endl;
 	std::cout << "Peak 2: " << peak2 << std::endl;
 	bounds_pk1 = step_out(peak1);
