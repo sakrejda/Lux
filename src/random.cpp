@@ -213,6 +213,6 @@ void RV_Missing_t_walk::print_slice(std::string s) {
 	std::cout << "        " << bounds_pk2[0] << "---" << bounds_pk2[1];
 	std::cout << std::endl;
 	if (
-			(bounds_pk1[0] < 100) || (bounds_pk1[1] > 200) ||
-			(bounds_pk2[0] < 100) || (bounds_pk2[1] > 200)) throw std::logic_error("OOPS.");
+			(bounds_pk1[0] < -100) || (bounds_pk1[1] > 200) ||
+			(bounds_pk2[0] < -100) || (bounds_pk2[1] > 200)) throw std::logic_error("OOPS.");
 }
