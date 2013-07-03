@@ -204,7 +204,9 @@ void RV_Missing_t_walk::find_peaks() {
 	companion(0,2) = 0.5 * (x1*x1*x3 + x1*p2*s2*s2 + x3*p1*s1*s1 + x3*x3*x1);
 	companion(1,2) = -0.5 * (p1*s1*s1 + x1*x1 + 4.0*x1*x3 + x3*x3 + p2*s2*s2);
 	companion(2,2) = 1.5 * (x1+x3);
-	arma::eig_gen(cx_eigval, cx_eigvec, companion);	
+	while(!arma::eig_gen(cx_eigval, cx_eigvec, companion)) { 
+		std::cout << "Fail." << std::endl; 
+	}
 	eigvalues = arma::real(cx_eigval);
 	eigvalues = arma::sort(eigvalues);
 	// Calculate condition number, if it's < 10^(-6) or so, 
