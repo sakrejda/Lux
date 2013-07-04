@@ -159,7 +159,7 @@ void RV_Missing_t_walk::find_slice() {
 std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	std::vector<double> bounds(2);
 	int m = 10;
-	double w = (s1+s2)/2;
+	double w = (s1+s2)/2.0;
 	bounds[0] = peak - w * U(R);  // w = use (s1+s2)/2
 	bounds[1] = bounds[0] + w;
 	int j = std::floor(m * U(R));    // m needed...
@@ -167,12 +167,12 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	while ((j>0) && lpdf() < lpdf(bounds[0]) ) { // trunc. can be added here.
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
-		print_slice("step_out_lhs");
+		std::cout << "Step_out_lhs: " << bounds[0] << std::endl;
 	}
 	while ((k>0) && lpdf() < lpdf(bounds[1]) ) { // truncation can be added here.
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
-		print_slice("step_out_rhs");
+		std::cout << "Step_out_rhs: " << bounds[1] << std::endl;
 	}
 	return bounds;
 }
@@ -224,7 +224,7 @@ void RV_Missing_t_walk::find_peaks() {
 	ecompanion(1,2) = companion(1,2);
 	ecompanion(2,2) = companion(2,2);
 	Eigen::EigenSolver<Eigen::MatrixXd> es(ecompanion);
-	std::cout << "Peaks: " << es.eigenvalues() << std::endl;
+	std::cout << "Peaks: \n" << es.eigenvalues() << std::endl;
 	
 }
 
