@@ -108,7 +108,7 @@ double RV_Missing_t_walk::draw() {
 	find_slice();
 	double ii = 0;
 	while(true) {
-		ii++; if (ii > 20) throw std::runtime_error("Too many steps.")
+		ii++; if (ii > 20) throw std::runtime_error("Too many steps.");
 		x_new = choose();	
 		ly_new = lpdf(x_new);
 		std::cout << "x_new:  " << x_new << std::endl;
