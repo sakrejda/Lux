@@ -106,10 +106,15 @@ double RV_Missing_t_walk::draw() {
 	// slice will usually/often consist of two parts.	
   ly = lpdf() - EXPO(R);
 	find_slice();
+	double ii = 0;
 	while(true) {
+		ii++; if (ii > 20) throw std::runtime_error("Too many steps.")
 		x_new = choose();	
 		ly_new = lpdf(x_new);
-		if (ly_new > ly) // && (x_new > min) && (x_new < max))  truncation.
+		std::cout << "x_new:  " << x_new << std::endl;
+		std::cout << "ly_new: " << ly_new << std::endl;
+		std::cout << "ly:     " << ly << std::endl;
+		if (ly_new >= ly) // && (x_new > min) && (x_new < max))  truncation.
 			break; 
 		else 
 			trim();
@@ -146,7 +151,15 @@ void RV_Missing_t_walk::find_slice() {
 	std::cout << "Peak 2: " << peak2 << std::endl;
 	bounds_pk1 = step_out(peak1);
 	bounds_pk2 = step_out(peak2);
-	if (
+	if (ly > lpdf(peak1)) {   // In case peak 1 does not reach slice level.
+		bounds_pk1[0] = bounds_pk2[0];
+		bounds_pk1[1] = bounds_pk2[0];
+	}
+	if (ly > lpdf(peak2)) {		// In case peak 2 does not reach slice level.
+		bounds_pk2[0] = bounds_pk1[0];
+		bounds_pk2[1] = bounds_pk1[0];
+	}
+	if (  // In case the two parts of the slice overlap, split it:
 		(bounds_pk1[0] < std::min(bounds_pk1[1], bounds_pk2[1])) &&
 		(bounds_pk2[0] < std::min(bounds_pk1[1], bounds_pk2[1]))
 	) {
@@ -156,6 +169,9 @@ void RV_Missing_t_walk::find_slice() {
 	}
 }
 
+
+// CHeck to make sure that the peak is even up to the level which
+// is being sampled!!!!!!!!!!!!!!!!
 std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	std::vector<double> bounds(2);
 	int m = 10;
@@ -180,13 +196,13 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 void RV_Missing_t_walk::trim() {
 	print_slice("trim 1");
 	if (x_new <= bounds_pk1[1]) {
-		if (x_new <= x2) {
+		if (x_new <= peak1) {
 			bounds_pk1[0] = x_new;
 		} else {
 			bounds_pk1[1] = x_new;
 		}
 	} else {
-		if (x_new <= x2) {
+		if (x_new <= peak2) {
 			bounds_pk2[0] = x_new;
 		} else {
 			bounds_pk2[1] = x_new;
