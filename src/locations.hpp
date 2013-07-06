@@ -35,6 +35,7 @@ public:
 	void drop_distribution(unsigned int which);
 
 	void draw();
+	arma::vec lpdf(arma::vec X);
 
 	~Locations();  
 
