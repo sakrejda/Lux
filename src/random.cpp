@@ -42,9 +42,6 @@ void RV_Uniform::jump(double X) {
 
 double RV_Uniform::draw() { 
 	x = min + (U(R) * (max - min)); 
-/*	std::cout << "x:   " << x << ", ";
-	std::cout << "min: " << min << ", ";
-	std::cout << "max: " << max << ", " << std::endl; */
 	return x;
 }
 
@@ -101,9 +98,7 @@ std::map<std::string, double> RV_Missing_t_walk::state() const {
 
 void RV_Missing_t_walk::jump(double X) { x2 = X; }
 
-double RV_Missing_t_walk::draw() { 
-	// Slice sampler here, complicaterated a little by the fact that the
-	// slice will usually/often consist of two parts.	
+double RV_Missing_t_walk::draw() {  // Slice sampler w/ two peaks.
   ly = lpdf() - EXPO(R);
 	find_slice();
 	double ii = 0;
@@ -111,14 +106,10 @@ double RV_Missing_t_walk::draw() {
 		ii++; if (ii > 20) throw std::runtime_error("Too many steps.");
 		x_new = choose();	
 		ly_new = lpdf(x_new);
-		std::cout << "x_new:  " << x_new << std::endl;
-		std::cout << "ly_new: " << ly_new << std::endl;
-		std::cout << "ly:     " << ly << std::endl;
 		if (ly_new >= ly) // && (x_new > min) && (x_new < max))  truncation.
 			break; 
 		else 
 			trim();
-		print_slice("jump");
 	}
 	x2 = x_new;
 	return x2; 
@@ -139,16 +130,6 @@ double RV_Missing_t_walk::lpdf() { return lpdf(x2); }
 
 void RV_Missing_t_walk::find_slice() {
 	find_peaks();
-	std::cout << "State: " << std::endl;
-	std::cout << "\t\tx1: " << x1 << std::endl;
-	std::cout << "\t\tx2: " << x2 << std::endl;
-	std::cout << "\t\tx3: " << x3 << std::endl;
-	std::cout << "\t\tp1: " << p1 << std::endl;
-	std::cout << "\t\tp2: " << p2 << std::endl;
-	std::cout << "\t\ts1: " << s1 << std::endl;
-	std::cout << "\t\ts2: " << s2 << std::endl;
-	std::cout << "\t\tPeak 1: " << peak1 << std::endl;
-	std::cout << "\t\tPeak 2: " << peak2 << std::endl;
 	if (ly <= lpdf(peak1)) bounds_pk1 = step_out(peak1);
 	if (ly <= lpdf(peak2)) bounds_pk2 = step_out(peak2);
 	if (ly > lpdf(peak1)) {   // In case peak 1 does not reach slice level.
@@ -181,18 +162,15 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	while ((j>0) && (ly < lpdf(bounds[0])) ) { // trunc. can be added here.
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
-		std::cout << "Step_out_lhs: " << bounds[0] << std::endl;
 	}
 	while ((k>0) && (ly < lpdf(bounds[1])) ) { // truncation can be added here.
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
-		std::cout << "Step_out_rhs: " << bounds[1] << std::endl;
 	}
 	return bounds;
 }
 
 void RV_Missing_t_walk::trim() {
-	print_slice("trim 1");
 	if (x_new <= bounds_pk1[1]) {
 		if (x_new <= peak1) {
 			bounds_pk1[0] = x_new;
@@ -206,7 +184,6 @@ void RV_Missing_t_walk::trim() {
 			bounds_pk2[1] = x_new;
 		}
 	}
-	print_slice("trim 2");
 }
 
 double RV_Missing_t_walk::choose() {
@@ -218,7 +195,6 @@ double RV_Missing_t_walk::choose() {
 	} else {
 		return (l + bounds_pk1[0]);
 	}
-	print_slice("choose");
 }
 
 void RV_Missing_t_walk::find_peaks() {
@@ -233,24 +209,12 @@ void RV_Missing_t_walk::find_peaks() {
 	// set both peaks to the average value... 
 	peak1 = eigvalues[0];
 	peak2 = eigvalues[2];
-	//	std::cout << "Peak 1: " << peak1 << ", peak 2: " << peak2 << std::endl;
 	ecompanion(0,2) = companion(0,2);
 	ecompanion(1,2) = companion(1,2);
 	ecompanion(2,2) = companion(2,2);
-	Eigen::EigenSolver<Eigen::MatrixXd> es(ecompanion);
-	std::cout << "Peaks: \n" << es.eigenvalues() << std::endl;
+//	Eigen::EigenSolver<Eigen::MatrixXd> es(ecompanion);
+//	std::cout << "Peaks: \n" << es.eigenvalues() << std::endl;
 	
 }
 
 
-void RV_Missing_t_walk::print_slice(std::string s) {
-	std::cout << s << "   ";
-	double d = (bounds_pk2[1] - bounds_pk2[0]) + (bounds_pk1[1] - bounds_pk1[0]);
-	double q = (bounds_pk2[0] - bounds_pk1[1]);
-	std::cout << "Bounds: " << bounds_pk1[0] << "---" << bounds_pk1[1];
-	std::cout << "        " << bounds_pk2[0] << "---" << bounds_pk2[1];
-	std::cout << std::endl;
-	if (
-			(bounds_pk1[0] < -100) || (bounds_pk1[1] > 200) ||
-			(bounds_pk2[0] < -100) || (bounds_pk2[1] > 200)) throw std::logic_error("OOPS.");
-}
