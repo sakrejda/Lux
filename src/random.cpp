@@ -172,7 +172,7 @@ void RV_Missing_t_walk::find_slice() {
 
 std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	std::vector<double> bounds(2);
-	int m = 10;
+	int m = 200;
 	double w = (s1+s2)/2.0;
 	bounds[0] = peak - w * U(R);  // w = use (s1+s2)/2
 	bounds[1] = bounds[0] + w;
