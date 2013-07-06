@@ -147,10 +147,10 @@ void RV_Missing_t_walk::find_slice() {
 	std::cout << "\t\tp2: " << p2 << std::endl;
 	std::cout << "\t\ts1: " << s1 << std::endl;
 	std::cout << "\t\ts2: " << s2 << std::endl;
-	std::cout << "Peak 1: " << peak1 << std::endl;
-	std::cout << "Peak 2: " << peak2 << std::endl;
-	bounds_pk1 = step_out(peak1);
-	bounds_pk2 = step_out(peak2);
+	std::cout << "\t\tPeak 1: " << peak1 << std::endl;
+	std::cout << "\t\tPeak 2: " << peak2 << std::endl;
+	if (ly <= lpdf(peak1)) bounds_pk1 = step_out(peak1);
+	if (ly <= lpdf(peak2)) bounds_pk2 = step_out(peak2);
 	if (ly > lpdf(peak1)) {   // In case peak 1 does not reach slice level.
 		bounds_pk1[0] = bounds_pk2[0];
 		bounds_pk1[1] = bounds_pk2[0];
@@ -170,8 +170,6 @@ void RV_Missing_t_walk::find_slice() {
 }
 
 
-// CHeck to make sure that the peak is even up to the level which
-// is being sampled!!!!!!!!!!!!!!!!
 std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	std::vector<double> bounds(2);
 	int m = 10;
@@ -180,12 +178,12 @@ std::vector<double> RV_Missing_t_walk::step_out(double peak) {
 	bounds[1] = bounds[0] + w;
 	int j = std::floor(m * U(R));    // m needed...
 	int k = (m-1) - j;
-	while ((j>0) && lpdf() < lpdf(bounds[0]) ) { // trunc. can be added here.
+	while ((j>0) && (ly < lpdf(bounds[0])) ) { // trunc. can be added here.
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
 		std::cout << "Step_out_lhs: " << bounds[0] << std::endl;
 	}
-	while ((k>0) && lpdf() < lpdf(bounds[1]) ) { // truncation can be added here.
+	while ((k>0) && (ly < lpdf(bounds[1])) ) { // truncation can be added here.
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
 		std::cout << "Step_out_rhs: " << bounds[1] << std::endl;
