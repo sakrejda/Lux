@@ -59,7 +59,55 @@ double RV_Uniform::lpdf() {
 		return 0;
 }
 
+RV_t_walk::RV_t_walk(
+		double const & x1_,
+		double			 & X,
+		double const & p1_,
+		double const & s1_,
+		trng::yarn2  & R_
+) : x1(x1_), x2(X), p1(p1_), s1(s1_), 
+		R(R_), slice(lpdf_,  
+			std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), 
+			&R
+) {
 
+}
+
+std::map<std::string, double> RV_t_walk::state() const {
+	std::map<std::string, double> out;
+	out["x1"] = x1;
+	out["X"] = x2;
+	out["p1"] = p1;
+	out["s1"] = s1;
+	return out;
+}
+
+void RV_t_walk::jump(double X) { 
+	x2 = X; 
+	slice.jump(X);
+}
+
+double draw() {
+	jump(slice.draw());
+}
+
+double RV_t_walk::lpdf(double X) {
+	double lpdf;
+	lpdf = lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
+		0.5 * log(p1*pi*pow(s1,2)) -
+		(p1+1.0)/2.0 * log(1.0 + (pow(X-x1,2))/(p1*pow(s1,2)) )
+		
+//		lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
+//		0.5 * log(p1*pi*pow(s1,2)) - 
+//		(p1+1.0)/2.0 * log(1.0 + (pow(X-x1,2))/(p1*pow(s1,2)) ) +
+//					lgamma((p2+1.0)/2.0) - lgamma(p2/2.0) -
+//		0.5 * log(p2*pi*pow(s2,2)) - 
+//		(p2+1.0)/2.0 * log(1.0 + (pow(x3-X,2))/(p2*pow(s2,2)) );
+	return lpdf;
+}
+
+double RV_t_walk::lpdf() { return lpdf(x2); }
+double RV_t_walk::lpdf_(double x) { return lpdf(x); }
 
 RV_Missing_t_walk::RV_Missing_t_walk(
 		double const & x1_,

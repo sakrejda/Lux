@@ -43,6 +43,8 @@ private:
 class RV_Uniform : public Random {
 
 public:
+	typedef double (*PDF)(double);
+
 	RV_Uniform(
 		double 			 & X,
 		double const & minimum,
@@ -63,7 +65,37 @@ private:
 
 };
 
+class RV_t_walk : public Random {
 
+public:
+	RV_t_walk(
+		double const & x1_,
+		double			 & X,
+		double const & p1_,
+		double const & s1_,
+		trng::yarn2  & R_
+	);
+	std::map<std::string, double> state() const;
+	void jump(double X);
+	double draw();
+	double lpdf(double X);
+	double lpdf();
+
+private:
+	typedef double (*pdf)(double x);
+	double lpdf_(double x);
+	trng::yarn2 & R;  
+	trng::uniform01_dist<double> U;
+	trng::exponential_dist<double> EXPO;
+	Slicer_Continuous<pdf, double> slice(lpdf_, 
+			std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), &R);
+
+	double const & x1; 
+	double       & x2;
+	double const & p1;
+	double const & s1;
+
+};
 
 class RV_Missing_t_walk : public Random {
 
