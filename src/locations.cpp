@@ -92,15 +92,15 @@ void Locations::bind_t_walk_distribution (
 	}
 }
 
-void Locations::bind_t_walk_distribution (
-		unsigned int which,
-		double const & p1, double const & s1, trng::yarn2 & R
+void Locations::bind_t_walk_distribution_open (
+		unsigned int which, trng::yarn2 & R
 ) {
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_t_walk(
-				draws[which-1], draws[which], p1, s1, R));
+				draws[which-1], draws[which], 
+				tails[which-1], scales[which-1], R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
@@ -108,7 +108,6 @@ void Locations::bind_t_walk_distribution (
 		throw(std::logic_error(msg.str()));
 	}
 }
-
 
 void Locations::bind_t_walk_distribution (
 		unsigned int which, trng::yarn2 & R

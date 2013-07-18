@@ -28,9 +28,8 @@ public:
 			unsigned int which, 
 			double const & p1, double const & p2, 
 			double const & s1, double const & s2, trng::yarn2 & R);
-	void bind_t_walk_distribution	(
+	void bind_t_walk_distribution_open(
 			unsigned int which,
-			double const & p1, double const & s1,
 			trng::yarn2 & R);
 	void bind_t_walk_distribution (
 			unsigned int which, trng::yarn2 & R);
