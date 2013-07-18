@@ -66,6 +66,7 @@ private:
 };
 
 class RV_t_walk : public Random {
+	friend double LPDF(double x);
 
 public:
 	RV_t_walk(
@@ -82,18 +83,20 @@ public:
 	double lpdf();
 
 private:
-	typedef double (*pdf)(double x);
-	double lpdf_(double x);
+	std::vector<double> bounds;
 	trng::yarn2 & R;  
 	trng::uniform01_dist<double> U;
 	trng::exponential_dist<double> EXPO;
-	Slicer_Continuous<pdf, double> slice(lpdf_, 
-			std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), &R);
 
 	double const & x1; 
 	double       & x2;
 	double const & p1;
 	double const & s1;
+
+	std::vector<double> step_out();
+	double ly; // cached log pdf at current value...
+	double x_new; // temporary new sampled value...
+	double ly_new; // temporary pdf at sampled value...
 
 };
 
