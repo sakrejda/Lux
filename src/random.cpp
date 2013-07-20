@@ -1,10 +1,10 @@
 #include "random.hpp"
 #include <math.h>
-#include <cmath>
+//#include <cmath>
 #include <boost/math/special_functions/gamma.hpp>
 #include <iostream>
 
-#include <slicer-continuous.hpp>
+//#include <slicer-continuous.hpp>
 
 #include <limits>
 #include <trng/uniform01_dist.hpp>
@@ -85,24 +85,14 @@ void RV_t_walk::jump(double X) {
 }
 
 double RV_t_walk::draw() {
-  ly = lpdf() - EXPO(R);
-	bounds = step_out();
-	double ii = 0;
-	while(true) {
-		ii++; 
-		x_new = U(R) * (bounds[1] - bounds[0]) + bounds[0];	
-		ly_new = lpdf(x_new);
-		if (ly_new >= ly) // && (x_new > min) && (x_new < max))  truncation.
-			break; 
-		else {
-			if (x_new <= x2) {
-				bounds[0] = x_new;
-			} else {
-				bounds[1] = x_new;
-			}
-		}	
-	}
-	x2 = x_new;
+	double S, V, W, T;
+	do {
+		S = 2.0 * U(R) - 1.0;
+		V = 2.0 * U(R) - 1.0;
+		W = S*S + V*V;
+	} while (W > 1.0);
+	T = S * sqrt(p1*(pow(W,-2.0/p1)-1.0)/W);
+  x2 = T * s1 + x2;
 	return x2; 
 }
 
@@ -123,24 +113,6 @@ double RV_t_walk::lpdf(double X) {
 
 double RV_t_walk::lpdf() { return lpdf(x2); }
 
-std::vector<double> RV_t_walk::step_out() {
-	std::vector<double> bounds(2);
-	int m = 200;
-	double w = s1;
-	bounds[0] = x2 - w * U(R);  // w = use (s1+s2)/2
-	bounds[1] = bounds[0] + w;
-	int j = std::floor(m * U(R));    // m needed...
-	int k = (m-1) - j;
-	while ((j>0) && (ly < lpdf(bounds[0])) ) { // trunc. can be added here.
-		bounds[0] = bounds[0] - w;
-		j = j - 1;
-	}
-	while ((k>0) && (ly < lpdf(bounds[1])) ) { // truncation can be added here.
-		bounds[1] = bounds[1] + w;
-		k = k - 1;
-	}
-	return bounds;
-}
 
 RV_Missing_t_walk::RV_Missing_t_walk(
 		double const & x1_,

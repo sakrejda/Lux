@@ -9,9 +9,10 @@
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
 #include <trng/exponential_dist.hpp>
+//#include <trng/student_t_dist.hpp>
 
-#include "slicer-discrete.hpp"
-#include "slicer-continuous.hpp"
+//#include "slicer-discrete.hpp"
+//#include "slicer-continuous.hpp"
 
 class Random { 
 
