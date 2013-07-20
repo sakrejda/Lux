@@ -92,7 +92,7 @@ double RV_t_walk::draw() {
 		W = S*S + V*V;
 	} while (W > 1.0);
 	T = S * sqrt(p1*(pow(W,-2.0/p1)-1.0)/W);
-  x2 = T * s1 + x2;
+  x2 = T * s1 + x1;
 	return x2; 
 }
 
