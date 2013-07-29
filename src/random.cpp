@@ -156,7 +156,8 @@ double RV_Missing_t_walk::draw() {  // Slice sampler w/ two peaks.
 	find_slice();
 	double ii = 0;
 	while(true) {
-		ii++; if (ii > 20) throw std::runtime_error("Too many steps.");
+		//ii++; // if (ii > 10000) throw std::runtime_error("Too many steps.");
+		ii++; if (ii > 10000) { std::cout << "Too many steps." << std::endl; }
 		x_new = choose();	
 		ly_new = lpdf(x_new);
 		if (ly_new >= ly) // && (x_new > min) && (x_new < max))  truncation.
