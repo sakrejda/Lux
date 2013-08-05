@@ -1,14 +1,11 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
-#include "random.hpp"
-
 #include <vector>
 #include <map>
 #include <memory>
-
 #include <armadillo>
-#include <trng/yarn2.hpp>
+#include "random.hpp"
 
 class Locations {
 

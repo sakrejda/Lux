@@ -1,7 +1,8 @@
-#include <math.h>
+#include "random.hpp"
 //#include <cmath>
 #include <boost/math/special_functions/gamma.hpp>
 #include <iostream>
+#include <math.h>
 
 //#include <slicer-continuous.hpp>
 
@@ -11,7 +12,6 @@
 
 //using boost::math::lgamma;
 const double pi = boost::math::constants::pi<double>();
-#include "random.hpp"
 
 RV_Constant::RV_Constant(double & X) : x(X) {}
 

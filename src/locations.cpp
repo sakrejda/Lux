@@ -1,8 +1,5 @@
-
 #include "locations.hpp"
 
-#include <armadillo>
-#include <trng/yarn2.hpp>
 
 Locations::Locations(
 		arma::vec & locations_, arma::vec & drift_,
