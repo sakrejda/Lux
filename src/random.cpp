@@ -180,10 +180,10 @@ double RV_Missing_t_walk::lpdf(double X) {
 	double lpdf;
 	lpdf = 	lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) - 
-		(p1+1.0)/2.0 * log(1.0 + (pow((X+os2)-(x1+os1),2))/(p1*pow(s1,2)) ) +
+		(p1+1.0)/2.0 * log(1.0 + (pow(X -(x1+os1),2))/(p1*pow(s1,2)) ) +
 					lgamma((p2+1.0)/2.0) - lgamma(p2/2.0) -
 		0.5 * log(p2*pi*pow(s2,2)) - 
-		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X+os2),2))/(p2*pow(s2,2)) );
+		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
 	return lpdf;
 }
 
