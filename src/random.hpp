@@ -7,9 +7,9 @@
 #include <armadillo>
 //#include <Eigen/Dense>
 #include <trng/yarn2.hpp>
+#include <trng/normal_dist.hpp>
 #include <trng/uniform01_dist.hpp>
 #include <trng/exponential_dist.hpp>
-#include <trng/normal_dist.hpp>
 //#include <trng/student_t_dist.hpp>
 
 //#include "slicer-discrete.hpp"

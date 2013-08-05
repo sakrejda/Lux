@@ -1,5 +1,5 @@
 #include "locations.hpp"
-
+#include "random.hpp"
 
 Locations::Locations(
 		arma::vec & locations_, arma::vec & drift_,

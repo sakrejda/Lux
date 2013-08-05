@@ -5,7 +5,9 @@
 #include <map>
 #include <memory>
 #include <armadillo>
-#include "random.hpp"
+#include <trng/yarn2.hpp>
+
+class Random;
 
 class Locations {
 
