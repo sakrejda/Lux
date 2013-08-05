@@ -13,6 +13,8 @@ ADD_DEFINITIONS(
 			-llapack
 			-lblas
 			-I/usr/include/eigen3
+			-I/usr/include/boost
+			-I/usr/include/trng4
 			-Wl,-z,defs
 )
 # Recurse into the "Hello" and "Demo" subdirectories. This does not

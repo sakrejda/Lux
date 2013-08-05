@@ -7,12 +7,14 @@
 Locations::Locations(
 		arma::vec & locations_, arma::vec & drift_,
 		arma::vec & tails_,  arma::vec & scales_, 
+		arma::vec & obs_scales_,
 		arma::vec & minima_,    arma::vec & maxima_, arma::vec & draws_, 
 		trng::yarn2 & R_
 ) : locations(locations_), 
 		drift(drift_),
 		tails(tails_),
 		scales(scales_),
+		obs_scales(obs_scales_),
 		minima(minima_),
 		maxima(maxima_),
 		R(R_),
@@ -67,6 +69,23 @@ void Locations::bind_ordered_uniform_distribution (
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Uniform(
 				draws[which], draws[which-1], draws[which+1], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.\n";
+		throw(std::logic_error(msg.str()));
+	}
+}
+
+void Locations::bind_normal_distribution (
+		unsigned int which, 
+		trng::yarn2 & R
+) {
+	if (distributions[which] == NULL) {
+		sample_order[1].push_back(which);
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Normal(
+				draws[which], locations[which], obs_scales[which], R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"

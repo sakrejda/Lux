@@ -1,4 +1,3 @@
-#include "random.hpp"
 #include <math.h>
 //#include <cmath>
 #include <boost/math/special_functions/gamma.hpp>
@@ -7,13 +6,12 @@
 //#include <slicer-continuous.hpp>
 
 #include <limits>
-#include <trng/uniform01_dist.hpp>
-#include <trng/exponential_dist.hpp>
-#include <Eigen/Dense>
-#include <Eigen/Eigenvalues>
+//#include <Eigen/Dense>
+//#include <Eigen/Eigenvalues>
 
-using boost::math::lgamma;
+//using boost::math::lgamma;
 const double pi = boost::math::constants::pi<double>();
+#include "random.hpp"
 
 RV_Constant::RV_Constant(double & X) : x(X) {}
 
@@ -62,6 +60,28 @@ double RV_Uniform::lpdf() {
 		return 0;
 }
 
+RV_Normal::RV_Normal(
+		double       & X_,
+		double const & mu_,
+		double const & s_,
+		trng::yarn2  & R_
+) : X(X_), mu(mu_), s(s_), R(R_), NORMAL(mu_, s_) { }
+
+void RV_Normal::jump(double X) { X = X; }
+
+double RV_Normal::draw() {
+	X = NORMAL(R);
+	return X;
+}
+
+double RV_Normal::lpdf(double X) {
+	NORMAL.mu(mu);
+	NORMAL.sigma(s);
+	return log(NORMAL.pdf(X));
+}
+
+double RV_Normal::lpdf() { lpdf(X); }
+
 RV_t_walk::RV_t_walk(
 		double const & x1_,
 		double			 & X,
@@ -100,7 +120,7 @@ double RV_t_walk::draw() {
 
 double RV_t_walk::lpdf(double X) {
 	double lpdf;
-	lpdf = lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
+	lpdf = boost::math::lgamma((p1+1.0)/2.0) - boost::math::lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) -
 		(p1+1.0)/2.0 * log(1.0 + (pow(X-(x1+os),2))/(p1*pow(s1,2)) );
 		
@@ -131,15 +151,15 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 		os1(os1_), os2(os2_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
 		companion(3,3), R(R_), eigvalues(3),
-		bounds_pk1(2), bounds_pk2(2), EXPO(1.0),
-		ecompanion(3,3)
+		bounds_pk1(2), bounds_pk2(2), EXPO(1.0)//,
+//		ecompanion(3,3)
 {
 	companion.zeros();
 	companion(1,0) = 1.0;
 	companion(2,1) = 1.0;
- 	ecompanion(0,0) = 0.0; ecompanion(0,1) = 0.0;
-	ecompanion(1,0) = 1.0; ecompanion(1,1) = 0.0;
-	ecompanion(2,0) = 0.0; ecompanion(2,1) = 1.0;
+// 	ecompanion(0,0) = 0.0; ecompanion(0,1) = 0.0;
+//	ecompanion(1,0) = 1.0; ecompanion(1,1) = 0.0;
+//	ecompanion(2,0) = 0.0; ecompanion(2,1) = 1.0;
 }
 
 std::map<std::string, double> RV_Missing_t_walk::state() const {
@@ -178,10 +198,10 @@ double RV_Missing_t_walk::draw() {  // Slice sampler w/ two peaks.
 
 double RV_Missing_t_walk::lpdf(double X) {
 	double lpdf;
-	lpdf = 	lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
+	lpdf = 	boost::math::lgamma((p1+1.0)/2.0) - boost::math::lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) - 
 		(p1+1.0)/2.0 * log(1.0 + (pow(X -(x1+os1),2))/(p1*pow(s1,2)) ) +
-					lgamma((p2+1.0)/2.0) - lgamma(p2/2.0) -
+					boost::math::lgamma((p2+1.0)/2.0) - boost::math::lgamma(p2/2.0) -
 		0.5 * log(p2*pi*pow(s2,2)) - 
 		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
 	return lpdf;
@@ -278,9 +298,9 @@ void RV_Missing_t_walk::find_peaks() {
 	// set both peaks to the average value... 
 	peak1 = eigvalues[0];
 	peak2 = eigvalues[2];
-	ecompanion(0,2) = companion(0,2);
-	ecompanion(1,2) = companion(1,2);
-	ecompanion(2,2) = companion(2,2);
+//	ecompanion(0,2) = companion(0,2);
+//	ecompanion(1,2) = companion(1,2);
+//	ecompanion(2,2) = companion(2,2);
 //	Eigen::EigenSolver<Eigen::MatrixXd> es(ecompanion);
 //	std::cout << "Peaks: \n" << es.eigenvalues() << std::endl;
 	

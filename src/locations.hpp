@@ -16,6 +16,7 @@ public:
 	Locations(
 			arma::vec & locations_, arma::vec & drift_, 
 			arma::vec & tails_, arma::vec & scales_, 
+			arma::vec & obs_scales_,
 			arma::vec & minima_, arma::vec & maxima_, arma::vec & draws_, trng::yarn2 & R_);
 	arma::vec & state() const;
 	double & state(arma::uword which) const;
@@ -25,6 +26,8 @@ public:
 	void bind_uniform_distribution	(
 			unsigned int which, trng::yarn2 & R);
 	void bind_ordered_uniform_distribution (
+			unsigned int which, trng::yarn2 & R);
+	void bind_normal_distribution (
 			unsigned int which, trng::yarn2 & R);
 	void bind_t_walk_distribution		(
 			unsigned int which, 
@@ -51,6 +54,7 @@ private:
 	arma::vec & drift;
 	arma::vec & tails;
 	arma::vec & scales;
+	arma::vec & obs_scales;
 	arma::vec & minima;
 	arma::vec & maxima;
 

@@ -5,10 +5,11 @@
 #include <map> 
 
 #include <armadillo>
-#include <Eigen/Dense>
+//#include <Eigen/Dense>
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
 #include <trng/exponential_dist.hpp>
+#include <trng/normal_dist.hpp>
 //#include <trng/student_t_dist.hpp>
 
 //#include "slicer-discrete.hpp"
@@ -65,6 +66,32 @@ private:
   	trng::uniform01_dist<> U;
 
 };
+
+class RV_Normal : public Random {
+
+public:
+	RV_Normal(
+		double       & X_,
+		double const & mu_,
+		double const & s_,
+		trng::yarn2  & R_
+	);
+	std::map<std::string, double> state() const;
+	void jump(double X);
+	double draw();
+	double lpdf(double X);
+	double lpdf();
+
+private:
+	trng::yarn2 & R;  
+	trng::normal_dist<> NORMAL;
+
+	double       & X;
+	double const & mu;
+	double const & s;
+
+};
+
 
 class RV_t_walk : public Random {
 	friend double LPDF(double x);
@@ -135,7 +162,7 @@ private:
 	arma::vec    eigvalues;
 	arma::cx_mat cx_eigvec;
 
-	Eigen::MatrixXd ecompanion;
+//	Eigen::MatrixXd ecompanion;
 
 	void print_slice(std::string s);
 
