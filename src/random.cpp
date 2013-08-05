@@ -23,12 +23,12 @@ double RV_Constant::draw() {return x;}
 
 double RV_Constant::lpdf(double X) {
 	if (X == x)
-		return std::numeric_limits<double>::infinity();
-	else 
 		return 0.0;
+	else 
+		return -1.0 * std::numeric_limits<double>::infinity();
 }
 
-double RV_Constant::lpdf() { return std::numeric_limits<double>::infinity(); }
+double RV_Constant::lpdf() { return lpdf(x); }
 
 
 
