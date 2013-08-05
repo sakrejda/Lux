@@ -65,16 +65,18 @@ double RV_Uniform::lpdf() {
 RV_t_walk::RV_t_walk(
 		double const & x1_,
 		double			 & X,
+		double const & os_,
 		double const & p1_,
 		double const & s1_,
 		trng::yarn2  & R_
-) : x1(x1_), x2(X), p1(p1_), s1(s1_), 
+) : x1(x1_), x2(X), os(os_), p1(p1_), s1(s1_), 
 		R(R_), EXPO(1.0), bounds(2) { }
 
 std::map<std::string, double> RV_t_walk::state() const {
 	std::map<std::string, double> out;
 	out["x1"] = x1;
 	out["X"] = x2;
+  out["os"] = os,
 	out["p1"] = p1;
 	out["s1"] = s1;
 	return out;
@@ -92,7 +94,7 @@ double RV_t_walk::draw() {
 		W = S*S + V*V;
 	} while (W > 1.0);
 	T = S * sqrt(p1*(pow(W,-2.0/p1)-1.0)/W);
-  x2 = T * s1 + x1;
+  x2 = T * s1 + x1 + os;
 	return x2; 
 }
 
@@ -100,7 +102,7 @@ double RV_t_walk::lpdf(double X) {
 	double lpdf;
 	lpdf = lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) -
-		(p1+1.0)/2.0 * log(1.0 + (pow(X-x1,2))/(p1*pow(s1,2)) );
+		(p1+1.0)/2.0 * log(1.0 + (pow(X-(x1+os),2))/(p1*pow(s1,2)) );
 		
 //		lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
 //		0.5 * log(p1*pi*pow(s1,2)) - 

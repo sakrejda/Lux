@@ -13,7 +13,9 @@
 class Locations {
 
 public:
-	Locations(arma::vec & locations_, arma::vec & tails_, arma::vec & scales_, 
+	Locations(
+			arma::vec & locations_, arma::vec & drift_, 
+			arma::vec & tails_, arma::vec & scales_, 
 			arma::vec & minima_, arma::vec & maxima_, arma::vec & draws_, trng::yarn2 & R_);
 	arma::vec & state() const;
 	double & state(arma::uword which) const;
@@ -45,6 +47,7 @@ public:
 private:
 	trng::yarn2 & R;
 	arma::vec & locations;
+	arma::vec & drift;
 	arma::vec & tails;
 	arma::vec & scales;
 	arma::vec & minima;

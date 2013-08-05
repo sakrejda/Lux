@@ -5,10 +5,12 @@
 #include <trng/yarn2.hpp>
 
 Locations::Locations(
-		arma::vec & locations_, arma::vec & tails_,  arma::vec & scales_, 
+		arma::vec & locations_, arma::vec & drift_,
+		arma::vec & tails_,  arma::vec & scales_, 
 		arma::vec & minima_,    arma::vec & maxima_, arma::vec & draws_, 
 		trng::yarn2 & R_
 ) : locations(locations_), 
+		drift(drift_),
 		tails(tails_),
 		scales(scales_),
 		minima(minima_),
@@ -99,7 +101,7 @@ void Locations::bind_t_walk_distribution_open (
 		sample_order[2].push_back(which);
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_t_walk(
-				draws[which-1], draws[which], 
+				draws[which-1], draws[which], drift[which-1],
 				tails[which-1], scales[which-1], R));
 	} else {
 		std::stringstream msg;

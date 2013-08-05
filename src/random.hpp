@@ -73,6 +73,7 @@ public:
 	RV_t_walk(
 		double const & x1_,
 		double			 & X,
+		double const & os_,
 		double const & p1_,
 		double const & s1_,
 		trng::yarn2  & R_
@@ -91,6 +92,7 @@ private:
 
 	double const & x1; 
 	double       & x2;
+	double const & os;
 	double const & p1;
 	double const & s1;
 
