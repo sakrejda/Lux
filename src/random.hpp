@@ -112,6 +112,8 @@ public:
 		double const & x1_,
 		double 			 & X,
 		double const & x3_,
+		double const & os1_,
+		double const & os2_,
 		double const & p1_,   // degrees of freedom 1
 		double const & p2_,   // degrees of freedom 2
 		double const & s1_,   // scale 1
@@ -154,6 +156,8 @@ private:
 	double const & x1; 
 	double       & x2;
 	double const & x3;
+	double const & os1;
+	double const & os2;
 	double const & p1;
 	double const & p2;
 	double const & s1;

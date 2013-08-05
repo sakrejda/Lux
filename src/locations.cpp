@@ -76,7 +76,8 @@ void Locations::bind_ordered_uniform_distribution (
 }
 
 void Locations::bind_t_walk_distribution (
-		unsigned int which,
+		unsigned int which, 
+		double const & drift1, double const & drift2,
 		double const & p1, double const & p2,
 		double const & s1, double const & s2, trng::yarn2 & R
 ) {
@@ -85,7 +86,7 @@ void Locations::bind_t_walk_distribution (
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Missing_t_walk(
 				draws[which-1], draws[which], draws[which+1], 
-			p1, p2, s1, s2, R));
+				drift1, drift2, p1, p2, s1, s2, R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
@@ -119,6 +120,7 @@ void Locations::bind_t_walk_distribution (
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Missing_t_walk(
 				draws[which-1], draws[which], draws[which+1], 
+				drift[which-1], drift[which],
 				tails[which-1], tails[which],
 				scales[which-1], scales[which], R));
 	} else {

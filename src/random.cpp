@@ -120,12 +120,15 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 		double const & x1_,
 		double 			 & X,
 		double const & x3_,
+		double const & os1_,
+		double const & os2_,
 		double const & p1_,   // degrees of freedom 1
 		double const & p2_,   // degrees of freedom 2
 		double const & s1_,   // scale 1
 		double const & s2_,   // scale 2
 		trng::yarn2 & R_
 ) :	x1(x1_), x2(X), x3(x3_),
+		os1(os1_), os2(os2_),
 		p1(p1_), p2(p2_), s1(s1_), s2(s2_), 
 		companion(3,3), R(R_), eigvalues(3),
 		bounds_pk1(2), bounds_pk2(2), EXPO(1.0),
@@ -144,6 +147,8 @@ std::map<std::string, double> RV_Missing_t_walk::state() const {
 	out["x1"] = x1;
 	out["X"] = x2;
 	out["x3"] = x3;
+	out["os1"] = os1;
+	out["os2"] = os2;
 	out["p1"] = p1;
 	out["p2"] = p2;
 	out["s1"] = s1;
@@ -175,10 +180,10 @@ double RV_Missing_t_walk::lpdf(double X) {
 	double lpdf;
 	lpdf = 	lgamma((p1+1.0)/2.0) - lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) - 
-		(p1+1.0)/2.0 * log(1.0 + (pow(X-x1,2))/(p1*pow(s1,2)) ) +
+		(p1+1.0)/2.0 * log(1.0 + (pow((X+os2)-(x1+os1),2))/(p1*pow(s1,2)) ) +
 					lgamma((p2+1.0)/2.0) - lgamma(p2/2.0) -
 		0.5 * log(p2*pi*pow(s2,2)) - 
-		(p2+1.0)/2.0 * log(1.0 + (pow(x3-X,2))/(p2*pow(s2,2)) );
+		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X+os2),2))/(p2*pow(s2,2)) );
 	return lpdf;
 }
 
@@ -254,9 +259,17 @@ double RV_Missing_t_walk::choose() {
 }
 
 void RV_Missing_t_walk::find_peaks() {
-	companion(0,2) = 0.5 * (x1*x1*x3 + x1*p2*s2*s2 + x3*p1*s1*s1 + x3*x3*x1);
-	companion(1,2) = -0.5 * (p1*s1*s1 + x1*x1 + 4.0*x1*x3 + x3*x3 + p2*s2*s2);
-	companion(2,2) = 1.5 * (x1+x3);
+	companion(0,2) = 0.5 * (
+										(x1+os1)*(x1+os1)*(x3-os2) + 
+										(x1+os1)*p2*s2*s2 + 
+										(x3-os2)*p1*s1*s1 + 
+										(x3-os2)*(x3-os2)*(x1+os1));
+	companion(1,2) = -0.5 * (
+										p1*s1*s1 + 
+										(x1+os1)*(x1+os1) + 
+										4.0*(x1+os1)*(x3-os2) + 
+										(x3-os2)*(x3-os2) + p2*s2*s2);
+	companion(2,2) = 1.5 * ((x1+os1)+(x3-os2));
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
 	eigvalues = arma::real(cx_eigval);
