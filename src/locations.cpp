@@ -91,25 +91,25 @@ void Locations::bind_normal_distribution (
 	}
 }
 
-void Locations::bind_t_walk_distribution (
-		unsigned int which, 
-		double const & drift1, double const & drift2,
-		double const & p1, double const & p2,
-		double const & s1, double const & s2, trng::yarn2 & R
-) {
-	if (distributions[which] == NULL) {
-		sample_order[2].push_back(which);
-		distributions[which] = 
-			std::unique_ptr<Random>(new RV_Missing_t_walk(
-				draws[which-1], draws[which], draws[which+1], 
-				drift1, drift2, p1, p2, s1, s2, R));
-	} else {
-		std::stringstream msg;
-		msg << "The location " << which << " (" << (which+1) << ")"
-					 " already has a distribution.  Not adding.\n";
-		throw(std::logic_error(msg.str()));
-	}
-}
+//void Locations::bind_t_walk_distribution (
+//		unsigned int which, 
+//		double const & drift1, double const & drift2,
+//		double const & p1, double const & p2,
+//		double const & s1, double const & s2, trng::yarn2 & R
+//) {
+//	if (distributions[which] == NULL) {
+//		sample_order[2].push_back(which);
+//		distributions[which] = 
+//			std::unique_ptr<Random>(new RV_Missing_t_walk(
+//				draws[which-1], draws[which], draws[which+1], 
+//				drift1, drift2, p1, p2, s1, s2, R));
+//	} else {
+//		std::stringstream msg;
+//		msg << "The location " << which << " (" << (which+1) << ")"
+//					 " already has a distribution.  Not adding.\n";
+//		throw(std::logic_error(msg.str()));
+//	}
+//}
 
 void Locations::bind_t_walk_distribution_open (
 		unsigned int which, trng::yarn2 & R
@@ -139,6 +139,46 @@ void Locations::bind_t_walk_distribution (
 				drift[which-1], drift[which],
 				tails[which-1], tails[which],
 				scales[which-1], scales[which], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.\n";
+		throw(std::logic_error(msg.str()));
+	}
+}
+
+void Locations::bind_t_walk_observed_normal_distribution (
+		unsigned int which, trng::yarn2 & R
+) {
+	if (distributions[which] == NULL) {
+		sample_order[2].push_back(which);
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Missing_t_walk_observed_normal(
+				draws[which-1], draws[which], draws[which+1], 
+				drift[which-1], drift[which],
+				tails[which-1], tails[which],
+				scales[which-1], scales[which], 
+				obs_scales[which-1], obs_scales[which], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.\n";
+		throw(std::logic_error(msg.str()));
+	}
+}
+
+void Locations::bind_t_walk_observed_interval_distribution (
+		unsigned int which, trng::yarn2 & R
+) {
+	if (distributions[which] == NULL) {
+		sample_order[2].push_back(which);
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_Missing_t_walk_observed_interval(
+				draws[which-1], draws[which], draws[which+1], 
+				drift[which-1], drift[which],
+				tails[which-1], tails[which],
+				scales[which-1], scales[which], 
+				minima[which-1], maxima[which], R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"

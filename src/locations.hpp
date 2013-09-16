@@ -28,15 +28,19 @@ public:
 			unsigned int which, trng::yarn2 & R);
 	void bind_normal_distribution (
 			unsigned int which, trng::yarn2 & R);
-	void bind_t_walk_distribution		(
-			unsigned int which, 
-			double const & drift1, double const & drift2,
-			double const & p1, double const & p2, 
-			double const & s1, double const & s2, trng::yarn2 & R);
+//	void bind_t_walk_distribution		(
+//			unsigned int which, 
+//			double const & drift1, double const & drift2,
+//			double const & p1, double const & p2, 
+//			double const & s1, double const & s2, trng::yarn2 & R);
 	void bind_t_walk_distribution_open(
 			unsigned int which,
 			trng::yarn2 & R);
 	void bind_t_walk_distribution (
+			unsigned int which, trng::yarn2 & R);
+	void bind_t_walk_observed_normal_distribution (
+			unsigned int which, trng::yarn2 & R);
+	void bind_t_walk_observed_interval_distribution (
 			unsigned int which, trng::yarn2 & R);
 
 	// Drop distribution:
