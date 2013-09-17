@@ -28,6 +28,8 @@ void Locations::bind_constant_distribution	(
 ) {
 	if (distributions[which] == NULL) {
 		sample_order[0].push_back(which);
+		// Shouldn't this technically be locations not draws?
+		// How to resolve?
 		distributions[which] = 
 			std::unique_ptr<Random>(new RV_Constant(draws[which]));
 	} else {
@@ -158,7 +160,7 @@ void Locations::bind_t_walk_observed_normal_distribution (
 				drift[which-1], drift[which],
 				tails[which-1], tails[which],
 				scales[which-1], scales[which], 
-				obs_scales[which-1], obs_scales[which], R));
+				locations[which], obs_scales[which], R));
 	} else {
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
