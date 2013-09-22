@@ -279,17 +279,31 @@ double RV_Missing_t_walk::choose() {
 }
 
 void RV_Missing_t_walk::find_peaks() {
-	companion(0,2) = 0.5 * (
-										(x1+os1)*(x1+os1)*(x3-os2) + 
-										(x1+os1)*p2*s2*s2 + 
-										(x3-os2)*p1*s1*s1 + 
-										(x3-os2)*(x3-os2)*(x1+os1));
+//	companion(0,2) = 0.5 * (
+//										(x1+os1)*(x1+os1)*(x3-os2) + 
+//										(x1+os1)*p2*s2*s2 + 
+//										(x3-os2)*p1*s1*s1 + 
+//										(x3-os2)*(x3-os2)*(x1+os1));
+  companion(0,2) = 0.5 * (
+		x3*x3*x1 + x3*x3*os1 - 2*x3*x1*os2 - 2*x3*os2*os1 +
+		x3*p1*s1*s1 + x3*x1*x1 + 2*x3*x1*os1 + os1*os1*x3 +
+		p2*s2*s2*x1 + x1*os2*os2 - x1*x1*os2 - 2*x1*os1*os2 +
+		p2*s2*s2*os1 + os2*os2*os1 - p1*s1*s1*os2 - os1*os1*os2
+	);
+//	companion(1,2) = -0.5 * (
+//										p1*s1*s1 + 
+//										(x1+os1)*(x1+os1) + 
+//										4.0*(x1+os1)*(x3-os2) + 
+//										(x3-os2)*(x3-os2) + p2*s2*s2);
 	companion(1,2) = -0.5 * (
-										p1*s1*s1 + 
-										(x1+os1)*(x1+os1) + 
-										4.0*(x1+os1)*(x3-os2) + 
-										(x3-os2)*(x3-os2) + p2*s2*s2);
-	companion(2,2) = 1.5 * ((x1+os1)+(x3-os2));
+		x3*x3 + 4*x3*x1 + x1*x1 + 4*x3*os1 - 4*x1*os2 - 2*x3*os2 + 2*x1*os1 +
+		p2*s2*s2 + p1*s1*s1 + os2*os2 - 4*os2*os1 + os1*os1
+	);
+//	companion(2,2) =  1.5 * ((x1+os1)+(x3-os2));
+	companion(2,2) = 1.5 * (
+		x3 + x1 + os1 - os2
+	);
+	
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
 	eigvalues = arma::real(cx_eigval);
