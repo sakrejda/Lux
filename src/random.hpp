@@ -257,6 +257,9 @@ private:
 	double const & Xobs;
 	double const & so2;
 
+	double A1, A2, A3, A4, B1, B2, B3, B4;
+
+
 };
 
 

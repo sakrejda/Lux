@@ -471,17 +471,39 @@ double RV_Missing_t_walk_observed_normal::choose() {
 
 void RV_Missing_t_walk_observed_normal::find_peaks() {
 	// NEEDS MODIFICATION TO INCLUDE OBSERVATION PROCESS
-	companion(0,2) = 0.5 * (
-										(x1+os1)*(x1+os1)*(x3-os2) + 
-										(x1+os1)*p2*s2*s2 + 
-										(x3-os2)*p1*s1*s1 + 
-										(x3-os2)*(x3-os2)*(x1+os1));
-	companion(1,2) = -0.5 * (
-										p1*s1*s1 + 
-										(x1+os1)*(x1+os1) + 
-										4.0*(x1+os1)*(x3-os2) + 
-										(x3-os2)*(x3-os2) + p2*s2*s2);
-	companion(2,2) = 1.5 * ((x1+os1)+(x3-os2));
+  A1 = -2*x1 - 2*os1 - 2*x3 + 2*os2;
+  A2 = 	p1*s1*s1 + x1*x1 + 2*x1*os1 + os1*os1 +
+        p2*s2*s2 + x3*x3 - 2*x3*os2 + os2*os2 +
+        4*x3*x1   - 4*x1*os2 +
+        4*x3*os1  - 4*os1*os2;
+  A3 = -2*p1*s1*s1*x3	 - 2*x1*x1*x3     - 4*x1*os1*x3 	- 2*os1*os1*x3 +
+        2*p1*s1*s1*os2 + 2*x1*x1*os2 		+ 4*x1*os2*os1 	+ 2*os1*os1*os2 +
+       -2*x1*p2*s2*s2  - 2*x1*x3*x3     + 4*x1*x3*os2 	- 2*x1*os2*os2 +
+       -2*os1*p2*s2*s2 - 2*os1*x3*x3 +
+        4*os1*x3*os2 	 - 2*os1*os2*os2;
+  A4 = 	  p1*s1*s1*p2*s2*s2 +   x1*x1*p2*s2*s2 +
+        2*x1*os1*p2*s2*s2 	+   os1*os1*p2*s2*s2 +
+          p1*s1*s1*x3*x3 		+   x1*x1*x3*x3 +
+        2*x1*os1*x3*x3 			+   os2*os2*x3*x3 +
+       -2*p1*s1*s1*x3*os2 	- 2*x1*x1*x3*os2 +
+       -4*x1*os1*x3*os2 		- 2*os1*os1*x3*os2 +
+          p1*s1*s1*os2*os2 	+   x1*x1*os2*os2 +
+        2*x1*os1*os2*os2 		+   os1*os1*os2*os2;
+  B1 = -2;
+  B2 =  3 * (x3 + x1 + os1 - os2);
+  B3 = -1 * (		x3*x3 		+ 4*x3*x1 	+ x1*x1 		+ 4*x3*os1 - 4*x1*os2 +
+             -2*x3*os2 		+ 2*x1*os1 	+ p2*s2*s2 	+
+                p1*s1*s1 	+ os2*os2 	- 4*os2*os1 + os1*os1);
+  B4 = 	x3*x3*x1 			+ x3*x3*os1 	- 2*x3*x1*os2 		- 2*x3*os2*os1 +
+        x3*p1*s1*s1 	+ x3*x1*x1 		+ 2*x3*x1*os1 		+   os1*os1*x3 +
+        p2*s2*s2*x1 	+ x1*os2*os2 	-   x1*x1*os2 		- 2*x1*os1*os2 +
+        p2*s2*s2*os1 	+ os2*os2*os1 -   p1*s1*s1*os2 	-   os1*os1*os2;
+
+	companion(0,4) = A4*Xobs           + B4*so2;
+	companion(1,4) = A3*Xobs - A4      + B3*so2;
+	companion(2,4) = A2*Xobs - A3      + B2*so2;
+	companion(3,4) = A1*Xobs - A2      + B1*so2;
+	companion(4,4) =    Xobs - A1;
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
 	eigvalues = arma::real(cx_eigval);
