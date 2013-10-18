@@ -220,20 +220,22 @@ public:
 	double lpdf();
 
 private:
-	void find_peaks();
-	double peak1, peak2;
+
+	// For keeping track of peaks and subslices.
+	std::vector<double> peaks;
+	std::vector<std::vector<double> > peak_bounds_lr;
+	std::vector<double> intervals;
+  double total_slice_length;
+
+	// 
 	arma::Mat<double> companion;
 	arma::cx_vec cx_eigval;
-	arma::vec    eigvalues;
 	arma::cx_mat cx_eigvec;
 
 //	Eigen::MatrixXd ecompanion;
 
-	void print_slice(std::string s);
-
+	void find_peaks();
 	void find_slice();
-	std::vector<double> bounds_pk1;
-	std::vector<double> bounds_pk2;
 	std::vector<double> step_out(double peak);
 	double choose();
 	void trim();
@@ -294,7 +296,6 @@ private:
 	double peak1, peak2;
 	arma::Mat<double> companion;
 	arma::cx_vec cx_eigval;
-	arma::vec    eigvalues;
 	arma::cx_mat cx_eigvec;
 
 //	Eigen::MatrixXd ecompanion;
