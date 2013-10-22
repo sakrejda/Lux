@@ -1,7 +1,6 @@
 add_library(Lux SHARED 
 	recapture.cpp 
 	locations.cpp 
-	helpers.cpp
 	rv_constant.cpp
 	rv_uniform.cpp
 	rv_normal.cpp
