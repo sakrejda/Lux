@@ -55,35 +55,35 @@ void RV_Missing_t_walk_core::find_slice() {
 	find_peaks();
 	std::vector<double>::iterator peaks_end = 
 		std::remove_if(peaks.begin(), peaks.end(), 
-				[ly](double x) {return lpdf(x) <= ly ? true : false; });
+				[=](double x) {return lpdf(x) <= ly ? true : false; });
 
 	// step out from peak.
 	for (std::vector<double>::iterator i = peaks.begin(); 
 				i != peaks_end; i++) {
 		peak_bound_lr.push_back(step_out(i));
 	}
-	for (std::vector<double>::iterator i = peak_bound_lr.begin(); 
+	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
 		// Trim overlap
-		bool fb = (i == peak_bound_lr.begin()   );
-		bool lb = (i == (peak_bound_lr.end() - 1);
-		if (!fb && (*(i-1)[1] > *i[0]) ) {
-			double mid = (*(i-1)[1] + *i[0])/2.0;
-			*(i-1)[1] = mid;
-			*i[0] = mid;
+		bool fb = (i == (peak_bound_lr.begin()   ));
+		bool lb = (i == (peak_bound_lr.end() - 1 ));
+		if (!fb && ((*(i-1))[1] > (*i)[0]) ) {
+			double mid = ((*(i-1))[1] + (*i)[0])/2.0;
+			(*(i-1))[1] = mid;
+			(*i)[0] = mid;
 		}
-		if (!lb && (*(i+1)[0] < *i[1]) ) {
-			double mid = (*(i+1)[0] + *i[1])/2.0;
-			*(i+1)[0] = mid;
-			*i[1] = mid;
+		if (!lb && ((*(i+1))[0] < (*i)[1]) ) {
+			double mid = ((*(i+1))[0] + (*i)[1])/2.0;
+			(*(i+1))[0] = mid;
+			(*i)[1] = mid;
 		}
 
 		// Calculate sub-slice to sub-slice distances:
 		if (!fb) {
-			intervals.push_back(*i[0] - *(i-1)[1]);
+			intervals.push_back((*i)[0] - (*(i-1))[1]);
 		}
-		total_slice_length += *i[1] - *i[0];
+		total_slice_length += (*i)[1] - (*i)[0];
 	}
 
 }
@@ -114,14 +114,14 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 }
 
 void RV_Missing_t_walk_core::trim() {
-	for (std::vector<double>::iterator i = peak_bound_lr.begin(); 
+	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-		if (*i[0] < x_new && x_new < *i[1]) {
-			if ( (x_new - *i[0]) < (*i[1] - x_new) )
-				*i[0] = x_new;
+		if ((*i)[0] < x_new && x_new < (*i)[1]) {
+			if ( (x_new - (*i)[0]) < ((*i)[1] - x_new) )
+				(*i)[0] = x_new;
 			else
-				*i[1] = x_new;
+				(*i)[1] = x_new;
 		}
 	}
 
@@ -129,13 +129,13 @@ void RV_Missing_t_walk_core::trim() {
 
 double RV_Missing_t_walk_core::choose() {
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
-	for (std::vector<double>::iterator i = peak_bound_lr.begin(); 
+	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-		if ( l < *i[1] )
-			return l + *i[0];
+		if ( l < (*i)[1] )
+			return l + (*i)[0];
 		else 
-			l = l - *i[1];
+			l = l - (*i)[1];
 	}
 }
 
@@ -144,16 +144,28 @@ void RV_Missing_t_walk_core::find_peaks() {
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
 	arma::cx_vec::iterator re_eigval_end = 
-		std::remove_if(cx_eigval.begin(), cx_eigval.end(), has_imaginary);
-	std:sort(cx_eigval.begin(), re_eigval_end);
-	re_eigval_end = std::unique(cx_eigval.begin(), re_eigval_end, close_enough);
+		std::remove_if(cx_eigval.begin(), cx_eigval.end(), 
+			[](std::complex<double> x) { return x.imag() == 0;});
+	std:sort(cx_eigval.begin(), re_eigval_end,
+		[](std::complex<double> a, std::complex<double> b) { 
+			return a.real() < b.real();
+		});
+	re_eigval_end = std::unique(cx_eigval.begin(), re_eigval_end,
+		[](std::complex<double> a, std::complex<double> b) {
+			return abs(a.real()-b.real()) < pow(10,-3);
+		});
+	
+
+	std::transform(cx_eigval.begin(), re_eigval_end, 
+		std::back_inserter(real_eigval), [](std::complex<double> x) { return x.real();}
+	);
 
  	bool toggle = false;
   std::partition_copy(
-		cx_eigval.begin(), re_eigval_end.end(),
+		real_eigval.begin(), real_eigval.end(),
 		std::back_inserter(peaks),
     std::back_inserter(valleys),
-    [&toggle](int) { return toggle = !toggle; });
+    [&toggle](double) { return toggle = !toggle; });
 
 	if (peaks.size() < 1) {
 		throw std::runtime_error("No peaks found.");

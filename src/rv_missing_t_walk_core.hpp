@@ -34,12 +34,12 @@ public:
 	void jump(double X);
 	double draw();
 
-private:
+protected:
 	virtual void derivative_poly() = 0;
 
 	void find_slice();
 	void find_peaks();
-	std::vector<double> step_out(double peak);
+	std::vector<double> step_out(std::vector<double>::iterator peak_iter);
 	double choose();
 	void trim();
 
@@ -64,10 +64,11 @@ private:
 	arma::Mat<double> companion;
 	arma::cx_vec cx_eigval;
 	arma::cx_mat cx_eigvec;
+	std::vector<double> real_eigval;
 
 	std::vector<double> peaks;
 	std::vector<double> valleys;
-	std::vector<std::vector<double> > peak_bounds_lr;
+	std::vector<std::vector<double> > peak_bound_lr;
 	std::vector<double> intervals;
   double total_slice_length;
 

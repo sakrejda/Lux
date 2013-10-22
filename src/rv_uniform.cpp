@@ -1,6 +1,7 @@
 #include "rv_uniform.hpp"
 #include <math.h>
 #include <limits>
+#include <stdexcept>
 
 
 RV_Uniform::RV_Uniform(
@@ -10,14 +11,14 @@ RV_Uniform::RV_Uniform(
 		trng::yarn2 & R_
 ) : x(X), min(minimum), max(maximum), R(R_) { 
 	if ((x < min) || (x > max)) 
-		out_of_range();
+		out_of_domain();
 }
 
 void RV_Uniform::jump(double X) {
 	if ((X >= min) && (X <= max))
 		x = X;
 	else 
-		out_of_range();
+		out_of_domain();
 }
 
 double RV_Uniform::draw() { 
@@ -36,7 +37,7 @@ double RV_Uniform::lpdf() { return lpdf(x); }
 
 void RV_Uniform::out_of_domain() {
 		std::stringstream msg;
-		msg << "Given value for 'x' is " << X << ", this is "
-					 "not in [" << min << "," << max << "]."
-		throw std::domain_error(msg);
+		msg << "Given value for 'x' is " << x << ", this is "
+					 "not in [" << min << "," << max << "].";
+		throw std::domain_error(msg.str());
 }

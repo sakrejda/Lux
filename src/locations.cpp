@@ -1,5 +1,11 @@
 #include "locations.hpp"
-#include "random.hpp"
+#include "rv_constant.hpp"
+#include "rv_uniform.hpp"
+#include "rv_normal.hpp"
+#include "rv_t_walk.hpp"
+#include "rv_missing_t_walk_observed_normal.hpp"
+#include "rv_missing_t_walk_observed_interval.hpp"
+#include "rv_missing_t_walk.hpp"
 
 Locations::Locations(
 		arma::vec & locations_, arma::vec & drift_,

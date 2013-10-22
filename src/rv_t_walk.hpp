@@ -8,11 +8,9 @@
 
 #include <trng/yarn2.hpp>
 #include <trng/uniform01_dist.hpp>
-#include <trng/exponential_dist.hpp>
 
 
 class RV_t_walk : public Random {
-	friend double LPDF(double x);
 
 public:
 	RV_t_walk(
@@ -32,7 +30,6 @@ public:
 private:
 	trng::yarn2 & R;  
 	trng::uniform01_dist<double> U;
-	trng::exponential_dist<double> EXPO;
 
 	double const & x1; 
 	double       & x2;

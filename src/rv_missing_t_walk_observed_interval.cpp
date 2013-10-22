@@ -20,7 +20,7 @@ RV_Missing_t_walk_observed_interval::RV_Missing_t_walk_observed_interval(
 		double const & Xmin_,
 		double const & Xmax_,
 		trng::yarn2 & R_
-) :	RV_Missing_t_walk_observed_core(x1_, X, x3_, os1_, os2_, p1_, p2_, s1_, s2_, R_),
+) :	RV_Missing_t_walk_core(x1_, X, x3_, os1_, os2_, p1_, p2_, s1_, s2_, R_),
 		Xmin(Xmin_), Xmax(Xmax_)
 {
 	// Companion matrix for eigenvalue peak-finding.
@@ -61,23 +61,23 @@ double RV_Missing_t_walk_observed_interval::lpdf() { return lpdf(x2); }
 
 
 void RV_Missing_t_walk_observed_interval::derivative_poly() {
-	double B1 = ( -1*(ptm1+1) - (pt__+1) );
-  double B2 = ( (ptm1+1)*(xtm1+deltatm1+2*xtp1-2*deltat__) +
-          (pt__+1)*(xtp1-deltat__+2*xtm1+2*deltatm1)  );
+	double B1 = ( -1*(p1+1) - (p2+1) );
+  double B2 = ( (p1+1)*(x1+os1+2*x3-2*os2) +
+          (p2+1)*(x3-os2+2*x1+2*os1)  );
   double B3 = (
-	  -1*(ptm1+1)*(
-		pt__*pow(sigmat__,2) + pow(xtp1-deltat__,2) + 
-			2*(xtm1+deltatm1)*(xtp1-deltat__)
+	  -1*(p1+1)*(
+		p2*pow(s2,2) + pow(x3-os2,2) + 
+			2*(x1+os1)*(x3-os2)
 		) -
-		 1*(pt__+1)*(
-		ptm1*pow(sigmatm1,2) + pow(xtm1+deltatm1,2) + 
-			2*(xtp1-deltat__)*(xtm1+deltatm1)) 
+		 1*(p2+1)*(
+		p1*pow(s1,2) + pow(x1+os1,2) + 
+			2*(x3-os2)*(x1+os1)) 
 	);
   double B4 = ( 
-		(ptm1+1)*(xtm1+deltatm1)*
-			(pt__*pow(sigmat__,2)+pow(xtp1-deltat__,2)) +
-    (pt__+1)*(xtp1-deltat__)*
-			(ptm1*pow(sigmatm1,2)+pow(xtm1+deltatm1,2)) 
+		(p1+1)*(x1+os1)*
+			(p2*pow(s2,2)+pow(x3-os2,2)) +
+    (p2+1)*(x3-os2)*
+			(p1*pow(s1,2)+pow(x1+os1,2)) 
 	);
 
   companion(0,2) = -B4/B1;

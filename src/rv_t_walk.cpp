@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <limits>
+#include <stdexcept>
 
 const double pi = boost::math::constants::pi<double>();
 
@@ -16,19 +17,19 @@ RV_t_walk::RV_t_walk(
 		double const & s1_,
 		trng::yarn2  & R_
 ) : x1(x1_), x2(X), os(os_), p1(p1_), s1(s1_), 
-		R(R_), EXPO(1.0) 
+		R(R_) 
 { 
 	if (p1 <= 0.0) {
 		std::stringstream msg;
 		msg << "Given value for 'p1' is " << p1;
 		msg << " degrees of freedom must be a positive number.";
-		throw std::domain_error(msg);
+		throw std::domain_error(msg.str());
 	}
 	if (s1 <= 0.0) {
 		std::stringstream msg;
 		msg << "Given value for 's1' is " << s1;
 		msg << " scale must be a positive number.";
-		throw std::domain_error(msg);
+		throw std::domain_error(msg.str());
 	}
 }
 
