@@ -4,6 +4,8 @@
 #include <math.h>
 #include <limits>
 
+#include <iostream>
+
 const double pi = boost::math::constants::pi<double>();
 
 
@@ -66,6 +68,11 @@ double RV_Missing_t_walk_observed_normal::lpdf() { return lpdf(x2); }
 
 
 void RV_Missing_t_walk_observed_normal::derivative_poly() {
+	std::cout << x1  << "\t" << X    << "\t" << x3 << "\n";
+	std::cout << os1 << "\t" << os2  << "\t" << "\n";
+	std::cout << p1  << "\t" << p2   << "\t" << "\n";
+	std::cout << s1  << "\t" << s2   << "\t" << "\n";
+	std::cout << Xobs << "\t" << so2 << "\n";
 	double A1 = 2*( (os2-x3) - (os1+x1) );
   double A2 = ( 
 		pow(x3-os2,2) + p2*pow(s2,2) +

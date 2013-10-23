@@ -1,4 +1,5 @@
 #include "rv_missing_t_walk_core.hpp"
+#include <iostream>
 
 RV_Missing_t_walk_core::RV_Missing_t_walk_core(
 		double const & x1_,
@@ -143,6 +144,7 @@ void RV_Missing_t_walk_core::find_peaks() {
 	derivative_poly();
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
+	std::cout << cx_eigval << "\n";
 	arma::cx_vec::iterator re_eigval_end = 
 		std::remove_if(cx_eigval.begin(), cx_eigval.end(), 
 			[](std::complex<double> x) { return x.imag() == 0;});
