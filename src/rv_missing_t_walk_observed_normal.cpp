@@ -68,7 +68,7 @@ double RV_Missing_t_walk_observed_normal::lpdf() { return lpdf(x2); }
 
 
 void RV_Missing_t_walk_observed_normal::derivative_poly() {
-	std::cout << x1  << "\t" << X    << "\t" << x3 << "\n";
+	std::cout << x1  << "\t" << x2   << "\t" << x3 << "\n";
 	std::cout << os1 << "\t" << os2  << "\t" << "\n";
 	std::cout << p1  << "\t" << p2   << "\t" << "\n";
 	std::cout << s1  << "\t" << s2   << "\t" << "\n";
