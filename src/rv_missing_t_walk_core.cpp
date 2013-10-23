@@ -138,10 +138,13 @@ void RV_Missing_t_walk_core::trim() {
 }
 
 double RV_Missing_t_walk_core::choose() {    
+	std::cout << "Total slice length: total_slice_length: ";
+	std::cout << total_slice_length << std::endl;
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
+		std::cout << "l: " << l << std::endl;
 		if ( l <= (*i)[1] )
 			return l; // + (*i)[0];
 		else 
