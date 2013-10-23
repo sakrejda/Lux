@@ -39,7 +39,12 @@ double RV_Missing_t_walk_core::draw() {
 	find_slice();
 	double ii = 0;
 	while(true) {
-		ii++; if (ii > 10000) { std::cout << "Too many steps." << std::endl; }
+		ii++; if (ii > 10000) { 
+			std::cout << "Too many steps." << std::endl; 
+			for ( unsigned int i=0; i < peaks.size(); i++ )
+				std::cout << "Peaks: " << peaks << std::endl;
+		}
+
 		x_new = choose();	
 		ly_new = lpdf(x_new);
 		if (ly_new >= ly) 
