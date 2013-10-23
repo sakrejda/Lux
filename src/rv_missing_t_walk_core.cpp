@@ -147,7 +147,7 @@ void RV_Missing_t_walk_core::find_peaks() {
 	std::cout << cx_eigval << "\n";
 	arma::cx_vec::iterator re_eigval_end = 
 		std::remove_if(cx_eigval.begin(), cx_eigval.end(), 
-			[](std::complex<double> x) { return x.imag() == 0;});
+			[](std::complex<double> x) { return x.imag() != 0;});
 	std:sort(cx_eigval.begin(), re_eigval_end,
 		[](std::complex<double> a, std::complex<double> b) { 
 			return a.real() < b.real();
