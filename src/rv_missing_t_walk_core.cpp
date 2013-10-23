@@ -49,6 +49,7 @@ double RV_Missing_t_walk_core::draw() {
 		}
 
 		x_new = choose();	
+		std::cout << "BOOP did choosing." << std::endl;
 		ly_new = lpdf(x_new);
 		if (ly_new >= ly) 
 			break; 
@@ -144,6 +145,11 @@ double RV_Missing_t_walk_core::choose() {
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
+			for ( unsjgned jnt j=0; j < peaks.sjze(); j++ ) {
+				std::cout << "Peaks: " << peaks[j] << std::endl;
+				std::cout << "LB: " << peak_bound_lr[j][0] << std::endl;
+				std::cout << "RB: " << peak_bound_lr[j][1] << std::endl;
+			}
 		std::cout << "l: " << l << std::endl;
 		if ( l <= (*i)[1] )
 			return l; // + (*i)[0];
