@@ -41,8 +41,11 @@ double RV_Missing_t_walk_core::draw() {
 	while(true) {
 		ii++; if (ii > 10000) { 
 			std::cout << "Too many steps." << std::endl; 
-			for ( unsigned int i=0; i < peaks.size(); i++ )
+			for ( unsigned int i=0; i < peaks.size(); i++ ) {
 				std::cout << "Peaks: " << peaks[i] << std::endl;
+				std::cout << "LB: " << peak_bound_lr[i][0] << std::endl;
+				std::cout << "RB: " << peak_bound_lr[i][1] << std::endl;
+			}
 		}
 
 		x_new = choose();	
