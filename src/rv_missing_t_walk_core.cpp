@@ -47,6 +47,7 @@ double RV_Missing_t_walk_core::draw() {
 		else 
 			trim();
 	}
+	std::cout << "BOOP" << std::endl;
 	x2 = x_new;
 	return x2; 
 }
