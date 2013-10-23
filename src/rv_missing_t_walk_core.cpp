@@ -145,7 +145,7 @@ double RV_Missing_t_walk_core::choose() {
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-			for ( unsjgned jnt j=0; j < peaks.sjze(); j++ ) {
+			for ( unsigned int j=0; j < peaks.size(); j++ ) {
 				std::cout << "Peaks: " << peaks[j] << std::endl;
 				std::cout << "LB: " << peak_bound_lr[j][0] << std::endl;
 				std::cout << "RB: " << peak_bound_lr[j][1] << std::endl;
