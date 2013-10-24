@@ -104,6 +104,7 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 	double w = (s1+s2)/2.0;
 	bounds[0] = *peak_iter - w * U(R);  // w = use (s1+s2)/2
 	bounds[1] = bounds[0] + w;
+	std::cout << bounds[0] << "----" << bounds[1] << std::endl;
 	int j = std::floor(m * U(R));    // m needed...
 	int k = (m-1) - j;
 	while ((j>0) && (ly < lpdf(bounds[0])) ) { 
