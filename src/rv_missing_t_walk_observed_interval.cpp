@@ -44,6 +44,19 @@ std::map<std::string, double> RV_Missing_t_walk_observed_interval::state() const
 
 
 double RV_Missing_t_walk_observed_interval::lpdf(double X) {
+	std::cout << "lpdf of RV_Missing_t_walk_observed_normal" << std::endl;
+	std::cout << "x1: " << x1 << std::endl;
+	std::cout << "X:  " << X  << std::endl;
+	std::cout << "x3: " << x3 << std::endl;
+	std::cout << "os1: " << os1 << std::endl;
+	std::cout << "os2: " << os2 << std::endl;
+	std::cout << "p1: " << p1 << std::endl;
+	std::cout << "p2: " << p2 << std::endl;
+	std::cout << "s1: " << s1 << std::endl;
+	std::cout << "s2: " << s2 << std::endl;
+	std::cout << "Xobs: " << Xobs << std::endl;
+	std::cout << "so2: " << so2 << std::endl;
+	std::cout << "Xmin: " << Xmin << ", Xmax: " << Xmax << std::endl;
 	if ((X < Xmin) || (X > Xmax)) {		
 		return -1.0 * std::numeric_limits<double>::infinity();
 	}

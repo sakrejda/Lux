@@ -49,6 +49,7 @@ std::map<std::string, double> RV_Missing_t_walk_observed_normal::state() const {
 
 double RV_Missing_t_walk_observed_normal::lpdf(double X) {
 	double lpdf;
+	std::cout << "lpdf of RV_Missing_t_walk_observed_normal" << std::endl;
 	std::cout << "x1: " << x1 << std::endl;
 	std::cout << "X:  " << X  << std::endl;
 	std::cout << "x3: " << x3 << std::endl;
