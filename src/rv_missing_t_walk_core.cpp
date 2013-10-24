@@ -72,6 +72,10 @@ void RV_Missing_t_walk_core::find_slice() {
 	for (std::vector<double>::iterator i = peaks.begin(); 
 				i != peaks_end; i++) {
 		peak_bound_lr.push_back(step_out(i));
+		if (peak_bound_lr[peak_bound_lr.size()-1][0] > peaks[i] ||
+				peak_bound_lr[peak_bound_lr.size()-1][1] < peaks[i]) {
+					throw std::runtime_error("Peak not in bounds.");
+		}
 	}
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
