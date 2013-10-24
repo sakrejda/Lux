@@ -59,7 +59,7 @@ double RV_Missing_t_walk_core::draw() {
 
 void RV_Missing_t_walk_core::find_slice() {
 	find_peaks();
-	std::cout << "x is: " << x << std::endl;
+	std::cout << "x is: " << x2 << std::endl;
 	
 	std::cout << "ly is: " << ly << std::endl;
 	std::for_each(peaks.begin(), peaks.end(), 
