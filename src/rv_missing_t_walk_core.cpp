@@ -37,6 +37,9 @@ void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 double RV_Missing_t_walk_core::draw() {
   ly = lpdf() - EXPO(R);
 	find_slice();
+	std::cout << "peak_bound_lr.size(): " << peak_bound_lr.size() << std::endl;
+	std::cout << "peaks.size(): " << peaks.size() << std::endl;
+
 	for ( unsigned int i=0; i < peaks.size(); ++i) {
 		std::cout << peak_bound_lr[i][0] << "----" << peaks[i] << "----" << peak_bound_lr[i][1] << std::endl;
 	}
@@ -165,6 +168,7 @@ void RV_Missing_t_walk_core::find_peaks() {
 	std::transform(cx_eigval.begin(), re_eigval_end, 
 		std::back_inserter(real_eigval), [](std::complex<double> x) { return x.real();}
 	);
+	std::cout << "real_eigval.size() " << real_eigval.size() << std::endl;
 
  	bool toggle = false;
   std::partition_copy(
@@ -176,6 +180,6 @@ void RV_Missing_t_walk_core::find_peaks() {
 	if (peaks.size() < 1) {
 		throw std::runtime_error("No peaks found.");
 	}
-
+	std::cout << "peaks.size() " << peaks.size() << std::endl;
 }	
 
