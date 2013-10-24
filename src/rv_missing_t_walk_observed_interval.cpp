@@ -23,6 +23,8 @@ RV_Missing_t_walk_observed_interval::RV_Missing_t_walk_observed_interval(
 ) :	RV_Missing_t_walk_core(x1_, X, x3_, os1_, os2_, p1_, p2_, s1_, s2_, R_),
 		Xmin(Xmin_), Xmax(Xmax_)
 {
+	std::cout << "Xmin: " << Xmin << ", Xmax: " << Xmax << std::endl;
+
 	// Companion matrix for eigenvalue peak-finding.
 	companion.set_size(3,3);
 	companion.zeros();
