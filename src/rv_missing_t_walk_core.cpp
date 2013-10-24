@@ -37,26 +37,19 @@ void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 double RV_Missing_t_walk_core::draw() {
   ly = lpdf() - EXPO(R);
 	find_slice();
+	for ( unsigned int i=0; i<peaks.size(); ++i) {
+		std::cout << peak_bound_lr[i][0] << "----" << peaks[i];
+		std::cout << "----" << peak_bound_lr[i][1] << std:endl;
+	}
 	double ii = 0;
 	while(true) {
-		ii++; if (ii > 10000) { 
-			std::cout << "Too many steps." << std::endl; 
-			for ( unsigned int i=0; i < peaks.size(); i++ ) {
-				std::cout << "Peaks: " << peaks[i] << std::endl;
-				std::cout << "LB: " << peak_bound_lr[i][0] << std::endl;
-				std::cout << "RB: " << peak_bound_lr[i][1] << std::endl;
-			}
-		}
-
 		x_new = choose();	
-		std::cout << "BOOP did choosing." << std::endl;
 		ly_new = lpdf(x_new);
 		if (ly_new >= ly) 
 			break; 
 		else 
 			trim();
 	}
-	std::cout << "BOOP" << std::endl;
 	x2 = x_new;
 	return x2; 
 }
@@ -114,15 +107,11 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 	while ((j>0) && (ly < lpdf(bounds[0])) ) { 
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
-		std::cout << "LB: " << bounds[0] << std::endl;
-		std::cout << "RB: " << bounds[1] << std::endl;
 		if (!fp && (bounds[0] < *(peak_iter-1))) break;
 	}
 	while ((k>0) && (ly < lpdf(bounds[1])) ) {
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
-		std::cout << "LB: " << bounds[0] << std::endl;
-		std::cout << "RB: " << bounds[1] << std::endl;
 		if (!lp && (bounds[1] > *(peak_iter+1))) break;
 	}
 	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) 
@@ -145,18 +134,10 @@ void RV_Missing_t_walk_core::trim() {
 }
 
 double RV_Missing_t_walk_core::choose() {    
-	std::cout << "Total slice length: total_slice_length: ";
-	std::cout << total_slice_length << std::endl;
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-			for ( unsigned int j=0; j < peaks.size(); j++ ) {
-				std::cout << "Peaks: " << peaks[j] << std::endl;
-				std::cout << "LB: " << peak_bound_lr[j][0] << std::endl;
-				std::cout << "RB: " << peak_bound_lr[j][1] << std::endl;
-			}
-		std::cout << "l: " << l << std::endl;
 		if ( l <= (*i)[1] )
 			return l; // + (*i)[0];
 		else 

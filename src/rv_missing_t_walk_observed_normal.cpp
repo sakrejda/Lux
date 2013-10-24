@@ -48,11 +48,6 @@ std::map<std::string, double> RV_Missing_t_walk_observed_normal::state() const {
 
 
 double RV_Missing_t_walk_observed_normal::lpdf(double X) {
-	std::cout << x1  << "\t" << X    << "\t" << x3 << "\n";
-	std::cout << os1 << "\t" << os2  << "\t" << "\n";
-	std::cout << p1  << "\t" << p2   << "\t" << "\n";
-	std::cout << s1  << "\t" << s2   << "\t" << "\n";
-	std::cout << Xobs << "\t" << so2 << "\n";
 	double lpdf;
 	lpdf = 	boost::math::lgamma((p1+1.0)/2.0) - boost::math::lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) - 
@@ -68,11 +63,6 @@ double RV_Missing_t_walk_observed_normal::lpdf() { return lpdf(x2); }
 
 
 void RV_Missing_t_walk_observed_normal::derivative_poly() {
-	std::cout << x1  << "\t" << x2   << "\t" << x3 << "\n";
-	std::cout << os1 << "\t" << os2  << "\t" << "\n";
-	std::cout << p1  << "\t" << p2   << "\t" << "\n";
-	std::cout << s1  << "\t" << s2   << "\t" << "\n";
-	std::cout << Xobs << "\t" << so2 << "\n";
 	double A1 = 2*( (os2-x3) - (os1+x1) );
   double A2 = ( 
 		pow(x3-os2,2) + p2*pow(s2,2) +
