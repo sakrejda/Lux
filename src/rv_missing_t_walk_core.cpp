@@ -37,7 +37,7 @@ void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 double RV_Missing_t_walk_core::draw() {
   ly = lpdf() - EXPO(R);
 	find_slice();
-	for ( unsigned int i=0; i<peaks.size(); ++i) {
+	for ( unsigned int i=0; i < peaks.size(); ++i) {
 		std::cout << peak_bound_lr[i][0] << "----" << peaks[i];
 		std::cout << "----" << peak_bound_lr[i][1] << std:endl;
 	}
