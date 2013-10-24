@@ -72,10 +72,6 @@ void RV_Missing_t_walk_core::find_slice() {
 	for (std::vector<double>::iterator i = peaks.begin(); 
 				i != peaks_end; i++) {
 		peak_bound_lr.push_back(step_out(i));
-		if (peak_bound_lr[peak_bound_lr.size()-1][0] > peaks[i] ||
-				peak_bound_lr[peak_bound_lr.size()-1][1] < peaks[i]) {
-					throw std::runtime_error("Peak not in bounds.");
-		}
 	}
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
@@ -118,13 +114,19 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 	while ((j>0) && (ly < lpdf(bounds[0])) ) { 
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
+		std::cout << "LB: " << bounds[0] << std::endl;
+		std::cout << "RB: " << bounds[1] << std::endl;
 		if (!fp && (bounds[0] < *(peak_iter-1))) break;
 	}
 	while ((k>0) && (ly < lpdf(bounds[1])) ) {
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
+		std::cout << "LB: " << bounds[0] << std::endl;
+		std::cout << "RB: " << bounds[1] << std::endl;
 		if (!lp && (bounds[1] > *(peak_iter+1))) break;
 	}
+	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) 
+		throw std::runtime_error("Peak not in bounds.");
 	return bounds;
 }
 
