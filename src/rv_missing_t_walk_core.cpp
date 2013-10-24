@@ -59,6 +59,10 @@ double RV_Missing_t_walk_core::draw() {
 
 void RV_Missing_t_walk_core::find_slice() {
 	find_peaks();
+	std::cout << "ly is: " << ly << std::endl;
+	std::for_each(peaks.begin(), peaks.end(), 
+			[=](double x) {std::cout << lpdf(x);});
+
 	std::vector<double>::iterator peaks_end = 
 		std::remove_if(peaks.begin(), peaks.end(), 
 				[=](double x) {return lpdf(x) <= ly ? true : false; });
