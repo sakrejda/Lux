@@ -54,8 +54,6 @@ double RV_Missing_t_walk_observed_interval::lpdf(double X) {
 	std::cout << "p2: " << p2 << std::endl;
 	std::cout << "s1: " << s1 << std::endl;
 	std::cout << "s2: " << s2 << std::endl;
-	std::cout << "Xobs: " << Xobs << std::endl;
-	std::cout << "so2: " << so2 << std::endl;
 	std::cout << "Xmin: " << Xmin << ", Xmax: " << Xmax << std::endl;
 	if ((X < Xmin) || (X > Xmax)) {		
 		return -1.0 * std::numeric_limits<double>::infinity();
