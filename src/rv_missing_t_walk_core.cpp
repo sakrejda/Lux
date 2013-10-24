@@ -66,6 +66,7 @@ void RV_Missing_t_walk_core::find_slice() {
 	// step out from peak.
 	for (std::vector<double>::iterator i = peaks.begin(); 
 				i != peaks_end; i++) {
+		std::cout << "Adding peak bounds." << std::endl;
 		peak_bound_lr.push_back(step_out(i));
 	}
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
