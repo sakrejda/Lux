@@ -36,7 +36,7 @@ void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 
 double RV_Missing_t_walk_core::draw() {
 	std::cout << "Draw." << std::endl;
-	std::cout << EXPO(R); << std::endl;
+	std::cout << EXPO(R) << std::endl;
 	std::cout << "Did draw." << std::endl;
   ly = lpdf() - EXPO(R);
 	std::cout << "Did lpdf()." << std::endl;
