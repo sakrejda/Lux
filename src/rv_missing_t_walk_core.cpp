@@ -74,6 +74,7 @@ void RV_Missing_t_walk_core::find_slice() {
 				[=](double x) {return lpdf(x) <= ly ? true : false; });
 
 	// step out from peak.
+	peak_bound_lr.clear();
 	for (std::vector<double>::iterator i = peaks.begin(); 
 				i != peaks_end; i++) {
 		std::cout << "Adding peak bounds." << std::endl;
@@ -98,6 +99,7 @@ void RV_Missing_t_walk_core::find_slice() {
 
 		// Calculate sub-slice to sub-slice distances:
 		total_slice_length = 0.0;
+		intervals.clear();
 		if (!fb) {
 			intervals.push_back((*i)[0] - (*(i-1))[1]);
 		}
@@ -171,6 +173,8 @@ double RV_Missing_t_walk_core::choose() {
 
 void RV_Missing_t_walk_core::find_peaks() {
 	derivative_poly();
+	cx_eigval.clear();
+	cx_eigvec.clear();
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
 	std::cout << cx_eigval << "\n";
@@ -186,11 +190,14 @@ void RV_Missing_t_walk_core::find_peaks() {
 			return abs(a.real()-b.real()) < pow(10,-3);
 		});
 	
-
+	real_eigval.clear();
 	std::transform(cx_eigval.begin(), re_eigval_end, 
 		std::back_inserter(real_eigval), [](std::complex<double> x) { return x.real();}
 	);
 	std::cout << "real_eigval.size() " << real_eigval.size() << std::endl;
+
+	peaks.clear();
+	valleys.clear();
 
  	bool toggle = false;
   std::partition_copy(
