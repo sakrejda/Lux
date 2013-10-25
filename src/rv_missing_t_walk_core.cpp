@@ -150,10 +150,11 @@ double RV_Missing_t_walk_core::choose() {
 		std::cout << peaks[i] << "----" << peak_bound_lr[i][1] << std::endl;
 	}
 	std::cout << "l: " << l << std::endl;
+	double k = 0;
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-		std::cout << "i: " << i << std::endl;
+		std::cout << "k: " << k++ << std::endl;
 		if ( l <= (*i)[1] )
 			return l; // + (*i)[0];
 		else 
