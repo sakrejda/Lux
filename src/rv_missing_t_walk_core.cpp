@@ -54,11 +54,13 @@ double RV_Missing_t_walk_core::draw() {
 			trim();
 	}
 	x2 = x_new;
+	std::cout << "Done draw.." << std::endl;
 	return x2; 
 }
 
 
 void RV_Missing_t_walk_core::find_slice() {
+	std::cout << std::endl << "In find_slice()." << std::endl;
 	total_slice_length = 0.0;
 	find_peaks();
 	std::cout << "x is: " << x2 << std::endl;
@@ -105,12 +107,14 @@ void RV_Missing_t_walk_core::find_slice() {
 			intervals.push_back((*i)[0] - (*(i-1))[1]);
 		}
 	}
+	std::cout << std::endl << "Done find_slice()." << std::endl;
 
 }
 
 
 std::vector<double> RV_Missing_t_walk_core::step_out(
 		std::vector<double>::iterator peak_iter) {
+	std::cout << std::endl << "In step_out()." << std::endl;
 	bool fp = (peak_iter == (peaks.begin()) );
 	bool lp = (peak_iter == (peaks.end()-1) );
 	std::vector<double> bounds(2);
@@ -133,10 +137,12 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 	}
 	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) 
 		throw std::runtime_error("Peak not in bounds.");
+	std::cout << std::endl << "Done step_out()." << std::endl;
 	return bounds;
 }
 
 void RV_Missing_t_walk_core::trim() {
+	std::cout << std::endl << "In trim()." << std::endl;
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
@@ -147,10 +153,11 @@ void RV_Missing_t_walk_core::trim() {
 				(*i)[1] = x_new;
 		}
 	}
-
+	std::cout << std::endl << "Done trim()." << std::endl;
 }
 
 double RV_Missing_t_walk_core::choose() {    
+	std::cout << std::endl << "In choose()." << std::endl;
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
 	for ( unsigned int i=0; i < peaks.size(); ++i) {
 		std::cout << peak_bound_lr[i][0] << "----";
@@ -163,15 +170,17 @@ double RV_Missing_t_walk_core::choose() {
 		std::cout << "k: " << k++ << std::endl;
 		std::cout << "l: " << l << std::endl;
 		std::cout << "Bounds: " << (*i)[0] << "------" << (*i)[1] << std::endl;
-		if ( l <= (*i)[1] ) 
+		if ( l <= (*i)[1] ) {
+			std::cout << std::endl << "Done choose()." << std::endl;
 			return l; // + (*i)[0];
-		else 
+		} else 
 			l = l - ( (*i)[1] - (*i)[0] ) - (*i)[0] + (*(i+1))[0];
 	}
 	std::runtime_error("RV_Missing_t_walk_core::choose ended out of bounds.");
 }
 
 void RV_Missing_t_walk_core::find_peaks() {
+	std::cout << std::endl << "In find_peaks()." << std::endl;
 	derivative_poly();
 	cx_eigval.clear();
 	cx_eigvec.clear();
@@ -210,5 +219,6 @@ void RV_Missing_t_walk_core::find_peaks() {
 		throw std::runtime_error("No peaks found.");
 	}
 	std::cout << "peaks.size() " << peaks.size() << std::endl;
+	std::cout << std::endl << "Done find_peaks()." << std::endl;
 }	
 
