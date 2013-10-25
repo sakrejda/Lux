@@ -18,4 +18,4 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 		trng::yarn2 & R_
 ) :	RV_Missing_t_walk_observed_interval(
 			x1_, X, x3_, os1_, os2_, p1_, p2_, s1_, s2_, 
-			NEG_INF, POS_INF, R(R_) { }
+			NEG_INF, POS_INF, R) { }
