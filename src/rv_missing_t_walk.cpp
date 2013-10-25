@@ -2,7 +2,7 @@
 
 #include <limits>
 
-RV_Missing_t_walk::NEG_FIN = -1.0 * std::numeric_limits<double>::infinity(),
+RV_Missing_t_walk::NEG_INF = -1.0 * std::numeric_limits<double>::infinity(),
 RV_Missing_t_walk::POS_INF =        std::numeric_limits<double>::infinity(), 
 
 RV_Missing_t_walk::RV_Missing_t_walk(
