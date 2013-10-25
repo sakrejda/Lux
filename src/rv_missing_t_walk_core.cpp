@@ -59,6 +59,7 @@ double RV_Missing_t_walk_core::draw() {
 
 
 void RV_Missing_t_walk_core::find_slice() {
+	total_slice_length = 0.0;
 	find_peaks();
 	std::cout << "x is: " << x2 << std::endl;
 	
@@ -98,12 +99,11 @@ void RV_Missing_t_walk_core::find_slice() {
 		}
 
 		// Calculate sub-slice to sub-slice distances:
-		total_slice_length = 0.0;
+		total_slice_length += (*i)[1] - (*i)[0];
 		intervals.clear();
 		if (!fb) {
 			intervals.push_back((*i)[0] - (*(i-1))[1]);
 		}
-		total_slice_length += (*i)[1] - (*i)[0];
 	}
 
 }
