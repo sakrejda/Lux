@@ -69,6 +69,7 @@ double RV_Missing_t_walk_observed_normal::lpdf(double X) {
 		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
 	lpdf += -0.5 * log(2*pi*pow(so2,2)) - (pow(X - Xobs,2) / (2*pow(so2,2)));
 	std::cout << lpdf << std::endl;
+	if (lpdf < -100.0) throw std::runtime_error("wtf?");
 	return lpdf;
 }
 
