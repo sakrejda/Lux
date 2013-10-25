@@ -67,6 +67,7 @@ double RV_Missing_t_walk_observed_interval::lpdf(double X) {
 					boost::math::lgamma((p2+1.0)/2.0) - boost::math::lgamma(p2/2.0) -
 		0.5 * log(p2*pi*pow(s2,2)) - 
 		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
+	std::cout << lpdf << std::endl;
 	return lpdf;
 }
 

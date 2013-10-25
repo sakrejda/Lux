@@ -36,6 +36,7 @@ void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 
 double RV_Missing_t_walk_core::draw() {
   ly = lpdf() - EXPO(R);
+	std::cout << "Did lpdf()." << std::endl;
 	find_slice();
 	std::cout << "peak_bound_lr.size(): " << peak_bound_lr.size() << std::endl;
 	std::cout << "peaks.size(): " << peaks.size() << std::endl;
