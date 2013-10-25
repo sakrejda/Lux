@@ -2,8 +2,8 @@
 
 #include <limits>
 
-double RV_Missing_t_walk::NEG_INF = -1.0 * std::numeric_limits<double>::infinity();
-double RV_Missing_t_walk::POS_INF =        std::numeric_limits<double>::infinity(); 
+static double NEG_INF = -1.0 * std::numeric_limits<double>::infinity();
+static double POS_INF =        std::numeric_limits<double>::infinity(); 
 
 RV_Missing_t_walk::RV_Missing_t_walk(
 		double const & x1_,
