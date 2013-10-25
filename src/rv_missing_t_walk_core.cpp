@@ -159,7 +159,7 @@ double RV_Missing_t_walk_core::choose() {
 		if ( l <= (*i)[1] ) 
 			return l; // + (*i)[0];
 		else 
-			l = l - ( (*i)[1] - (*i)[0] ) + (*(i+1))[0];
+			l = l - ( (*i)[1] - (*i)[0] ) - (*i)[0] + (*(i+1))[0];
 	}
 }
 
