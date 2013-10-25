@@ -2,6 +2,9 @@
 
 #include <limits>
 
+RV_Missing_t_walk::NEG_FIN = -1.0 * std::numeric_limits<double>::infinity(),
+RV_Missing_t_walk::POS_INF =        std::numeric_limits<double>::infinity(), 
+
 RV_Missing_t_walk::RV_Missing_t_walk(
 		double const & x1_,
 		double 			 & X,
@@ -15,6 +18,4 @@ RV_Missing_t_walk::RV_Missing_t_walk(
 		trng::yarn2 & R_
 ) :	RV_Missing_t_walk_observed_interval(
 			x1_, X, x3_, os1_, os2_, p1_, p2_, s1_, s2_, 
-			-1.0 * std::numeric_limits<double>::infinity(),
-			       std::numeric_limits<double>::infinity(), 
-			R_) { }
+			NEG_INF, POS_INF, R(R_) { }
