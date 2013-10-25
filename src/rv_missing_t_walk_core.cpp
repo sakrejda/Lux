@@ -97,6 +97,7 @@ void RV_Missing_t_walk_core::find_slice() {
 		}
 
 		// Calculate sub-slice to sub-slice distances:
+		total_slice_length = 0.0;
 		if (!fb) {
 			intervals.push_back((*i)[0] - (*(i-1))[1]);
 		}
@@ -165,6 +166,7 @@ double RV_Missing_t_walk_core::choose() {
 		else 
 			l = l - ( (*i)[1] - (*i)[0] ) - (*i)[0] + (*(i+1))[0];
 	}
+	std::runtime_error("RV_Missing_t_walk_core::choose ended out of bounds.");
 }
 
 void RV_Missing_t_walk_core::find_peaks() {
