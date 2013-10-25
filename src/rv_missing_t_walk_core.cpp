@@ -40,9 +40,6 @@ double RV_Missing_t_walk_core::draw() {
 	std::cout << "peak_bound_lr.size(): " << peak_bound_lr.size() << std::endl;
 	std::cout << "peaks.size(): " << peaks.size() << std::endl;
 
-	for ( unsigned int i=0; i < peaks.size(); ++i) {
-		std::cout << peak_bound_lr[i][0] << "----" << peaks[i] << "----" << peak_bound_lr[i][1] << std::endl;
-	}
 	double ii = 0;
 	while(true) {
 		x_new = choose();	
@@ -148,9 +145,15 @@ void RV_Missing_t_walk_core::trim() {
 
 double RV_Missing_t_walk_core::choose() {    
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
+	for ( unsigned int i=0; i < peaks.size(); ++i) {
+		std::cout << peak_bound_lr[i][0] << "----" << std::endl;
+		std::cout << peaks[i] << "----" << peak_bound_lr[i][1] << std::endl;
+	}
+	std::cout << "l: " << l << std::endl;
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
+		std::cout << "i: " << i << std::endl;
 		if ( l <= (*i)[1] )
 			return l; // + (*i)[0];
 		else 
