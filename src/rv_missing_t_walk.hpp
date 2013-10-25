@@ -19,10 +19,6 @@ public:
 		trng::yarn2 & R_
 	);
 
-private:
-	static double NEG_INF;
-	static double POS_INF;
-
 };
 
 
