@@ -74,17 +74,17 @@ void RV_Missing_t_walk_core::find_slice() {
 				i != peaks_end; i++) {
 		peak_bound_lr.push_back(step_out(i));
 	}
+	// Trim overlap
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-		// Trim overlap
-		bool fb = (i == (peak_bound_lr.begin()   ));
+//		bool fb = (i == (peak_bound_lr.begin()   ));
 		bool lb = (i == (peak_bound_lr.end() - 1 ));
-		if (!fb && ((*(i-1))[1] > (*i)[0]) ) {
-			double mid = ((*(i-1))[1] + (*i)[0])/2.0;
-			(*(i-1))[1] = mid;
-			(*i)[0] = mid;
-		}
+//		if (!fb && ((*(i-1))[1] > (*i)[0]) ) {
+//			double mid = ((*(i-1))[1] + (*i)[0])/2.0;
+//			(*(i-1))[1] = mid;
+//			(*i)[0] = mid;
+//		}
 		if (!lb && ((*(i+1))[0] < (*i)[1]) ) {
 			double mid = ((*(i+1))[0] + (*i)[1])/2.0;
 			(*(i+1))[0] = mid;
@@ -94,8 +94,8 @@ void RV_Missing_t_walk_core::find_slice() {
 		// Calculate sub-slice to sub-slice distances:
 		total_slice_length += (*i)[1] - (*i)[0];
 		intervals.clear();
-		if (!fb) {
-			intervals.push_back((*i)[0] - (*(i-1))[1]);
+		if (!lb) {
+			intervals.push_back((*(i+1))[0] - (*i)[1]);
 		}
 	}
 	std::cout << std::endl << "Done find_slice()." << std::endl;
@@ -157,6 +157,7 @@ void RV_Missing_t_walk_core::trim() {
 double RV_Missing_t_walk_core::choose() {    
 	std::cout << std::endl << "In choose()." << std::endl;
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
+	std::cout << "total_slice_length: " << total_slice_length << std::endl;
 	for ( unsigned int i=0; i < peaks.size(); ++i) {
 		std::cout << peak_bound_lr[i][0] << "----";
 		std::cout << peaks[i] << "----" << peak_bound_lr[i][1] << std::endl;
