@@ -23,7 +23,6 @@ RV_Missing_t_walk_observed_interval::RV_Missing_t_walk_observed_interval(
 ) :	RV_Missing_t_walk_core(x1_, X, x3_, os1_, os2_, p1_, p2_, s1_, s2_, R_),
 		Xmin(Xmin_), Xmax(Xmax_)
 {
-	std::cout << "Xmin: " << Xmin << ", Xmax: " << Xmax << std::endl;
 
 	// Companion matrix for eigenvalue peak-finding.
 	companion.set_size(3,3);
@@ -46,17 +45,6 @@ std::map<std::string, double> RV_Missing_t_walk_observed_interval::state() const
 
 
 double RV_Missing_t_walk_observed_interval::lpdf(double X) {
-	std::cout << "lpdf of RV_Missing_t_walk_observed_normal" << std::endl;
-	std::cout << "x1: " << x1 << std::endl;
-	std::cout << "X:  " << X  << std::endl;
-	std::cout << "x3: " << x3 << std::endl;
-	std::cout << "os1: " << os1 << std::endl;
-	std::cout << "os2: " << os2 << std::endl;
-	std::cout << "p1: " << p1 << std::endl;
-	std::cout << "p2: " << p2 << std::endl;
-	std::cout << "s1: " << s1 << std::endl;
-	std::cout << "s2: " << s2 << std::endl;
-	std::cout << "Xmin: " << Xmin << ", Xmax: " << Xmax << std::endl;
 	if ((X < Xmin) || (X > Xmax)) {		
 		return -1.0 * std::numeric_limits<double>::infinity();
 	}
@@ -67,7 +55,6 @@ double RV_Missing_t_walk_observed_interval::lpdf(double X) {
 					boost::math::lgamma((p2+1.0)/2.0) - boost::math::lgamma(p2/2.0) -
 		0.5 * log(p2*pi*pow(s2,2)) - 
 		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
-	std::cout << lpdf << std::endl;
 	return lpdf;
 }
 

@@ -49,18 +49,6 @@ std::map<std::string, double> RV_Missing_t_walk_observed_normal::state() const {
 
 double RV_Missing_t_walk_observed_normal::lpdf(double X) {
 	double lpdf;
-	std::cout << "lpdf of RV_Missing_t_walk_observed_normal" << std::endl;
-	std::cout << "x1: " << x1 << std::endl;
-	std::cout << "X:  " << X  << std::endl;
-	std::cout << "x3: " << x3 << std::endl;
-	std::cout << "os1: " << os1 << std::endl;
-	std::cout << "os2: " << os2 << std::endl;
-	std::cout << "p1: " << p1 << std::endl;
-	std::cout << "p2: " << p2 << std::endl;
-	std::cout << "s1: " << s1 << std::endl;
-	std::cout << "s2: " << s2 << std::endl;
-	std::cout << "Xobs: " << Xobs << std::endl;
-	std::cout << "so2: " << so2 << std::endl;
 	lpdf = 	boost::math::lgamma((p1+1.0)/2.0) - boost::math::lgamma(p1/2.0) -
 		0.5 * log(p1*pi*pow(s1,2)) - 
 		(p1+1.0)/2.0 * log(1.0 + (pow(X -(x1+os1),2))/(p1*pow(s1,2)) ) +
@@ -68,7 +56,6 @@ double RV_Missing_t_walk_observed_normal::lpdf(double X) {
 		0.5 * log(p2*pi*pow(s2,2)) - 
 		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
 	lpdf += -0.5 * log(2*pi*pow(so2,2)) - (pow(X - Xobs,2) / (2*pow(so2,2)));
-	std::cout << lpdf << std::endl;
 	if (lpdf < -100.0) throw std::runtime_error("wtf?");
 	return lpdf;
 }

@@ -63,14 +63,6 @@ void RV_Missing_t_walk_core::find_slice() {
 	std::cout << std::endl << "In find_slice()." << std::endl;
 	total_slice_length = 0.0;
 	find_peaks();
-	std::cout << "x is: " << x2 << std::endl;
-	
-	std::cout << "ly is: " << ly << std::endl;
-	std::for_each(peaks.begin(), peaks.end(), 
-		[=](double x) {
-			std::cout << "peak: " << x << ", lpdf(peak): " << lpdf(x) << std::endl;
-		}
-	);
 
 	std::vector<double>::iterator peaks_end = 
 		std::remove_if(peaks.begin(), peaks.end(), 
@@ -80,7 +72,6 @@ void RV_Missing_t_walk_core::find_slice() {
 	peak_bound_lr.clear();
 	for (std::vector<double>::iterator i = peaks.begin(); 
 				i != peaks_end; i++) {
-		std::cout << "Adding peak bounds." << std::endl;
 		peak_bound_lr.push_back(step_out(i));
 	}
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
@@ -122,19 +113,26 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 	double w = (s1+s2)/2.0;
 	bounds[0] = *peak_iter - w * U(R);  // w = use (s1+s2)/2
 	bounds[1] = bounds[0] + w;
-	std::cout << bounds[0] << "----" << bounds[1] << std::endl;
+	std::cout << "1. Local var. bounds: " << bounds[0] << "----";
+	std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 	int j = std::floor(m * U(R));    // m needed...
 	int k = (m-1) - j;
 	while ((j>0) && (ly < lpdf(bounds[0])) ) { 
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
+		std::cout << "2. Local var. bounds: " << bounds[0] << "----";
+		std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 		if (!fp && (bounds[0] < *(peak_iter-1))) break;
 	}
 	while ((k>0) && (ly < lpdf(bounds[1])) ) {
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
+		std::cout << "3. Local var. bounds: " << bounds[0] << "----";
+		std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 		if (!lp && (bounds[1] > *(peak_iter+1))) break;
 	}
+	std::cout << "4. Local var. bounds: " << bounds[0] << "----";
+	std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) 
 		throw std::runtime_error("Peak not in bounds.");
 	std::cout << std::endl << "Done step_out()." << std::endl;
