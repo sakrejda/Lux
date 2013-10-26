@@ -95,6 +95,7 @@ void RV_Missing_t_walk_core::find_slice() {
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
+		bool lb = (i == (peak_bound_lr.end() - 1 ));
 		// Calculate sub-slice to sub-slice distances:
 		total_slice_length += (*i)[1] - (*i)[0];
 		intervals.clear();
