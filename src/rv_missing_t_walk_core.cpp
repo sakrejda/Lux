@@ -35,14 +35,10 @@ std::map<std::string, double> RV_Missing_t_walk_core::state() const {
 void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 
 double RV_Missing_t_walk_core::draw() {
-	std::cout << "Draw." << std::endl;
-	std::cout << EXPO(R) << std::endl;
-	std::cout << "Did draw." << std::endl;
+	std::cout << "lpdf(): " << lpdf() << std::endl;
   ly = lpdf() - EXPO(R);
-	std::cout << "Did lpdf()." << std::endl;
+	std::cout << "ly:     " << ly << std::endl;
 	find_slice();
-	std::cout << "peak_bound_lr.size(): " << peak_bound_lr.size() << std::endl;
-	std::cout << "peaks.size(): " << peaks.size() << std::endl;
 
 	double ii = 0;
 	while(true) {
@@ -101,7 +97,10 @@ void RV_Missing_t_walk_core::find_slice() {
 			intervals.push_back((*(i+1))[0] - (*i)[1]);
 		}
 	}
-	std::cout << "V: total_slice_length: " << total_slice_length << std::endl;
+	if (peak_bound_lr.size() != (peaks_end - peaks.begin()) ) 
+		throw std::runtime_error("Mismatch between number of peaks and number of bounds.");
+
+
 	std::cout << std::endl << "Done find_slice()." << std::endl;
 
 }
@@ -111,7 +110,7 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 		std::vector<double>::iterator peak_iter) {
 	std::cout << std::endl << "In step_out()." << std::endl;
 	bool fp = (peak_iter == (peaks.begin()) );
-	bool lp = (peak_iter == (peaks.end()-1) );
+	bool lp = (peak_iter == (peaks_end-1) );
 	std::vector<double> bounds(2);
 	int m = 200;
 	double w = (s1+s2)/2.0;
@@ -209,7 +208,6 @@ void RV_Missing_t_walk_core::find_peaks() {
 	std::transform(cx_eigval.begin(), re_eigval_end, 
 		std::back_inserter(real_eigval), [](std::complex<double> x) { return x.real();}
 	);
-	std::cout << "real_eigval.size() " << real_eigval.size() << std::endl;
 
 	peaks.clear();
 	valleys.clear();
@@ -224,7 +222,6 @@ void RV_Missing_t_walk_core::find_peaks() {
 	if (peaks.size() < 1) {
 		throw std::runtime_error("No peaks found.");
 	}
-	std::cout << "peaks.size() " << peaks.size() << std::endl;
 	std::cout << std::endl << "Done find_peaks()." << std::endl;
 }	
 
