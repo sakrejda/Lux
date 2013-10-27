@@ -66,7 +66,11 @@ void RV_Missing_t_walk_core::find_slice() {
 
 	std::vector<double>::iterator peaks_end = 
 		std::remove_if(peaks.begin(), peaks.end(), 
-				[=](double x) {return lpdf(x) <= ly ? true : false; });
+			[=](double x) {
+				std::cout << "y@slice: " << ly << ", y@peak: " << lpdf(x) << std::endl;
+				return lpdf(x) < ly ? true : false; 
+			}
+		);
 
 	// step out from peak.
 	peak_bound_lr.clear();
