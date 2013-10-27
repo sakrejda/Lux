@@ -56,7 +56,6 @@ double RV_Missing_t_walk_observed_normal::lpdf(double X) {
 		0.5 * log(p2*pi*pow(s2,2)) - 
 		(p2+1.0)/2.0 * log(1.0 + (pow(x3-(X +os2),2))/(p2*pow(s2,2)) );
 	lpdf += -0.5 * log(2*pi*pow(so2,2)) - (pow(X - Xobs,2) / (2*pow(so2,2)));
-	if (lpdf < -100.0) throw std::runtime_error("wtf?");
 	return lpdf;
 }
 
@@ -104,6 +103,7 @@ void RV_Missing_t_walk_observed_normal::derivative_poly() {
 	companion(2,4) = A2*Xobs - A3      + B2*so2;
 	companion(3,4) = A1*Xobs - A2      + B1*so2;
 	companion(4,4) =    Xobs - A1							 ;
+	std::cout << companion << std::endl;
 }
 
 
