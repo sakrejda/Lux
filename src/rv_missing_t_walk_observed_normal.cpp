@@ -113,10 +113,10 @@ void RV_Missing_t_walk_observed_normal::derivative_poly() {
 	std::cout << "B3: " << B3 << std::endl;
 	std::cout << "B4: " << B4 << std::endl;
 
-	companion(0,4) = A4*Xobs           + B4*so2;
-	companion(1,4) = A3*Xobs - A4      + B3*so2;
-	companion(2,4) = A2*Xobs - A3      + B2*so2;
-	companion(3,4) = A1*Xobs - A2      + B1*so2;
+	companion(0,4) = A4*Xobs           + B4*pow(so2,2);
+	companion(1,4) = A3*Xobs - A4      + B3*pow(so2,2);
+	companion(2,4) = A2*Xobs - A3      + B2*pow(so2,2);
+	companion(3,4) = A1*Xobs - A2      + B1*pow(so2,2);
 	companion(4,4) =    Xobs - A1							 ;
 	std::cout << companion << std::endl;
 }
