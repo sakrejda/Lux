@@ -149,10 +149,13 @@ void RV_Missing_t_walk_core::trim() {
 				i != peak_bound_lr.end(); i++) 
 	{
 		if ((*i)[0] < x_new && x_new < (*i)[1]) {
-			if ( (x_new - (*i)[0]) < ((*i)[1] - x_new) )
+			if ( (x_new - (*i)[0]) < ((*i)[1] - x_new) ) {
+				total_slice_length -= x_new - (*i)[0];
 				(*i)[0] = x_new;
-			else
+			}	else {
+				total_slice_length -= (*i)[1] - x_new;
 				(*i)[1] = x_new;
+			}
 		}
 	}
 	std::cout << std::endl << "Done trim()." << std::endl;
