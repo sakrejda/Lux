@@ -62,6 +62,7 @@ double RV_Missing_t_walk_core::draw() {
 void RV_Missing_t_walk_core::find_slice() {
 	std::cout << std::endl << "In find_slice()." << std::endl;
 	total_slice_length = 0.0;
+	intervals.clear();
 	find_peaks();
 
 	std::vector<double>::iterator peaks_end = 
@@ -82,13 +83,7 @@ void RV_Missing_t_walk_core::find_slice() {
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-//		bool fb = (i == (peak_bound_lr.begin()   ));
 		bool lb = (i == (peak_bound_lr.end() - 1 ));
-//		if (!fb && ((*(i-1))[1] > (*i)[0]) ) {
-//			double mid = ((*(i-1))[1] + (*i)[0])/2.0;
-//			(*(i-1))[1] = mid;
-//			(*i)[0] = mid;
-//		}
 		if (!lb && ((*(i+1))[0] < (*i)[1]) ) {
 			double mid = ((*(i+1))[0] + (*i)[1])/2.0;
 			(*(i+1))[0] = mid;
@@ -102,11 +97,11 @@ void RV_Missing_t_walk_core::find_slice() {
 		bool lb = (i == (peak_bound_lr.end() - 1 ));
 		// Calculate sub-slice to sub-slice distances:
 		total_slice_length += (*i)[1] - (*i)[0];
-		intervals.clear();
 		if (!lb) {
 			intervals.push_back((*(i+1))[0] - (*i)[1]);
 		}
 	}
+	std::cout << "V: total_slice_length: " << total_slice_length << std::endl;
 	std::cout << std::endl << "Done find_slice()." << std::endl;
 
 }
