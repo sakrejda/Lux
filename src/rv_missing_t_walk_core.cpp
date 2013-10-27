@@ -146,16 +146,18 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 		k = k - 1;
 		if (!lp && (bounds[1] > *(peak_iter+1))) break;
 	}
-	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) 
+	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) {
+		std::cout << "*peak_iter: " << *peak_iter << std::endl;
+		std::cout << "bounds[0]: " << bounds[0] << std::endl;
+		std::cout << "bounds[1]: " << bounds[1] << std::endl;
 		throw std::runtime_error("Peak not in bounds.");
+	}
 	return bounds;
 }
 
 void RV_Missing_t_walk_core::trim() {
 	std::cout << std::endl << "In trim()." << std::endl;
-	for (unsigned int i = 0; 
-				i != peak_bound_lr.size(); i++) 
-	{
+	for (unsigned int i = 0; i != peak_bound_lr.size(); i++) {
 
 		// Trimming needs to be done around PEAK. (?)
 		// Maybe bounds/peak/widths need to be all in
