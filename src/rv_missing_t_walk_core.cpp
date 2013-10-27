@@ -67,7 +67,6 @@ void RV_Missing_t_walk_core::find_slice() {
 				std::cout << "x1: " << x1 << ", x2: " << x2 << ", x3: " << x3 << std::endl;
 				std::cout << "s1: " << s1 << ", s2: " << s2 << std::endl;
 				std::cout << "p1: " << p1 << ", p2: " << p2 << std::endl;
-				std::cout << "so2: " << so2 << ", Xobs: " << Xobs << std::endl;
 				std::cout << "y@slice: " << ly << ", y@peak: " << lpdf(x) << std::endl;
 				return lpdf(x) < ly ? true : false; 
 			}
