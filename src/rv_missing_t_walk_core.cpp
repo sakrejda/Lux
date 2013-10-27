@@ -160,6 +160,8 @@ void RV_Missing_t_walk_core::trim() {
 				total_slice_length -= (*i)[1] - x_new;
 				(*i)[1] = x_new;
 			}
+			if ( ((*i)[0] > x_new) || ((*i)[1] < x_new) ) 
+				throw std::runtime_error("Peak not within bounds.");
 		}
 	}
 	std::cout << std::endl << "Done trim()." << std::endl;
