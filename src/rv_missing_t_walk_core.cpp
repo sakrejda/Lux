@@ -35,9 +35,8 @@ std::map<std::string, double> RV_Missing_t_walk_core::state() const {
 void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 
 double RV_Missing_t_walk_core::draw() {
-	std::cout << "lpdf(): " << lpdf() << std::endl;
+	std::cout << "In draw: << std::endl;
   ly = lpdf() - EXPO(R);
-	std::cout << "ly:     " << ly << std::endl;
 	find_slice();
 
 	double ii = 0;
