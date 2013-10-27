@@ -57,8 +57,7 @@ double RV_Missing_t_walk_core::draw() {
 		if (mod == 0) throw std::runtime_error("'x_new' not in bounds.");
 		// DEBUG END.
 
-		ly_new = lpdf(x_new);
-		if (ly_new >= ly) 
+		if (lpdf(x_new) >= ly) 
 			break; 
 		else 
 			trim();
@@ -128,7 +127,6 @@ void RV_Missing_t_walk_core::find_slice() {
 
 std::vector<double> RV_Missing_t_walk_core::step_out(
 		std::vector<double>::iterator peak_iter) {
-	std::cout << std::endl << "In step_out()." << std::endl;
 	bool fp = (peak_iter == (peaks.begin()) );
 	bool lp = (peak_iter == (peaks.end()-1) );
 	std::vector<double> bounds(2);
@@ -136,46 +134,41 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 	double w = (s1+s2)/2.0;
 	bounds[0] = *peak_iter - w * U(R);  // w = use (s1+s2)/2
 	bounds[1] = bounds[0] + w;
-	std::cout << "1. Local var. bounds: " << bounds[0] << "----";
-	std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 	int j = std::floor(m * U(R));    // m needed...
 	int k = (m-1) - j;
 	while ((j>0) && (ly < lpdf(bounds[0])) ) { 
 		bounds[0] = bounds[0] - w;
 		j = j - 1;
-		std::cout << "2. Local var. bounds: " << bounds[0] << "----";
-		std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 		if (!fp && (bounds[0] < *(peak_iter-1))) break;
 	}
 	while ((k>0) && (ly < lpdf(bounds[1])) ) {
 		bounds[1] = bounds[1] + w;
 		k = k - 1;
-		std::cout << "3. Local var. bounds: " << bounds[0] << "----";
-		std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 		if (!lp && (bounds[1] > *(peak_iter+1))) break;
 	}
-	std::cout << "4. Local var. bounds: " << bounds[0] << "----";
-	std::cout << *peak_iter << "----" << bounds[1] << std::endl;
 	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) 
 		throw std::runtime_error("Peak not in bounds.");
-	std::cout << std::endl << "Done step_out()." << std::endl;
 	return bounds;
 }
 
 void RV_Missing_t_walk_core::trim() {
 	std::cout << std::endl << "In trim()." << std::endl;
-	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
-				i != peak_bound_lr.end(); i++) 
+	for (unsigned int i = 0; 
+				i != peak_bound_lr.size(); i++) 
 	{
-		if ((*i)[0] < x_new && x_new < (*i)[1]) {
-			if ( (x_new - (*i)[0]) < ((*i)[1] - x_new) ) {
-				total_slice_length -= x_new - (*i)[0];
-				(*i)[0] = x_new;
+
+		// Trimming needs to be done around PEAK. (?)
+		// Maybe bounds/peak/widths need to be all in
+		// std::map<std::string,double>> ?, err... vector-of.
+		if (peak_bound_lr[i][0] < x_new && x_new < peak_bound_lr[i][1]) {
+			if (x_new < peaks[i] ) {
+				total_slice_length -= x_new - peak_bound_lr[i][0];
+				peak_bound_lr[i][0] = x_new;
 			}	else {
-				total_slice_length -= (*i)[1] - x_new;
-				(*i)[1] = x_new;
+				total_slice_length -= peak_bound_lr[i][1] - x_new;
+				peak_bound_lr[i][1] = x_new;
 			}
-			if ( ((*i)[0] > x_new) || ((*i)[1] < x_new) ) 
+			if ( (peak_bound_lr[i][0] > peaks[i]) || (peak_bound_lr[i][1] < peaks[i]) ) 
 				throw std::runtime_error("Peak not within bounds.");
 		}
 	}

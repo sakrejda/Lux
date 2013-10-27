@@ -70,6 +70,7 @@ protected:
 	std::vector<double> valleys;
 	std::vector<std::vector<double> > peak_bound_lr;
 	std::vector<double> intervals;
+	std::vector<std::map<std::string, double> > peakery;
   double total_slice_length;
 
 };
