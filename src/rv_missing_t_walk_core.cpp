@@ -71,7 +71,7 @@ void RV_Missing_t_walk_core::find_slice() {
 		peaks.end()
 	);
 	if (peaks.size() < 1)
-		throw std::runtim_error("No peaks found above slice.")
+		throw std::runtime_error("No peaks found above slice.")
 
 	// step out from peak.
 	peak_bound_lr.clear();
