@@ -51,7 +51,7 @@ double RV_Missing_t_walk_core::draw() {
 			if ((*i)[0] < x_new && x_new < (*i)[1]) {
 				if ( ((*i)[0] > x_new) || ((*i)[1] < x_new) ) 
 					throw std::runtime_error("Peak not within bounds.");
-				mod++
+				mod++;
 			}
 		}
 		if (mod == 0) throw std::runtime_error("'x_new' not in bounds.");
