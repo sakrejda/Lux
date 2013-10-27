@@ -61,18 +61,20 @@ void RV_Missing_t_walk_core::find_slice() {
 	intervals.clear();
 	find_peaks();
 
-	std::vector<double>::iterator peaks_end = 
+	peaks.erase( 
 		std::remove_if(peaks.begin(), peaks.end(), 
 			[=](double x) {
 				std::cout << "y@slice: " << ly << ", y@peak: " << lpdf(x) << std::endl;
 				return lpdf(x) < ly ? true : false; 
 			}
-		);
+		),
+		peaks.end()
+	);
 
 	// step out from peak.
 	peak_bound_lr.clear();
 	for (std::vector<double>::iterator i = peaks.begin(); 
-				i != peaks_end; i++) {
+				i != peaks.end(); i++) {
 		peak_bound_lr.push_back(step_out(i));
 	}
 	// Trim overlap
@@ -97,9 +99,8 @@ void RV_Missing_t_walk_core::find_slice() {
 			intervals.push_back((*(i+1))[0] - (*i)[1]);
 		}
 	}
-	if (peak_bound_lr.size() != (peaks_end - peaks.begin()) ) 
+	if (peak_bound_lr.size() != peaks.size() ) 
 		throw std::runtime_error("Mismatch between number of peaks and number of bounds.");
-
 
 	std::cout << std::endl << "Done find_slice()." << std::endl;
 
@@ -110,7 +111,7 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 		std::vector<double>::iterator peak_iter) {
 	std::cout << std::endl << "In step_out()." << std::endl;
 	bool fp = (peak_iter == (peaks.begin()) );
-	bool lp = (peak_iter == (peaks_end-1) );
+	bool lp = (peak_iter == (peaks.end()-1) );
 	std::vector<double> bounds(2);
 	int m = 200;
 	double w = (s1+s2)/2.0;
