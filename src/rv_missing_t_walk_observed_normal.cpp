@@ -104,6 +104,14 @@ void RV_Missing_t_walk_observed_normal::derivative_poly() {
     (p2+1)*(x3-os2)*
 			(p1*pow(s1,2)+pow(x1+os1,2)) 
 	);
+	std::cout << "A1: " << A1 << std::endl;
+	std::cout << "A2: " << A2 << std::endl;
+	std::cout << "A3: " << A3 << std::endl;
+	std::cout << "A4: " << A4 << std::endl;
+	std::cout << "B1: " << B1 << std::endl;
+	std::cout << "B2: " << B2 << std::endl;
+	std::cout << "B3: " << B3 << std::endl;
+	std::cout << "B4: " << B4 << std::endl;
 
 	companion(0,4) = A4*Xobs           + B4*so2;
 	companion(1,4) = A3*Xobs - A4      + B3*so2;
