@@ -35,41 +35,23 @@ std::map<std::string, double> RV_Missing_t_walk_core::state() const {
 void RV_Missing_t_walk_core::jump(double X) { x2 = X; }
 
 double RV_Missing_t_walk_core::draw() {
-	std::cout << "In draw:" << std::endl;
   ly = lpdf() - EXPO(R);
 	find_slice();
 
 	double ii = 0;
 	while(true) {
 		x_new = choose();	
-
-		// DEBUG:
-		unsigned int mod = 0;
-		for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
-					i != peak_bound_lr.end(); i++) 
-		{
-			if ((*i)[0] < x_new && x_new < (*i)[1]) {
-				if ( ((*i)[0] > x_new) || ((*i)[1] < x_new) ) 
-					throw std::runtime_error("Peak not within bounds.");
-				mod++;
-			}
-		}
-		if (mod == 0) throw std::runtime_error("'x_new' not in bounds.");
-		// DEBUG END.
-
 		if (lpdf(x_new) >= ly) 
 			break; 
 		else 
 			trim();
 	}
 	x2 = x_new;
-	std::cout << "Done draw.." << std::endl;
 	return x2; 
 }
 
 
 void RV_Missing_t_walk_core::find_slice() {
-	std::cout << std::endl << "In find_slice()." << std::endl;
 	total_slice_length = 0.0;
 	intervals.clear();
 	find_peaks();
@@ -77,10 +59,6 @@ void RV_Missing_t_walk_core::find_slice() {
 	peaks.erase( 
 		std::remove_if(peaks.begin(), peaks.end(), 
 			[=](double x) {
-				std::cout << "x1: " << x1 << ", x2: " << x2 << ", x3: " << x3 << std::endl;
-				std::cout << "s1: " << s1 << ", s2: " << s2 << std::endl;
-				std::cout << "p1: " << p1 << ", p2: " << p2 << std::endl;
-				std::cout << "y@slice: " << ly << ", y@peak: " << lpdf(x) << std::endl;
 				return lpdf(x) < ly ? true : false; 
 			}
 		),
@@ -117,8 +95,6 @@ void RV_Missing_t_walk_core::find_slice() {
 	if (peak_bound_lr.size() != peaks.size() ) 
 		throw std::runtime_error("Mismatch between number of peaks and number of bounds.");
 
-	std::cout << std::endl << "Done find_slice()." << std::endl;
-
 }
 
 
@@ -144,16 +120,12 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 		if (!lp && (bounds[1] > *(peak_iter+1))) break;
 	}
 	if (*peak_iter < bounds[0] || *peak_iter > bounds[1]) {
-		std::cout << "*peak_iter: " << *peak_iter << std::endl;
-		std::cout << "bounds[0]: " << bounds[0] << std::endl;
-		std::cout << "bounds[1]: " << bounds[1] << std::endl;
 		throw std::runtime_error("Peak not in bounds.");
 	}
 	return bounds;
 }
 
 void RV_Missing_t_walk_core::trim() {
-	std::cout << std::endl << "In trim()." << std::endl;
 	for (unsigned int i = 0; i != peak_bound_lr.size(); i++) {
 		if (peak_bound_lr[i][0] < x_new && x_new < peak_bound_lr[i][1]) {
 			if (x_new < peaks[i] ) {
@@ -167,26 +139,15 @@ void RV_Missing_t_walk_core::trim() {
 				throw std::runtime_error("Peak not within bounds.");
 		}
 	}
-	std::cout << std::endl << "Done trim()." << std::endl;
 }
 
 double RV_Missing_t_walk_core::choose() {    
-	std::cout << std::endl << "In choose()." << std::endl;
 	double l = U(R) * total_slice_length + peak_bound_lr[0][0]; 
-	std::cout << "total_slice_length: " << total_slice_length << std::endl;
-	for ( unsigned int i=0; i < peaks.size(); ++i) {
-		std::cout << peak_bound_lr[i][0] << "----";
-		std::cout << peaks[i] << "----" << peak_bound_lr[i][1] << std::endl;
-	}
 	double k = 0;
 	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
 				i != peak_bound_lr.end(); i++) 
 	{
-		std::cout << "k: " << k++ << std::endl;
-		std::cout << "l: " << l << std::endl;
-		std::cout << "Bounds: " << (*i)[0] << "------" << (*i)[1] << std::endl;
 		if ( l <= (*i)[1] ) {
-			std::cout << std::endl << "Done choose()." << std::endl;
 			return l; // + (*i)[0];
 		} else 
 			l = l - ( (*i)[1] - (*i)[0] ) - (*i)[0] + (*(i+1))[0];
@@ -195,13 +156,11 @@ double RV_Missing_t_walk_core::choose() {
 }
 
 void RV_Missing_t_walk_core::find_peaks() {
-	std::cout << std::endl << "In find_peaks()." << std::endl;
 	derivative_poly();
 	cx_eigval.clear();
 	cx_eigvec.clear();
 	if (!arma::eig_gen(cx_eigval, cx_eigvec, companion)) 
 		throw std::runtime_error("Failed eigenvalue decomposition.");
-	std::cout << cx_eigval << "\n";
 	arma::cx_vec::iterator re_eigval_end = 
 		std::remove_if(cx_eigval.begin(), cx_eigval.end(), 
 			[](std::complex<double> x) { return x.imag() != 0;});
@@ -232,6 +191,5 @@ void RV_Missing_t_walk_core::find_peaks() {
 	if (peaks.size() < 1) {
 		throw std::runtime_error("No peaks found.");
 	}
-	std::cout << std::endl << "Done find_peaks()." << std::endl;
 }	
 

@@ -63,12 +63,6 @@ double RV_Missing_t_walk_observed_normal::lpdf() { return lpdf(x2); }
 
 
 void RV_Missing_t_walk_observed_normal::derivative_poly() {
-	std::cout << "In poly: " << std::endl;
-  std::cout << "x1: " << x1 << ", x2: " << x2 << ", x3: " << x3 << std::endl;
-	std::cout << "os1: " << os1 << ", os2: " << os2 << std::endl;
-  std::cout << "s1: " << s1 << ", s2: " << s2 << std::endl;
-  std::cout << "p1: " << p1 << ", p2: " << p2 << std::endl;
-	std::cout << "Xobs: " << Xobs << "so2: " << so2 << std::endl;
 
 	double A1 = 2*( (os2-x3) - (os1+x1) );
   double A2 = ( 
@@ -104,21 +98,12 @@ void RV_Missing_t_walk_observed_normal::derivative_poly() {
     (p2+1)*(x3-os2)*
 			(p1*pow(s1,2)+pow(x1+os1,2)) 
 	);
-	std::cout << "A1: " << A1 << std::endl;
-	std::cout << "A2: " << A2 << std::endl;
-	std::cout << "A3: " << A3 << std::endl;
-	std::cout << "A4: " << A4 << std::endl;
-	std::cout << "B1: " << B1 << std::endl;
-	std::cout << "B2: " << B2 << std::endl;
-	std::cout << "B3: " << B3 << std::endl;
-	std::cout << "B4: " << B4 << std::endl;
 
 	companion(0,4) = A4*Xobs           + B4*pow(so2,2);
 	companion(1,4) = A3*Xobs - A4      + B3*pow(so2,2);
 	companion(2,4) = A2*Xobs - A3      + B2*pow(so2,2);
 	companion(3,4) = A1*Xobs - A2      + B1*pow(so2,2);
 	companion(4,4) =    Xobs - A1							 ;
-	std::cout << companion << std::endl;
 }
 
 
