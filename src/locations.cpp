@@ -67,8 +67,12 @@ void Locations::bind_ordered_uniform_distribution (
 		unsigned int which, 
 		trng::yarn2 & R
 ) {
-	// ONLY works if distributions[-1/+1] are drawn on the
-	// prior "level".
+	if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " is dependent on an off-the-end index.\n";
+		throw std::logit_error(msg.str());
+	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
@@ -122,6 +126,12 @@ void Locations::bind_normal_distribution (
 void Locations::bind_t_walk_distribution_open (
 		unsigned int which, trng::yarn2 & R
 ) {
+	if ((which-1) < 0 ) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " is dependent on an off-the-end index.\n";
+		throw std::logit_error(msg.str());
+	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
@@ -139,6 +149,12 @@ void Locations::bind_t_walk_distribution_open (
 void Locations::bind_t_walk_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
+	if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " is dependent on an off-the-end index.\n";
+		throw std::logit_error(msg.str());
+	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
@@ -158,6 +174,12 @@ void Locations::bind_t_walk_distribution (
 void Locations::bind_t_walk_observed_normal_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
+	if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " is dependent on an off-the-end index.\n";
+		throw std::logit_error(msg.str());
+	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
@@ -178,6 +200,12 @@ void Locations::bind_t_walk_observed_normal_distribution (
 void Locations::bind_t_walk_observed_interval_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
+	if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " is dependent on an off-the-end index.\n";
+		throw std::logit_error(msg.str());
+	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
 		distributions[which] = 
@@ -218,6 +246,7 @@ void Locations::drop_distribution(unsigned int which) {
 void Locations::draw() {
 	// Modify this loop to respect the sample_order vector...
 	// Need to also add correct removal order.
+	// Ordering NOT needed if the correct distributions are used!
 	unsigned int which=0;
 	for (unsigned int level=0; level < sample_order.size(); ++level) {
 		for (unsigned int i = 0; i < sample_order[level].size(); ++i) { 
