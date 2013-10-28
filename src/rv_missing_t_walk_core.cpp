@@ -95,15 +95,12 @@ void RV_Missing_t_walk_core::find_slice() {
 				i != peaks.end(); i++) {
 		peak_bound_lr.push_back(step_out(i));
 	}
-	// Trim overlap
-	for (std::vector<std::vector<double> >::iterator i = peak_bound_lr.begin(); 
-				i != peak_bound_lr.end(); i++) 
-	{
-		bool lb = (i == (peak_bound_lr.end() - 1 ));
-		if (!lb && ((*(i+1))[0] < (*i)[1]) ) {
-			double mid = ((*(i+1))[0] + (*i)[1])/2.0;
-			(*(i+1))[0] = mid;
-			(*i)[1] = mid;
+	// Fix overlap
+	for (unsigned int i = 0; i != (peak_bound_lr.size()-1); i++) {
+		if (peak_bound_lr[i+1][0] < peak_bound_lr[i][1] ) {
+			double mid = (peaks[i+1] + peaks[i])/2.0;
+			peak_bound_lr[i+1][0] = mid;
+			peak_bound_lr[i][1] = mid;
 		}
 	}
 
@@ -158,10 +155,6 @@ std::vector<double> RV_Missing_t_walk_core::step_out(
 void RV_Missing_t_walk_core::trim() {
 	std::cout << std::endl << "In trim()." << std::endl;
 	for (unsigned int i = 0; i != peak_bound_lr.size(); i++) {
-
-		// Trimming needs to be done around PEAK. (?)
-		// Maybe bounds/peak/widths need to be all in
-		// std::map<std::string,double>> ?, err... vector-of.
 		if (peak_bound_lr[i][0] < x_new && x_new < peak_bound_lr[i][1]) {
 			if (x_new < peaks[i] ) {
 				total_slice_length -= x_new - peak_bound_lr[i][0];
