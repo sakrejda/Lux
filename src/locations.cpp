@@ -71,7 +71,7 @@ void Locations::bind_ordered_uniform_distribution (
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
 					 " is dependent on an off-the-end index.\n";
-		throw std::logit_error(msg.str());
+		throw std::logic_error(msg.str());
 	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
@@ -130,7 +130,7 @@ void Locations::bind_t_walk_distribution_open (
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
 					 " is dependent on an off-the-end index.\n";
-		throw std::logit_error(msg.str());
+		throw std::logic_error(msg.str());
 	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
@@ -153,7 +153,7 @@ void Locations::bind_t_walk_distribution (
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
 					 " is dependent on an off-the-end index.\n";
-		throw std::logit_error(msg.str());
+		throw std::logic_error(msg.str());
 	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
@@ -178,7 +178,7 @@ void Locations::bind_t_walk_observed_normal_distribution (
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
 					 " is dependent on an off-the-end index.\n";
-		throw std::logit_error(msg.str());
+		throw std::logic_error(msg.str());
 	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
@@ -204,7 +204,7 @@ void Locations::bind_t_walk_observed_interval_distribution (
 		std::stringstream msg;
 		msg << "The location " << which << " (" << (which+1) << ")"
 					 " is dependent on an off-the-end index.\n";
-		throw std::logit_error(msg.str());
+		throw std::logic_error(msg.str());
 	}
 	if (distributions[which] == NULL) {
 		sample_order[2].push_back(which);
