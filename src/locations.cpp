@@ -146,6 +146,29 @@ void Locations::bind_t_walk_distribution_open (
 	}
 }
 
+void Locations::bind_t_walk_distribution_open_reverse (
+		unsigned int which, trng::yarn2 & R
+) {
+	if ((which) < 0  || ((which+1) >= draws.size()) ) {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " is dependent on an off-the-end index.\n";
+		throw std::logic_error(msg.str());
+	}
+	if (distributions[which] == NULL) {
+		sample_order[2].push_back(which);
+		distributions[which] = 
+			std::unique_ptr<Random>(new RV_t_walk(
+				draws[which+1], draws[which], drift[which],
+				tails[which], scales[which], R));
+	} else {
+		std::stringstream msg;
+		msg << "The location " << which << " (" << (which+1) << ")"
+					 " already has a distribution.  Not adding.\n";
+		throw(std::logic_error(msg.str()));
+	}
+}
+
 void Locations::bind_t_walk_distribution (
 		unsigned int which, trng::yarn2 & R
 ) {
