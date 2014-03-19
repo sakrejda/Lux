@@ -8,10 +8,10 @@
 #include "rv_missing_t_walk.hpp"
 
 Locations::Locations(
-		arma::vec & locations_, arma::vec & drift_,
-		arma::vec & tails_,  arma::vec & scales_, 
-		arma::vec & obs_scales_,
-		arma::vec & minima_,    arma::vec & maxima_, arma::vec & draws_, 
+		arma::vec locations_, arma::vec drift_,
+		arma::vec tails_,  arma::vec scales_, 
+		arma::vec obs_scales_,
+		arma::vec minima_,    arma::vec maxima_, arma::vec draws_, 
 		trng::yarn2 & R_
 ) : locations(locations_), 
 		drift(drift_),
@@ -25,8 +25,8 @@ Locations::Locations(
 		sample_order(),
 		draws(draws_) { }
 
-arma::vec & Locations::state() const { return locations; }
-double & Locations::state(arma::uword which) const { return locations[which]; }
+const arma::vec & Locations::state() const { return locations; }
+const double & Locations::state(arma::uword which) const { return locations[which]; }
 
 // Available distributions:
 void Locations::bind_constant_distribution	(

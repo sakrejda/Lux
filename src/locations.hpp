@@ -19,12 +19,12 @@ class Locations {
 
 public:
 	Locations(
-			arma::vec & locations_, arma::vec & drift_, 
-			arma::vec & tails_, arma::vec & scales_, 
-			arma::vec & obs_scales_,
-			arma::vec & minima_, arma::vec & maxima_, arma::vec & draws_, trng::yarn2 & R_);
-	arma::vec & state() const;
-	double & state(arma::uword which) const;
+			arma::vec locations_, arma::vec drift_, 
+			arma::vec tails_, arma::vec scales_, 
+			arma::vec obs_scales_,
+			arma::vec minima_, arma::vec maxima_, arma::vec draws_, trng::yarn2 & R_);
+	const arma::vec & state() const;
+	const double & state(arma::uword which) const;
 
 	// Available distributions:
 	void bind_constant_distribution	(unsigned int which);
@@ -55,13 +55,13 @@ public:
 
 private:
 	trng::yarn2 & R;
-	arma::vec & locations;
-	arma::vec & drift;
-	arma::vec & tails;
-	arma::vec & scales;
-	arma::vec & obs_scales;
-	arma::vec & minima;
-	arma::vec & maxima;
+	arma::vec locations;
+	arma::vec drift;
+	arma::vec tails;
+	arma::vec scales;
+	arma::vec obs_scales;
+	arma::vec minima;
+	arma::vec maxima;
 
 	std::vector<std::unique_ptr<Random> > distributions;
 	std::map<unsigned int, std::vector<unsigned int> > sample_order;
