@@ -7,6 +7,12 @@
 #include <armadillo>
 #include <trng/yarn2.hpp>
 
+// This would lend itself to cleaner user code if the Locations class
+// took ownership of the data---somebody has to and you don't want to
+// hack that at the R/C++ interface (so I've learned)... everything else
+// could be the same, except the Rcpp/R interface code would have to act
+// like it doesn't have ownership...
+
 class Random;
 
 class Locations {

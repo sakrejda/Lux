@@ -13,6 +13,11 @@
 #include <trng/uniform01_dist.hpp>
 #include <trng/exponential_dist.hpp>
 
+// If I use the paradigm from 'recapture.hpp' where the state/parameters
+// are classes, maybe this could be a template for a generic 1-D slice
+// sampler core... ?  The peak/root finding would have to be broken out
+// as well (?) to allow for either eigenvalue based or numerical root
+// finding for the slice sampler starting pts...
 
 class RV_Missing_t_walk_core : public Random {
 
