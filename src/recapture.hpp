@@ -9,7 +9,7 @@
 
 #include "../include/slicer-discrete.hpp"
 
-class Recapture_State {
+class Recapture_State {  // State in that observed and unobserved sense.
 
 public:
 	Recapture_State();  // required
@@ -49,7 +49,7 @@ private:
 
 };
 
-class Recapture_Parameters {
+class Recapture_Parameters {  // Parameters in that unobservable sense... (?)
 	
 public:
 	Recapture_Parameters();
