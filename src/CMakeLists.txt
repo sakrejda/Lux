@@ -1,6 +1,6 @@
 add_library(Lux SHARED 
 	recapture.cpp 
-	locations.cpp 
+	time_series.cpp 
 	rv_constant.cpp
 	rv_uniform.cpp
 	rv_normal.cpp
@@ -13,7 +13,7 @@ add_library(Lux SHARED
 INSTALL(TARGETS Lux LIBRARY DESTINATION lib)
 INSTALL(FILES 
 	recapture.hpp 
-	locations.hpp
+	time_series.hpp
 	random.hpp 
 	rv_constant.hpp
 	rv_uniform.hpp
