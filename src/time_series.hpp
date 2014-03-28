@@ -40,10 +40,10 @@ public:
     Time_Series_Parameters(
             Time_Series_Data & data_,
             arma::Col<double> x_at_times_,
-            arma::Col<double> drift_;
-            arma::Col<double> scales_;
-            arma::Col<double> tails_;
-            arma::Col<double> obs_scales_;
+            arma::Col<double> drift_,
+            arma::Col<double> scales_,
+            arma::Col<double> tails_,
+            arma::Col<double> obs_scales_
     );
 
     const arma::Col<double> & get_x_at_times() const;
