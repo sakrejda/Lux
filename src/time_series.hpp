@@ -128,9 +128,9 @@ private:
     std::map<unsigned int, std::vector<unsigned int> > sample_order;
     std::map<unsigned int, std::vector<unsigned int> > sample_order_bk;
 
-    static std::string distribution_already_bound(int which, std::string distr);
-    static std::string distribution_not_bound(int which, std::string action);
-    static std::string off_the_end(int which, std::string distr);
+    std::string distribution_already_bound(int which, std::string distr);
+    std::string distribution_not_bound(int which, std::string action);
+    std::string off_the_end(int which, std::string distr);
 };
 
 #endif

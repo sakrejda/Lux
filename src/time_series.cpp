@@ -78,11 +78,11 @@ Time_Series_Posterior::Time_Series_Posterior(
     maxima_at_times = data.get_maxima_at_times();
 
     // Non-const handles.
-     x_at_times = get_x_at_times_handle();
-     drift = get_drift_handle();
-     scales = get_scales_handle();
-     tails = get_tails_handle();
-     obs_scales = get_obs_scales_handle();
+     x_at_times = parameters.get_x_at_times_handle();
+     drift = parameters.get_drift_handle();
+     scales = parameters.get_scales_handle();
+     tails = parameters.get_tails_handle();
+     obs_scales = parameters.get_obs_scales_handle();
 
 }
 
@@ -280,14 +280,14 @@ arma::vec Time_Series_Posterior::lpdf(arma::vec X) {
 
 Time_Series_Posterior::~Time_Series_Posterior() { distributions.clear(); }
 
-static std::string Time_Series_Posterior::distribution_already_bound(int which, std::string distr) {
+std::string Time_Series_Posterior::distribution_already_bound(int which, std::string distr) {
     std::stringstream msg;
     msg << "The index " << which << " (" << (which+1) << ")"
         " already has a distribution.  Not adding" << distr << ".\n";
     return msg.str();
 }
 
-static std::string Time_Series_Posterior::distribution_not_bound(int which, std::string action) {
+std::string Time_Series_Posterior::distribution_not_bound(int which, std::string action) {
     std::stringstream msg;
     msg << "The index " << which << " (" << (which+1) << ")"
         " lacks a distribution: " << action << "."
@@ -295,7 +295,7 @@ static std::string Time_Series_Posterior::distribution_not_bound(int which, std:
     return msg.str();
 }
 
-static std::string Time_Series_Posterior::off_the_end(int which, std::string distr) {
+std::string Time_Series_Posterior::off_the_end(int which, std::string distr) {
     std::stringstream msg;
     msg << "The index " << which << " (" << (which+1) << ")"
         " is dependent on an off-the-end index.  Not adding " << distr << ".\n";
