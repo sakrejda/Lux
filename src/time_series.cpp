@@ -27,9 +27,9 @@ const arma::Col<double> & Time_Series_Data::get_minima_at_times() const {return 
 const arma::Col<double> & Time_Series_Data::get_maxima_at_times() const {return maxima_at_times;}
 
 
-Time_Series_Parameters::Time_Series_Parameters() :
-    x_at_times(0.0), drift(0.0),
-    scales(0.0), tails(0.0), obs_scales(0.0) {}
+//Time_Series_Parameters::Time_Series_Parameters() :
+//    data(), x_at_times(0.0), drift(0.0),
+//    scales(0.0), tails(0.0), obs_scales(0.0) {}
 
 Time_Series_Parameters::Time_Series_Parameters(
     Time_Series_Data & data_,
@@ -38,7 +38,7 @@ Time_Series_Parameters::Time_Series_Parameters(
     arma::Col<double> scales_;
     arma::Col<double> tails_;
     arma::Col<double> obs_scales_;
-) : x_at_times(x_at_times_), drift(drift_),
+) : data(data_), x_at_times(x_at_times_), drift(drift_),
     scales(scales_), tails(tails_), obs_scales(obs_scales_) {}
 
 const arma::Col<double> & Time_Series_Parameters::get_x_at_times() const {return x_at_times;}
@@ -65,7 +65,7 @@ Time_Series_Posterior::Time_Series_Posterior(
         Time_Series_Data const & data_,
         Time_Series_Parameters & parameters_,
         trng::yarn2 & R_
-) : state(state_),
+) : data(data_),
     parameters(parameters_),
     R(R_),
     distributions(parameters_.size()),

@@ -36,7 +36,7 @@ private:
 class Time_Series_Parameters { // Parameters in that unobservable sense...
 
 public:
-    Time_Series_Parameters();
+//    Time_Series_Parameters();
     Time_Series_Parameters(
             Time_Series_Data & data_,
             arma::Col<double> x_at_times_,
