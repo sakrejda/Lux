@@ -7,15 +7,84 @@
 #include "rv_missing_t_walk_observed_interval.hpp"
 #include "rv_missing_t_walk.hpp"
 
+Time_Series_Data::Time_Series_Data() :
+    times(0.0), y_at_times(0.0),
+    minima_at_times(0.0), maxima_at_times(0.0) {}
+
+Time_Series_Data::Time_Series_Data(
+    std::vector<double> times_,
+    std::vector<double> y_at_times_,
+    std::vector<double> minima_at_times_,
+    std::vector<double> maxima_at_times_
+) : times(times_),
+    y_at_times(y_at_times_),
+    minima_at_times(minima_at_times_),
+    maxima_at_times(maxima_at_times_) { }
+
+const arma::Col<double> & Time_Series_Data::get_times() const {return times;}
+const arma::Col<double> & Time_Series_Data::get_y_at_times() const {return y_at_times;}
+const arma::Col<double> & Time_Series_Data::get_minima_at_times() const {return minima_at_times;}
+const arma::Col<double> & Time_Series_Data::get_maxima_at_times() const {return maxima_at_times;}
+
+
+Time_Series_Parameters::Time_Series_Parameters() :
+    x_at_times(0.0), drift(0.0),
+    scales(0.0), tails(0.0), obs_scales(0.0) {}
+
+Time_Series_Parameters::Time_Series_Parameters(
+    Time_Series_Data & data_,
+    arma::Col<double> x_at_times_,
+    arma::Col<double> drift_;
+    arma::Col<double> scales_;
+    arma::Col<double> tails_;
+    arma::Col<double> obs_scales_;
+) : x_at_times(x_at_times_), drift(drift_),
+    scales(scales_), tails(tails_), obs_scales(obs_scales_) {}
+
+const arma::Col<double> & Time_Series_Parameters::get_x_at_times() const {return x_at_times;}
+const arma::Col<double> & Time_Series_Parameters::get_drift() const {return drift;}
+const arma::Col<double> & Time_Series_Parameters::get_scales() const {return scales;}
+const arma::Col<double> & Time_Series_Parameters::get_tails() const {return tails;}
+const arma::Col<double> & Time_Series_Parameters::get_obs_scales() const {return obs_scales;}
+
+void Time_Series_Parameters::set_x_at_times(arma::Col<double> x_at_times_) {x_at_times = x_at_times_; }
+void Time_Series_Parameters::set_drift(arma::Col<double> drift_) {drift = drift_; }
+void Time_Series_Parameters::set_scales(arma::Col<double> scales_) {scales = scales_; }
+void Time_Series_Parameters::set_tails(arma::Col<double> tails_) {tails = tails_; }
+void Time_Series_Parameters::set_obs_scales(arma::Col<double> obs_scales_) {obs_scales = obs_scales_; }
+
+arma::Col<double> & Time_Series_Parameters::get_x_at_times_handle() {return x_at_times;}
+arma::Col<double> & Time_Series_Parameters::get_drift_handle() {return drift;}
+arma::Col<double> & Time_Series_Parameters::get_scales_handle() {return scales;}
+arma::Col<double> & Time_Series_Parameters::get_tails_handle() {return tails;}
+arma::Col<double> & Time_Series_Parameters::get_obs_scales_handle() {return obs_scales;}
+
+const int size() const { return x_at_times.size(); }
+
 Time_Series_Posterior::Time_Series_Posterior(
-        Time_Series_State const & state_,
-        Time_Series_Parameters const & parameters_,
+        Time_Series_Data const & data_,
+        Time_Series_Parameters & parameters_,
         trng::yarn2 & R_
 ) : state(state_),
     parameters(parameters_),
     R(R_),
-    distributions(locations_.size()),
-    sample_order() { }
+    distributions(parameters_.size()),
+    sample_order()
+{
+        // Const handles!
+    times = data.get_times();
+    y_at_times = data.get_y_at_times();
+    minima_at_times = data.get_minima_at_times();
+    maxima_at_times = data.get_maxima_at_times();
+
+    // Non-const handles.
+     x_at_times = get_x_at_times_handle();
+     drift = get_drift_handle();
+     scales = get_scales_handle();
+     tails = get_tails_handle();
+     obs_scales = get_obs_scales_handle();
+
+}
 
 // Available distributions:
 
@@ -25,7 +94,7 @@ void Time_Series_Posterior::bind_constant_distribution  (int which) {
 
     sample_order[0].push_back(which);
     distributions[which] =
-        std::unique_ptr<Random>(new RV_Constant(draws[which]));
+        std::unique_ptr<Random>(new RV_Constant(x_at_times[which]));
 }
 
 
@@ -34,123 +103,131 @@ void Time_Series_Posterior::bind_uniform_distribution (int which) {
         throw std::logic_error(distribution_already_bound(which, "uniform"));
 
     sample_order[1].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(
-            new RV_Uniform(draws[which], minima[which], maxima[which], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_Uniform(
+            x_at_times[which], minima_at_times[which], maxima_at_times[which], R)
+    );
 
 }
 
 void Time_Series_Posterior::bind_ordered_uniform_distribution (int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "ordered_uniform"));
 
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "ordered_uniform"));
 
     sample_order[2].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_Uniform(
-            draws[which], draws[which-1], draws[which+1], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_Uniform(
+            x_at_times[which], x_at_times[which-1], x_at_times[which+1], R)
+    );
 
 }
 
-void Time_Series_Posterior::bind_normal_distribution (int which, trng::yarn2 & R) {
+void Time_Series_Posterior::bind_normal_distribution (int which) {
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "normal"));
 
     sample_order[1].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_Normal(
-            draws[which], locations[which], obs_scales[which], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_Normal(
+            x_at_times[which], y_at_times[which], obs_scales[which], R)
+    );
 
 }
 
 
 void Time_Series_Posterior::bind_t_walk_distribution_open (int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_open"));
 
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "t_walk_open"));
 
     sample_order[2].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_t_walk(
-            draws[which-1], draws[which], drift[which-1],
-            tails[which-1], scales[which-1], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_t_walk(
+            x_at_times[which-1], x_at_times[which], drift[which-1],
+            tails[which-1], scales[which-1], R)
+    );
 
 }
 
-void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (int which, trng::yarn2 & R) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (int which) {
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_open_reverse"));
 
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "t_walk_open_reverse"));
 
     sample_order[2].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_t_walk(
-            draws[which+1], draws[which], drift[which],
-            tails[which], scales[which], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_t_walk(
+            x_at_times[which+1], x_at_times[which], drift[which],
+            tails[which], scales[which], R)
+    );
 
 }
 
-void Time_Series_Posterior::bind_t_walk_distribution (int which, trng::yarn2 & R) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+void Time_Series_Posterior::bind_t_walk_distribution (int which) {
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk"));
 
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "t_walk"));
 
     sample_order[2].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_Missing_t_walk(
-            draws[which-1], draws[which], draws[which+1],
-            drift[which-1], drift[which],
-            tails[which-1], tails[which],
-            scales[which-1], scales[which], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_Missing_t_walk(
+            x_at_times[which-1],    x_at_times[which],  x_at_times[which+1],
+            drift[which-1],         drift[which],
+            tails[which-1],         tails[which],
+            scales[which-1],        scales[which], R)
+    );
 
 }
 
-void Time_Series_Posterior::bind_t_walk_observed_normal_distribution (int which, trng::yarn2 & R) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+void Time_Series_Posterior::bind_t_walk_observed_normal_distribution (int which) {
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_observed_normal"));
 
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "t_walk_observed_normal"));
 
     sample_order[2].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_Missing_t_walk_observed_normal(
-            draws[which-1], draws[which], draws[which+1],
-            drift[which-1], drift[which],
-            tails[which-1], tails[which],
-            scales[which-1], scales[which],
-            locations[which], obs_scales[which], R));
+    distributions[which] = std::unique_ptr<Random>(
+        new RV_Missing_t_walk_observed_normal(
+            x_at_times[which-1],    x_at_times[which], x_at_times[which+1],
+            drift[which-1],             drift[which],
+            tails[which-1],             tails[which],
+            scales[which-1],            scales[which],
+            y_at_times[which],      obs_scales[which], R)
+        );
 
 }
 
-void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (int which, trng::yarn2 & R) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (int which) {
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_observed_interval"));
 
     if (distributions[which] != NULL)
         throw std::logic_error(distribution_already_bound(which, "t_walk_observed_interval"));
 
     sample_order[2].push_back(which);
-    distributions[which] =
-        std::unique_ptr<Random>(new RV_Missing_t_walk_observed_interval(
-            draws[which-1], draws[which], draws[which+1],
-            drift[which-1], drift[which],
-            tails[which-1], tails[which],
-            scales[which-1], scales[which],
-            minima[which-1], maxima[which], R));
+    distributions[which] = std::unique_ptr<Random>(
+                new RV_Missing_t_walk_observed_interval(
+            x_at_times[which-1],            x_at_times[which], x_at_times[which+1],
+            drift[which-1],                     drift[which],
+            tails[which-1],                     tails[which],
+            scales[which-1],                    scales[which],
+            minima_at_times[which-1], maxima_at_times[which], R)
+        );
 
 }
 
 void Time_Series_Posterior::drop_distribution(int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == draws.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
     if (distributions[which] == NULL)
@@ -220,7 +297,7 @@ static std::string Time_Series_Posterior::distribution_not_bound(int which, std:
 
 static std::string Time_Series_Posterior::off_the_end(int which, std::string distr) {
     std::stringstream msg;
-    msg << "The location " << which << " (" << (which+1) << ")"
+    msg << "The index " << which << " (" << (which+1) << ")"
         " is dependent on an off-the-end index.  Not adding " << distr << ".\n";
     return msg.str();
 }
