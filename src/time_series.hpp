@@ -99,7 +99,7 @@ public:
     void draw();
     arma::vec lpdf(arma::vec X);
 
-    ~Locations();
+    ~Time_Series_Posterior();
 
 private:
     Time_Series_State const & state;

@@ -7,33 +7,28 @@
 #include "rv_missing_t_walk_observed_interval.hpp"
 #include "rv_missing_t_walk.hpp"
 
-Time_Series::Time_Series(
+Time_Series_Posterior::Time_Series_Posterior(
         Time_Series_State const & state_,
         Time_Series_Parameters const & parameters_,
         trng::yarn2 & R_
-) : locations(locations_),
-        drift(drift_),
-        tails(tails_),
-        scales(scales_),
-        obs_scales(obs_scales_),
-        minima(minima_),
-        maxima(maxima_),
-        R(R_),
-        distributions(locations_.size()),
-        sample_order(),
-        draws(draws_) { }
-
-const arma::vec & Locations::state() const { return locations; }
-const double & Locations::state(arma::uword which) const { return locations[which]; }
+) : state(state_),
+    parameters(parameters_),
+    R(R_),
+    distributions(locations_.size()),
+    sample_order() { }
 
 // Available distributions:
-void Locations::bind_constant_distribution  (
+
+// These bind_X_distribution functions could be broken out into
+// one function to handle the checking and a slew of short
+// functions to handle initialization, that way it would be clear
+// at a glance which distributions are defined(?)
+
+void Time_Series_Posterior::bind_constant_distribution  (
         unsigned int which
 ) {
     if (distributions[which] == NULL) {
         sample_order[0].push_back(which);
-        // Shouldn't this technically be locations not draws?
-        // How to resolve?
         distributions[which] =
             std::unique_ptr<Random>(new RV_Constant(draws[which]));
     } else {
@@ -45,7 +40,7 @@ void Locations::bind_constant_distribution  (
 }
 
 
-void Locations::bind_uniform_distribution (
+void Time_Series_Posterior::bind_uniform_distribution (
         unsigned int which, trng::yarn2 & R
 ) {
     if (distributions[which] == NULL) {
@@ -61,7 +56,7 @@ void Locations::bind_uniform_distribution (
     }
 }
 
-void Locations::bind_ordered_uniform_distribution (
+void Time_Series_Posterior::bind_ordered_uniform_distribution (
         unsigned int which,
         trng::yarn2 & R
 ) {
@@ -84,7 +79,7 @@ void Locations::bind_ordered_uniform_distribution (
     }
 }
 
-void Locations::bind_normal_distribution (
+void Time_Series_Posterior::bind_normal_distribution (
         unsigned int which,
         trng::yarn2 & R
 ) {
@@ -101,7 +96,7 @@ void Locations::bind_normal_distribution (
     }
 }
 
-//void Locations::bind_t_walk_distribution (
+//void Time_Series_Posterior::bind_t_walk_distribution (
 //      unsigned int which,
 //      double const & drift1, double const & drift2,
 //      double const & p1, double const & p2,
@@ -121,7 +116,7 @@ void Locations::bind_normal_distribution (
 //  }
 //}
 
-void Locations::bind_t_walk_distribution_open (
+void Time_Series_Posterior::bind_t_walk_distribution_open (
         unsigned int which, trng::yarn2 & R
 ) {
     if ((which-1) < 0 ) {
@@ -144,7 +139,7 @@ void Locations::bind_t_walk_distribution_open (
     }
 }
 
-void Locations::bind_t_walk_distribution_open_reverse (
+void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (
         unsigned int which, trng::yarn2 & R
 ) {
     if ((which) < 0  || ((which+1) >= draws.size()) ) {
@@ -167,7 +162,7 @@ void Locations::bind_t_walk_distribution_open_reverse (
     }
 }
 
-void Locations::bind_t_walk_distribution (
+void Time_Series_Posterior::bind_t_walk_distribution (
         unsigned int which, trng::yarn2 & R
 ) {
     if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
@@ -192,7 +187,7 @@ void Locations::bind_t_walk_distribution (
     }
 }
 
-void Locations::bind_t_walk_observed_normal_distribution (
+void Time_Series_Posterior::bind_t_walk_observed_normal_distribution (
         unsigned int which, trng::yarn2 & R
 ) {
     if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
@@ -218,7 +213,7 @@ void Locations::bind_t_walk_observed_normal_distribution (
     }
 }
 
-void Locations::bind_t_walk_observed_interval_distribution (
+void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (
         unsigned int which, trng::yarn2 & R
 ) {
     if ( ( (which-1) < 0) || ((which + 1) == draws.size()) ) {
@@ -244,7 +239,7 @@ void Locations::bind_t_walk_observed_interval_distribution (
     }
 }
 
-void Locations::drop_distribution(unsigned int which) {
+void Time_Series_Posterior::drop_distribution(unsigned int which) {
     if (distributions[which] == NULL) {
         std::stringstream msg;
         msg << "The location " << which << " (" << (which+1) << ")"
