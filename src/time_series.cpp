@@ -59,7 +59,7 @@ arma::Col<double> & Time_Series_Parameters::get_scales_handle() {return scales;}
 arma::Col<double> & Time_Series_Parameters::get_tails_handle() {return tails;}
 arma::Col<double> & Time_Series_Parameters::get_obs_scales_handle() {return obs_scales;}
 
-const int size() const { return x_at_times.size(); }
+const int Time_Series_Parameters::size() const { return x_at_times.size(); }
 
 Time_Series_Posterior::Time_Series_Posterior(
         Time_Series_Data const & data_,
@@ -68,21 +68,19 @@ Time_Series_Posterior::Time_Series_Posterior(
 ) : data(data_),
     parameters(parameters_),
     R(R_),
+    times(data_.get_times()),
+    y_at_times(data.get_y_at_times()),
+    minima_at_times(data.get_minima_at_times()),
+    maxima_at_times(data.get_maxima_at_times()),
+    x_at_times(parameters.get_x_at_times_handle()),
+    drift(parameters.get_drift_handle()),
+    scales(parameters.get_scales_handle()),
+    tails(parameters.get_tails_handle()),
+    obs_scales(parameters.get_obs_scales_handle()),
     distributions(parameters_.size()),
     sample_order()
 {
-        // Const handles!
-    times = data.get_times();
-    y_at_times = data.get_y_at_times();
-    minima_at_times = data.get_minima_at_times();
-    maxima_at_times = data.get_maxima_at_times();
 
-    // Non-const handles.
-     x_at_times = parameters.get_x_at_times_handle();
-     drift = parameters.get_drift_handle();
-     scales = parameters.get_scales_handle();
-     tails = parameters.get_tails_handle();
-     obs_scales = parameters.get_obs_scales_handle();
 
 }
 
