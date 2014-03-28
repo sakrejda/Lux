@@ -86,7 +86,7 @@ public:
     );
 
     // Available distributions:
-    void bind_constant_distribution (unsigned int which);
+    void bind_constant_distribution (int which);
     void bind_uniform_distribution  (int which);
     void bind_ordered_uniform_distribution (int which);
     void bind_normal_distribution (int which);
