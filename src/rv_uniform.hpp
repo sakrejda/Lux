@@ -9,23 +9,23 @@
 class RV_Uniform : public Random {
 
 public:
-	RV_Uniform(
-		double 			 & X,
-		double const & minimum,
-		double const & maximum,
-		trng::yarn2 & R_);
+    RV_Uniform(
+        double           & X,
+        double const & minimum,
+        double const & maximum,
+        trng::yarn2 & R_);
 
-	void draw();
-	double lpdf(double X);
-	double lpdf();
+    void draw();
+    double lpdf(double X);
+    double lpdf();
 
 private:
-		trng::yarn2  & R;
-		double 			 & x;
-		double const & min;
-		double const & max;
-  	trng::uniform01_dist<> U;
-		void out_of_domain();
+    trng::yarn2  & R;
+    double           & x;
+    double const & min;
+    double const & max;
+    trng::uniform01_dist<> U;
+    void out_of_domain() const;
 
 };
 

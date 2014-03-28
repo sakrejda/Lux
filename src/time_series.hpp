@@ -1,5 +1,5 @@
-#ifndef LOCATION_H
-#define LOCATION_H
+#ifndef TIME_SERIES_H
+#define TIME_SERIES_H
 
 #include <vector>
 #include <map>
@@ -37,7 +37,7 @@ private:
 
 };
 
-class Time_Series_Parameters { // Parameters in that unobservable sense... (?)
+class Time_Series_Parameters { // Parameters in that unobservable sense...
 
 public:
     Time_Series_Parameters();
@@ -61,7 +61,6 @@ private:
     arma::Col<double> scales;
     arma::Col<double> tails;
     arma::Col<double> obs_scales;
-
 };
 
 
@@ -76,25 +75,17 @@ public:
 
     // Available distributions:
     void bind_constant_distribution (unsigned int which);
-    void bind_uniform_distribution  (
-            unsigned int which, trng::yarn2 & R);
-    void bind_ordered_uniform_distribution (
-            unsigned int which, trng::yarn2 & R);
-    void bind_normal_distribution (
-            unsigned int which, trng::yarn2 & R);
-    void bind_t_walk_distribution_open(
-            unsigned int which, trng::yarn2 & R);
-    void bind_t_walk_distribution_open_reverse(
-            unsigned int which, trng::yarn2 & R);
-    void bind_t_walk_distribution (
-            unsigned int which, trng::yarn2 & R);
-    void bind_t_walk_observed_normal_distribution (
-            unsigned int which, trng::yarn2 & R);
-    void bind_t_walk_observed_interval_distribution (
-            unsigned int which, trng::yarn2 & R);
+    void bind_uniform_distribution  (int which);
+    void bind_ordered_uniform_distribution (int which);
+    void bind_normal_distribution (int which);
+    void bind_t_walk_distribution_open(int which);
+    void bind_t_walk_distribution_open_reverse(int which);
+    void bind_t_walk_distribution (int which);
+    void bind_t_walk_observed_normal_distribution (int which);
+    void bind_t_walk_observed_interval_distribution (int which);
 
     // Drop distribution:
-    void drop_distribution(unsigned int which);
+    void drop_distribution(int which);
 
     void draw();
     arma::vec lpdf(arma::vec X);
@@ -110,6 +101,9 @@ private:
     std::map<unsigned int, std::vector<unsigned int> > sample_order;
     std::map<unsigned int, std::vector<unsigned int> > sample_order_bk;
 
+    static std::string distribution_already_bound(int which, std::string distr);
+    static std::string distribution_not_bound(int which, std::string action);
+    static std::string off_the_end(int which, std::string distr);
 };
 
 #endif
