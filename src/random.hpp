@@ -10,7 +10,7 @@
 class Random {
 
 public:
-    virtual double draw() = 0;
+    virtual void draw() = 0;
     virtual double lpdf(double X) = 0;
     virtual double lpdf() = 0;
 

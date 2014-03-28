@@ -11,7 +11,7 @@ class RV_Constant : public Random {
 public:
 	RV_Constant(double & X);
 
-	double draw();
+	void draw();
 	double lpdf(double X);
 	double lpdf();
 

@@ -44,7 +44,7 @@ std::map<std::string, double> RV_t_walk::state() const {
 }
 
 
-double RV_t_walk::draw() {
+void RV_t_walk::draw() {
 	double S, V, W, T;
 	do {
 		S = 2.0 * U(R) - 1.0;
@@ -53,7 +53,6 @@ double RV_t_walk::draw() {
 	} while (W > 1.0);
 	T = S * sqrt(p1*(pow(W,-2.0/p1)-1.0)/W);
   x2 = T * s1 + x1 + os;
-	return x2; 
 }
 
 double RV_t_walk::lpdf(double X) {

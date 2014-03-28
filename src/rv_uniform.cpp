@@ -14,10 +14,7 @@ RV_Uniform::RV_Uniform(
 		out_of_domain();
 }
 
-double RV_Uniform::draw() { 
-	x = min + (U(R) * (max - min)); 
-	return x;
-}
+void RV_Uniform::draw() { x = min + (U(R) * (max - min)); }
 
 double RV_Uniform::lpdf(double X) {
 	if ((X >= min) && (X <= max)) 

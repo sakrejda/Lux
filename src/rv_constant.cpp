@@ -5,7 +5,7 @@
 
 RV_Constant::RV_Constant(double & X) : x(X) {}
 
-double RV_Constant::draw() {return x;}
+void RV_Constant::draw() {}
 
 double RV_Constant::lpdf(double X) {
 	if (X == x)

@@ -36,7 +36,7 @@ public:
     );
 
     virtual std::map<std::string, double> state() const;
-    double draw();
+    void draw();
 
 protected:
     virtual void derivative_poly() = 0;

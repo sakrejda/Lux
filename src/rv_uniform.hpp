@@ -15,7 +15,7 @@ public:
 		double const & maximum,
 		trng::yarn2 & R_);
 
-	double draw();
+	void draw();
 	double lpdf(double X);
 	double lpdf();
 

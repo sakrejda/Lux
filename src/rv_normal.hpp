@@ -18,7 +18,7 @@ public:
 		trng::yarn2  & R_
 	);
 	std::map<std::string, double> state() const;
-	double draw();
+	void draw();
 	double lpdf(double X);
 	double lpdf();
 
