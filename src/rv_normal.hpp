@@ -18,7 +18,6 @@ public:
 		trng::yarn2  & R_
 	);
 	std::map<std::string, double> state() const;
-	void jump(double X);
 	double draw();
 	double lpdf(double X);
 	double lpdf();

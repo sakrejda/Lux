@@ -15,7 +15,6 @@ public:
 		double const & maximum,
 		trng::yarn2 & R_);
 
-	void jump(double X);
 	double draw();
 	double lpdf(double X);
 	double lpdf();

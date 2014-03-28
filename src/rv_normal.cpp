@@ -9,8 +9,6 @@ RV_Normal::RV_Normal(
 		trng::yarn2  & R_
 ) : X(X_), mu(mu_), s(s_), R(R_), NORMAL(mu_, s_) { }
 
-void RV_Normal::jump(double X) { X = X; }
-
 double RV_Normal::draw() {
 	X = NORMAL(R);
 	return X;

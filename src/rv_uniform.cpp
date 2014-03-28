@@ -14,13 +14,6 @@ RV_Uniform::RV_Uniform(
 		out_of_domain();
 }
 
-void RV_Uniform::jump(double X) {
-	if ((X >= min) && (X <= max))
-		x = X;
-	else 
-		out_of_domain();
-}
-
 double RV_Uniform::draw() { 
 	x = min + (U(R) * (max - min)); 
 	return x;

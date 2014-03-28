@@ -5,8 +5,6 @@
 
 RV_Constant::RV_Constant(double & X) : x(X) {}
 
-void RV_Constant::jump(double X) { }
-
 double RV_Constant::draw() {return x;}
 
 double RV_Constant::lpdf(double X) {

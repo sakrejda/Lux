@@ -43,9 +43,6 @@ std::map<std::string, double> RV_t_walk::state() const {
 	return out;
 }
 
-void RV_t_walk::jump(double X) { 
-	x2 = X; 
-}
 
 double RV_t_walk::draw() {
 	double S, V, W, T;

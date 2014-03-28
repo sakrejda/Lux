@@ -1,4 +1,4 @@
-#include "locations.hpp"
+#include "time_series.hpp"
 #include "rv_constant.hpp"
 #include "rv_uniform.hpp"
 #include "rv_normal.hpp"
@@ -7,11 +7,9 @@
 #include "rv_missing_t_walk_observed_interval.hpp"
 #include "rv_missing_t_walk.hpp"
 
-Locations::Locations(
-		arma::vec locations_, arma::vec drift_,
-		arma::vec tails_,  arma::vec scales_, 
-		arma::vec obs_scales_,
-		arma::vec minima_,    arma::vec maxima_, arma::vec draws_, 
+Time_Series::Time_Series(
+		Time_Series_State const & state_,
+		Time_Series_Parameters const & parameters_, 
 		trng::yarn2 & R_
 ) : locations(locations_), 
 		drift(drift_),
