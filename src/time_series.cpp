@@ -87,7 +87,7 @@ Time_Series_Posterior::Time_Series_Posterior(
 // Available distributions:
 
 void Time_Series_Posterior::bind_constant_distribution  (int which) {
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "constant"));
 
     sample_order[0].push_back(which);
@@ -97,7 +97,7 @@ void Time_Series_Posterior::bind_constant_distribution  (int which) {
 
 
 void Time_Series_Posterior::bind_uniform_distribution (int which) {
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "uniform"));
 
     sample_order[1].push_back(which);
@@ -112,7 +112,7 @@ void Time_Series_Posterior::bind_ordered_uniform_distribution (int which) {
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "ordered_uniform"));
 
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "ordered_uniform"));
 
     sample_order[2].push_back(which);
@@ -124,7 +124,7 @@ void Time_Series_Posterior::bind_ordered_uniform_distribution (int which) {
 }
 
 void Time_Series_Posterior::bind_normal_distribution (int which) {
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "normal"));
 
     sample_order[1].push_back(which);
@@ -140,7 +140,7 @@ void Time_Series_Posterior::bind_t_walk_distribution_open (int which) {
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_open"));
 
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "t_walk_open"));
 
     sample_order[2].push_back(which);
@@ -156,7 +156,7 @@ void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (int which) {
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_open_reverse"));
 
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "t_walk_open_reverse"));
 
     sample_order[2].push_back(which);
@@ -172,7 +172,7 @@ void Time_Series_Posterior::bind_t_walk_distribution (int which) {
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk"));
 
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "t_walk"));
 
     sample_order[2].push_back(which);
@@ -190,7 +190,7 @@ void Time_Series_Posterior::bind_t_walk_observed_normal_distribution (int which)
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_observed_normal"));
 
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "t_walk_observed_normal"));
 
     sample_order[2].push_back(which);
@@ -209,7 +209,7 @@ void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (int whic
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_observed_interval"));
 
-    if (distributions[which] != NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_already_bound(which, "t_walk_observed_interval"));
 
     sample_order[2].push_back(which);
@@ -228,7 +228,7 @@ void Time_Series_Posterior::drop_distribution(int which) {
     if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
-    if (distributions[which] == NULL)
+    if (!distributions[which])
         throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
 
     // Reverse lookup in sample_order to remove the value from the
@@ -252,7 +252,7 @@ void Time_Series_Posterior::draw() {
     for (unsigned int level=0; level < sample_order.size(); ++level) {
         for (unsigned int i = 0; i < sample_order[level].size(); ++i) {
             which = sample_order[level][i];
-            if (distributions[which] == NULL)
+            if (!distributions[which])
                 throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
             else
                 distributions[which]->draw();
@@ -266,7 +266,7 @@ arma::vec Time_Series_Posterior::lpdf(arma::vec X) {
     for (unsigned int level=0; level < sample_order.size(); ++level) {
         for (unsigned int i = 0; i < sample_order[level].size(); ++i) {
             which = sample_order[level][i];
-            if (distributions[which] == NULL)
+            if (!distributions[which])
                 throw std::logic_error(distribution_not_bound(which,"NOT CALCULATING LPDF"));
             else
                 lpdfs[which] = distributions[which]->lpdf(X[which]);
