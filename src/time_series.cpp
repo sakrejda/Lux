@@ -80,7 +80,8 @@ Time_Series_Posterior::Time_Series_Posterior(
     distributions(parameters_.size()),
     sample_order()
 {
-	std::for_each(distributions.begin(), distributions.end(), [](std::unique_ptr<Random> p) {if(p) throw std::logic_error("BAH!");});
+	std::for_each(distributions.begin(), distributions.end(), 
+		[](std::unique_ptr<Random> & p) { p = nullptr;});
 
 }
 
