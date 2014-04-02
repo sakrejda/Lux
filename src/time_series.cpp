@@ -274,7 +274,10 @@ arma::vec Time_Series_Posterior::lpdf(arma::vec X) {
 
         }
     }
-    return lpdfs;
+    if (sample_order.size() > 0)
+		return lpdfs;
+	else 
+		throw std::logic_error("No distributions bound.  Calculation skipped");
 }
 
 Time_Series_Posterior::~Time_Series_Posterior() { distributions.clear(); }
