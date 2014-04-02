@@ -77,10 +77,10 @@ Time_Series_Posterior::Time_Series_Posterior(
     scales(parameters.get_scales_handle()),
     tails(parameters.get_tails_handle()),
     obs_scales(parameters.get_obs_scales_handle()),
-    distributions(parameters_.size(),nullptr),
+    distributions(parameters_.size()),
     sample_order()
 {
-	//std::for_each(distributions.begin(), distributions.end(), [](std::unique_ptr<Random> p) {p = nullptr;});
+	std::for_each(distributions.begin(), distributions.end(), [](std::unique_ptr<Random> p) {if(p) throw std::logic_error("BAH!");});
 
 }
 
