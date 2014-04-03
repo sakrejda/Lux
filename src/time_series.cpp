@@ -226,10 +226,10 @@ void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (int whic
 }
 
 void Time_Series_Posterior::drop_distribution(int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
+    if ( ( (which) < 0) || (which >= x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
-    if (!distributions[which])
+    if (distributions[which] == nullptr)
         throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
 
     // Reverse lookup in sample_order to remove the value from the
@@ -300,6 +300,6 @@ std::string Time_Series_Posterior::distribution_not_bound(int which, std::string
 std::string Time_Series_Posterior::off_the_end(int which, std::string distr) {
     std::stringstream msg;
     msg << "The index " << which << " (" << (which+1) << ")"
-        " is dependent on an off-the-end index.  Not adding " << distr << ".\n";
+        " is dependent on an off-the-end index: " << distr << ".\n";
     return msg.str();
 }
