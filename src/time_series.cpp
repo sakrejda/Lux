@@ -84,6 +84,7 @@ Time_Series_Posterior::Time_Series_Posterior(
 {
     std::for_each(distributions.begin(), distributions.end(),
         [](std::unique_ptr<Random> & p) { p = nullptr;});
+    std::cout << "x_at_times.size(): " << x_at_times.size() << std::endl;
 
 }
 
