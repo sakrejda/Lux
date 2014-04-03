@@ -231,6 +231,14 @@ void Time_Series_Posterior::drop_distribution(int which) {
     if ( ( (which) < 0) || (which >= x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
+    std::for_each(distributions.begin(), distributions.end(),
+        [](std::unique_ptr<int> & p) {
+            if (p == nullptr)
+                std::cout << "NULL" << std::endl;
+            else
+                std::cout << "NOT NULL" << std::endl;
+        });
+
     std::cout << "index is: " << which << std::endl;
     if (distributions[which] == nullptr)
         throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
