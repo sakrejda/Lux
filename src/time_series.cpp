@@ -80,8 +80,8 @@ Time_Series_Posterior::Time_Series_Posterior(
     distributions(parameters_.size()),
     sample_order()
 {
-	std::for_each(distributions.begin(), distributions.end(), 
-		[](std::unique_ptr<Random> & p) { p = nullptr;});
+    std::for_each(distributions.begin(), distributions.end(),
+        [](std::unique_ptr<Random> & p) { p = nullptr;});
 
 }
 
@@ -274,7 +274,10 @@ arma::vec Time_Series_Posterior::lpdf(arma::vec X) {
 
         }
     }
-    return lpdfs;
+    if (sample_order.size() > 0)
+        return lpdfs;
+    else
+        throw std::logic_error("NO distributions set, NOT calculating lpdf.");
 }
 
 Time_Series_Posterior::~Time_Series_Posterior() { distributions.clear(); }
