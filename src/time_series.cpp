@@ -154,7 +154,7 @@ void Time_Series_Posterior::bind_t_walk_distribution_open (int which) {
 }
 
 void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (int which) {
-    if (  ((which + 1) == x_at_times.size()) )
+    if ( ((which + 1) >= x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "t_walk_open_reverse"));
 
     if (distributions[which])
