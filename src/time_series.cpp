@@ -253,7 +253,7 @@ void Time_Series_Posterior::draw() {
     for (unsigned int level=0; level < sample_order.size(); ++level) {
         for (unsigned int i = 0; i < sample_order[level].size(); ++i) {
             which = sample_order[level][i];
-            if (distributions[which].get() == nullptr)
+            if (!distributions[which])
                 throw std::logic_error(distribution_not_bound(which, "NOT DRAWING"));
             else
                 distributions[which]->draw();
