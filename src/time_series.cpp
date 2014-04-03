@@ -7,6 +7,8 @@
 #include "rv_missing_t_walk_observed_interval.hpp"
 #include "rv_missing_t_walk.hpp"
 
+#include <iostream>
+
 Time_Series_Data::Time_Series_Data() :
     times(0.0), y_at_times(0.0),
     minima_at_times(0.0), maxima_at_times(0.0) {}
@@ -229,9 +231,11 @@ void Time_Series_Posterior::drop_distribution(int which) {
     if ( ( (which) < 0) || (which >= x_at_times.size()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
+    std::cout << "index is: " << which << std::endl;
     if (distributions[which] == nullptr)
         throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
 
+    std::cout << "distributions[which] is NOT nullptr.
     // Reverse lookup in sample_order to remove the value from the
     // correct key...
     for (unsigned int i = 0; i < sample_order.size(); ++i) {
