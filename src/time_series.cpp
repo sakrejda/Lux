@@ -235,7 +235,7 @@ void Time_Series_Posterior::drop_distribution(int which) {
     if (distributions[which] == nullptr)
         throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
 
-    std::cout << "distributions[which] is NOT nullptr.
+    std::cout << "distributions[which] is NOT nullptr." << std::endl;
     // Reverse lookup in sample_order to remove the value from the
     // correct key...
     for (unsigned int i = 0; i < sample_order.size(); ++i) {
