@@ -232,7 +232,7 @@ void Time_Series_Posterior::drop_distribution(int which) {
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
     std::for_each(distributions.begin(), distributions.end(),
-        [](std::unique_ptr<int> & p) {
+        [](std::unique_ptr<Random> & p) {
             if (p == nullptr)
                 std::cout << "NULL" << std::endl;
             else
