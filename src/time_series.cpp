@@ -61,7 +61,7 @@ arma::Col<double> & Time_Series_Parameters::get_scales_handle() {return scales;}
 arma::Col<double> & Time_Series_Parameters::get_tails_handle() {return tails;}
 arma::Col<double> & Time_Series_Parameters::get_obs_scales_handle() {return obs_scales;}
 
-const int Time_Series_Parameters::size() const { return x_at_times.size(); }
+int Time_Series_Parameters::dimension() const { return x_at_times.size(); }
 
 Time_Series_Posterior::Time_Series_Posterior(
         Time_Series_Data const & data_,
@@ -71,21 +71,19 @@ Time_Series_Posterior::Time_Series_Posterior(
     parameters(parameters_),
     R(R_),
     times(data_.get_times()),
-    y_at_times(data.get_y_at_times()),
-    minima_at_times(data.get_minima_at_times()),
-    maxima_at_times(data.get_maxima_at_times()),
-    x_at_times(parameters.get_x_at_times_handle()),
-    drift(parameters.get_drift_handle()),
-    scales(parameters.get_scales_handle()),
-    tails(parameters.get_tails_handle()),
-    obs_scales(parameters.get_obs_scales_handle()),
+    y_at_times(data_.get_y_at_times()),
+    minima_at_times(data_.get_minima_at_times()),
+    maxima_at_times(data_.get_maxima_at_times()),
+    x_at_times(parameters_.get_x_at_times_handle()),
+    drift(parameters_.get_drift_handle()),
+    scales(parameters_.get_scales_handle()),
+    tails(parameters_.get_tails_handle()),
+    obs_scales(parameters_.get_obs_scales_handle()),
     distributions(parameters_.size()),
     sample_order()
 {
     std::for_each(distributions.begin(), distributions.end(),
         [](std::unique_ptr<Random> & p) { p = nullptr;});
-    std::cout << "x_at_times.size(): " << x_at_times.size() << std::endl;
-
 }
 
 // Available distributions:
