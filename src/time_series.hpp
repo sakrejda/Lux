@@ -39,11 +39,11 @@ public:
 //    Time_Series_Parameters();
     Time_Series_Parameters(
             Time_Series_Data & data_,
-            arma::Col<double> x_at_times_,
-            arma::Col<double> drift_,
-            arma::Col<double> scales_,
-            arma::Col<double> tails_,
-            arma::Col<double> obs_scales_
+            std::vector<double> x_at_times_,
+            std::vector<double> drift_,
+            std::vector<double> scales_,
+            std::vector<double> tails_,
+            std::vector<double> obs_scales_
     );
 
     const arma::Col<double> & get_x_at_times() const;
@@ -64,7 +64,7 @@ public:
     arma::Col<double> & get_tails_handle() ;
     arma::Col<double> & get_obs_scales_handle() ;
 
-    int size() const;
+    int dimension() const;
 private:
     const Time_Series_Data & data;
     arma::Col<double> x_at_times;

@@ -35,11 +35,11 @@ const arma::Col<double> & Time_Series_Data::get_maxima_at_times() const {return 
 
 Time_Series_Parameters::Time_Series_Parameters(
     Time_Series_Data & data_,
-    arma::Col<double> x_at_times_,
-    arma::Col<double> drift_,
-    arma::Col<double> scales_,
-    arma::Col<double> tails_,
-    arma::Col<double> obs_scales_
+    std::vector<double> x_at_times_,
+    std::vector<double> drift_,
+    std::vector<double> scales_,
+    std::vector<double> tails_,
+    std::vector<double> obs_scales_
 ) : data(data_), x_at_times(x_at_times_), drift(drift_),
     scales(scales_), tails(tails_), obs_scales(obs_scales_) {}
 
