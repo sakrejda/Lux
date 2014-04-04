@@ -64,7 +64,7 @@ public:
     arma::Col<double> & get_tails_handle() ;
     arma::Col<double> & get_obs_scales_handle() ;
 
-    const int size() const;
+    int size() const;
 private:
     const Time_Series_Data & data;
     arma::Col<double> x_at_times;
