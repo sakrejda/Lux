@@ -277,7 +277,7 @@ arma::vec Time_Series_Posterior::lpdf(arma::vec X) {
     for (unsigned int level=0; level < sample_order.size(); ++level) {
         for (unsigned int i = 0; i < sample_order[level].size(); ++i) {
             which = sample_order[level][i];
-            if (!distributions[which])
+            if (distributions[which] == nullptr)
                 throw std::logic_error(distribution_not_bound(which,"NOT CALCULATING LPDF"));
             else
                 lpdfs[which] = distributions[which]->lpdf(X[which]);
@@ -295,7 +295,7 @@ Time_Series_Posterior::~Time_Series_Posterior() { distributions.clear(); }
 std::string Time_Series_Posterior::distribution_already_bound(int which, std::string distr) {
     std::stringstream msg;
     msg << "The index " << which << " (" << (which+1) << ")"
-        " already has a distribution.  Not adding" << distr << ".\n";
+        " already has a distribution.  Not adding " << distr << ".\n";
     return msg.str();
 }
 
