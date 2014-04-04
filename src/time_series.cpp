@@ -79,7 +79,7 @@ Time_Series_Posterior::Time_Series_Posterior(
     scales(parameters_.get_scales_handle()),
     tails(parameters_.get_tails_handle()),
     obs_scales(parameters_.get_obs_scales_handle()),
-    distributions(parameters_.size()),
+    distributions(parameters_.dimension()),
     sample_order()
 {
     std::for_each(distributions.begin(), distributions.end(),
@@ -111,7 +111,7 @@ void Time_Series_Posterior::bind_uniform_distribution (int which) {
 }
 
 void Time_Series_Posterior::bind_ordered_uniform_distribution (int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "ordered_uniform"));
 
     if (distributions[which])
@@ -155,7 +155,7 @@ void Time_Series_Posterior::bind_t_walk_distribution_open (int which) {
 }
 
 void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (int which) {
-    if ( ((which + 1) >= x_at_times.size()) )
+    if ( ((which + 1) >= parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "t_walk_open_reverse"));
 
     if (distributions[which])
@@ -171,7 +171,7 @@ void Time_Series_Posterior::bind_t_walk_distribution_open_reverse (int which) {
 }
 
 void Time_Series_Posterior::bind_t_walk_distribution (int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "t_walk"));
 
     if (distributions[which])
@@ -189,7 +189,7 @@ void Time_Series_Posterior::bind_t_walk_distribution (int which) {
 }
 
 void Time_Series_Posterior::bind_t_walk_observed_normal_distribution (int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "t_walk_observed_normal"));
 
     if (distributions[which])
@@ -208,7 +208,7 @@ void Time_Series_Posterior::bind_t_walk_observed_normal_distribution (int which)
 }
 
 void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (int which) {
-    if ( ( (which-1) < 0) || ((which + 1) == x_at_times.size()) )
+    if ( ( (which-1) < 0) || ((which + 1) == parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "t_walk_observed_interval"));
 
     if (distributions[which])
@@ -227,7 +227,7 @@ void Time_Series_Posterior::bind_t_walk_observed_interval_distribution (int whic
 }
 
 void Time_Series_Posterior::drop_distribution(int which) {
-    if ( ( (which) < 0) || (which >= x_at_times.size()) )
+    if ( ( (which) < 0) || (which >= parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
     std::for_each(distributions.begin(), distributions.end(),
@@ -273,7 +273,7 @@ void Time_Series_Posterior::draw() {
 }
 
 arma::vec Time_Series_Posterior::lpdf(arma::vec X) {
-    arma::vec lpdfs(distributions.size());
+    arma::vec lpdfs(parameters.dimension());
     unsigned int which=0;
     for (unsigned int level=0; level < sample_order.size(); ++level) {
         for (unsigned int i = 0; i < sample_order[level].size(); ++i) {
