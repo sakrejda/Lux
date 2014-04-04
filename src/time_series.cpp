@@ -230,15 +230,14 @@ void Time_Series_Posterior::drop_distribution(int which) {
     if ( ( (which) < 0) || (which >= parameters.dimension()) )
         throw std::logic_error(off_the_end(which, "NOT DELETING"));
 
-    std::for_each(distributions.begin(), distributions.end(),
-        [](std::unique_ptr<Random> & p) {
-            if (p == nullptr)
-                std::cout << "NULL" << std::endl;
-            else
-                std::cout << "NOT NULL" << std::endl;
-        });
+    //std::for_each(distributions.begin(), distributions.end(),
+        //[](std::unique_ptr<Random> & p) {
+            //if (p == nullptr)
+                //std::cout << "NULL" << std::endl;
+            //else
+                //std::cout << "NOT NULL" << std::endl;
+        //});
 
-    std::cout << "index is: " << which << std::endl;
     if (distributions[which] == nullptr)
         throw std::logic_error(distribution_not_bound(which, "NOT DELETING"));
 
@@ -251,7 +250,7 @@ void Time_Series_Posterior::drop_distribution(int which) {
                 sample_order[i].erase(sample_order[i].begin()+j);
         }
     }
-    distributions[which].reset(NULL);
+    distributions[which].reset(nullptr);
 
 
 }
@@ -264,7 +263,7 @@ void Time_Series_Posterior::draw() {
     for (unsigned int level=0; level < sample_order.size(); ++level) {
         for (unsigned int i = 0; i < sample_order[level].size(); ++i) {
             which = sample_order[level][i];
-            if (!distributions[which])
+            if (distributions[which] == nullptr)
                 throw std::logic_error(distribution_not_bound(which, "NOT DRAWING"));
             else
                 distributions[which]->draw();
